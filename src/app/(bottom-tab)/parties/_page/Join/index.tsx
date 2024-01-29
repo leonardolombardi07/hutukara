@@ -1,0 +1,94 @@
+"use client";
+
+import React from "react";
+import Box from "@mui/material/Box";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import Button from "@mui/material/Button";
+import Slide from "@mui/material/Slide";
+import { TransitionProps } from "@mui/material/transitions";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import { useQueryState } from "nuqs";
+import Typography from "@mui/material/Typography";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import TextField from "@mui/material/TextField";
+
+export default function Join() {
+  const [queryParam, setQueryParam] = useQueryState("join", {
+    history: "push",
+  });
+
+  function close() {
+    setQueryParam("");
+  }
+
+  function onFormSubmission(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const pin = String(formData.get("pin"));
+    close();
+  }
+
+  return (
+    <Dialog
+      fullScreen
+      open={queryParam === "true"}
+      TransitionComponent={Transition}
+      onClose={close}
+    >
+      <AppBar sx={{ position: "relative" }}>
+        <Toolbar>
+          <IconButton edge="start" color="inherit" onClick={close}>
+            <CloseIcon />
+          </IconButton>
+
+          <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+            Join a Party
+          </Typography>
+        </Toolbar>
+      </AppBar>
+
+      <form onSubmit={onFormSubmission}>
+        <DialogContent sx={{ py: 4 }}>
+          <TextField autoFocus fullWidth label="Party PIN" />
+        </DialogContent>
+
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
+            px: 2,
+            pb: 2,
+          }}
+        >
+          <Button
+            type="submit"
+            size="large"
+            variant="contained"
+            fullWidth
+            color="primary"
+          >
+            Join
+          </Button>
+
+          <Button onClick={close} size="large" variant="outlined" fullWidth>
+            Cancel
+          </Button>
+        </Box>
+      </form>
+    </Dialog>
+  );
+}
+
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="down" ref={ref} {...props} timeout={600} />;
+});

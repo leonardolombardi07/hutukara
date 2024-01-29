@@ -1,89 +1,127 @@
+import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
-import PartyCard from "./_page/PartyCard";
 import ActionButtonGroup from "./_page/ActionButtonGroup";
 import Chip from "@mui/material/Chip";
 import Container from "@mui/material/Container";
 import { APP_NAME } from "@/app/constants";
 import { Metadata } from "next";
+import Join from "./_page/Join";
+import Host from "./_page/Host";
+import ItemCard from "./_page/ItemCard";
+import ItemModal from "./_page/ItemModal";
+import { Item } from "./types";
+import FilterChip from "./_page/FilterChip";
+import ItemList from "./_page/ItemList";
 
 export const metadata: Metadata = {
   title: `${APP_NAME} | Parties`,
   description: "Visualize and manage your parties",
 };
 
-interface Party {
-  id: string;
-  title: string;
-  description: string;
-  results: [];
-  createdAt: Date;
-  members: any[];
-  hosts: any[];
+interface PageProps {
+  searchParams: {
+    id?: string;
+
+    // Host
+    host?: "true" | string;
+
+    // Join
+    join?: "true" | string;
+
+    // Filter
+    filter?: "ongoing" | "finished" | string;
+  };
 }
 
-export default function Page() {
-  const data = FAKE_PARTIES;
+async function getData(): Promise<{
+  data: Item[];
+}> {
+  return {
+    data: FAKE_DATA,
+  };
+}
+
+export default async function Page({ searchParams }: PageProps) {
+  const { data } = await getData();
 
   return (
-    <Container component={"main"} disableGutters>
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          minWidth: 300,
-          width: "100%",
-        }}
-      >
-        <ActionButtonGroup />
-      </Box>
-
+    <React.Fragment>
       <Container
-        component={"section"}
+        component={"main"}
+        disableGutters
         sx={{
-          mt: 5,
+          pb: 5,
         }}
       >
-        <Box sx={{ mb: 3 }}>
-          <Typography variant="h3">Your Parties</Typography>
-
-          <Box
-            sx={{
-              display: "flex",
-              gap: 1,
-              mt: 1,
-            }}
-          >
-            <Chip label="Order by" variant="outlined" size="medium" />
-            <Chip label="Under way" variant="outlined" size="medium" />
-            <Chip label="Over" variant="outlined" size="medium" />
-          </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            minWidth: 300,
+            width: "100%",
+          }}
+        >
+          <ActionButtonGroup />
         </Box>
 
-        <Grid container spacing={2}>
-          {data.map((item) => {
-            return (
-              <Grid item key={item.id} xs={12} md={6} xl={4}>
-                <PartyCard {...item} />
-              </Grid>
-            );
-          })}
-        </Grid>
+        <Container
+          component={"section"}
+          sx={{
+            mt: 5,
+          }}
+        >
+          <Box sx={{ mb: 3 }}>
+            <Typography variant="h3">Your Parties</Typography>
+
+            <Box
+              sx={{
+                display: "flex",
+                gap: 1,
+                mt: 1,
+              }}
+            >
+              <FilterChip label="Under way" value="ongoing" queryKey="filter" />
+
+              <FilterChip label="Over" value="finished" queryKey="filter" />
+            </Box>
+          </Box>
+
+          <ItemList data={data} />
+        </Container>
       </Container>
-    </Container>
+
+      <Join />
+      <Host />
+      <ItemModal data={data} />
+    </React.Fragment>
   );
 }
 
-const FAKE_PARTIES: Party[] = [
+const FAKE_PERSON: Item["members"][number] = {
+  id: "1",
+  name: "John Doe",
+  avatarUrl: "https://i.pravatar.cc/300?img=1",
+};
+
+function getPersonArray(num: number) {
+  return Array.from({ length: num }, (_, i) => ({
+    ...FAKE_PERSON,
+    id: i.toString(),
+  }));
+}
+
+const FAKE_DATA: Item[] = [
   {
     id: "1",
-    title: "Some party",
+    title: "With Members",
     description: "Some nice party",
     results: [],
     createdAt: new Date("2021-10-10"),
-    members: [1, 2],
-    hosts: [3],
+    members: getPersonArray(3),
+    hosts: getPersonArray(1),
+    pin: "1234",
   },
 
   {
@@ -92,7 +130,19 @@ const FAKE_PARTIES: Party[] = [
     description: "Some other nice party",
     results: [],
     createdAt: new Date("2018-10-10"),
-    members: [1],
-    hosts: [4],
+    members: [],
+    hosts: [],
+    pin: "1234",
+  },
+
+  {
+    id: "3",
+    title: "Third party",
+    description: "Yes, with results!",
+    results: [3, 4, 5],
+    createdAt: new Date("2013-10-10"),
+    members: [],
+    hosts: [],
+    pin: "1234",
   },
 ] as const;

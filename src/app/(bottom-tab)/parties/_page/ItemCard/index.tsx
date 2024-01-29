@@ -1,14 +1,12 @@
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import IconButton from "@mui/material/IconButton";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CardActionArea from "@mui/material/CardActionArea";
 import Link from "next/link";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import GroupsIcon from "@mui/icons-material/Groups";
 
-interface PartyCardProps {
+interface ItemCardProps {
   id: string;
   title: string;
   description: string;
@@ -17,18 +15,18 @@ interface PartyCardProps {
   hosts: any[];
 }
 
-export default function PartyCard(props: PartyCardProps) {
+export default function ItemCard(props: ItemCardProps) {
   const { id, title, description, createdAt, members, hosts } = props;
   return (
     <Card variant="outlined">
-      <CardActionArea LinkComponent={Link} href={`/parties/${id}`}>
+      <CardActionArea LinkComponent={Link} href={`?id=${id}`}>
         <CardHeader title={title} subheader={<CardSubheader {...props} />} />
       </CardActionArea>
     </Card>
   );
 }
 
-function CardSubheader({ createdAt, members, hosts }: PartyCardProps) {
+function CardSubheader({ createdAt, members, hosts }: ItemCardProps) {
   const totalNumberOfMembers = members.length + hosts.length;
   return (
     <Box

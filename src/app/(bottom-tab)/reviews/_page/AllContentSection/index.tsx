@@ -3,8 +3,6 @@
 import Grid from "@mui/material/Grid";
 import ContentCard from "../ContentCard";
 import Section from "../Section";
-import Button from "@mui/material/Button";
-import ArrowRight from "@mui/icons-material/ArrowRight";
 
 const FAKE_CONTENT = [
   {

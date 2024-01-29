@@ -12,7 +12,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         sx={{
           flexGrow: 1,
           width: "100%",
-          pb: 4, // Leo: avoid bottom tab menu overlap
+          pb: 7, // Leo: avoid bottom tab menu overlap. TODO: use actual height of bottom tab menu
         }}
       >
         <Toolbar />
