@@ -3,7 +3,7 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 import { Item } from "../../types";
-import ItemCard from "../ItemCard";
+import ItemCard from "./ItemCard";
 import { useQueryState } from "nuqs";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";

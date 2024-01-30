@@ -9,25 +9,23 @@ import GroupsIcon from "@mui/icons-material/Groups";
 interface ItemCardProps {
   id: string;
   title: string;
-  description: string;
   createdAt: Date;
   members: any[];
-  hosts: any[];
 }
 
 export default function ItemCard(props: ItemCardProps) {
-  const { id, title, description, createdAt, members, hosts } = props;
+  const { id, title } = props;
   return (
     <Card variant="outlined">
-      <CardActionArea LinkComponent={Link} href={`?id=${id}`}>
+      <CardActionArea LinkComponent={Link} href={`/parties/${id}`}>
         <CardHeader title={title} subheader={<CardSubheader {...props} />} />
       </CardActionArea>
     </Card>
   );
 }
 
-function CardSubheader({ createdAt, members, hosts }: ItemCardProps) {
-  const totalNumberOfMembers = members.length + hosts.length;
+function CardSubheader({ createdAt, members }: ItemCardProps) {
+  const totalNumberOfMembers = members.length + 1; // add 1 for the host
   return (
     <Box
       sx={{

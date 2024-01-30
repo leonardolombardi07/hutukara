@@ -11,14 +11,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <Container
-      component={"main"}
-      sx={{
-        alignItems: "center",
-        py: 3,
-        pb: 5,
-      }}
-    >
+    <Container component={"main"} disableGutters maxWidth="md">
       <RatedContentSection />
       <AllContentSection />
     </Container>

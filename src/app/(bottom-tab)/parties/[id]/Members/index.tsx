@@ -1,9 +1,8 @@
 "use client";
 
 import React from "react";
-import { Item } from "../../../types";
+import { Item } from "../types";
 import Typography from "@mui/material/Typography";
-import Section from "../Section";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
@@ -11,6 +10,7 @@ import ListItemText from "@mui/material/ListItemText";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import Divider from "@mui/material/Divider";
+import Paper from "@mui/material/Paper";
 
 interface MembersProps {
   data: Item["members"];
@@ -18,10 +18,10 @@ interface MembersProps {
 
 export default function Members({ data }: MembersProps) {
   return (
-    <Section title="Members">
+    <Paper>
       {data.length === 0 && (
         <Typography variant="body1" color="textSecondary">
-          No members... yet!
+          No guests... yet!
         </Typography>
       )}
 
@@ -45,6 +45,6 @@ export default function Members({ data }: MembersProps) {
           );
         })}
       </List>
-    </Section>
+    </Paper>
   );
 }

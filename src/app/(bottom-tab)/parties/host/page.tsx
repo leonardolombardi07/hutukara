@@ -14,31 +14,25 @@ import Typography from "@mui/material/Typography";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import TextField from "@mui/material/TextField";
+import { useRouter } from "next/navigation";
 
-export default function Join() {
-  const [queryParam, setQueryParam] = useQueryState("join", {
-    history: "push",
-  });
+export default function Page() {
+  const router = useRouter();
 
   function close() {
-    setQueryParam("");
+    router.back();
   }
 
   function onFormSubmission(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    const pin = String(formData.get("pin"));
+    const title = String(formData.get("title"));
     close();
   }
 
   return (
-    <Dialog
-      fullScreen
-      open={queryParam === "true"}
-      TransitionComponent={Transition}
-      onClose={close}
-    >
+    <Dialog fullScreen open TransitionComponent={Transition} onClose={close}>
       <AppBar sx={{ position: "relative" }}>
         <Toolbar>
           <IconButton edge="start" color="inherit" onClick={close}>
@@ -46,14 +40,14 @@ export default function Join() {
           </IconButton>
 
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-            Join a Party
+            Host a Party
           </Typography>
         </Toolbar>
       </AppBar>
 
       <form onSubmit={onFormSubmission}>
         <DialogContent sx={{ py: 4 }}>
-          <TextField autoFocus fullWidth label="Party PIN" />
+          <TextField autoFocus fullWidth label="Title" />
         </DialogContent>
 
         <Box
@@ -72,7 +66,7 @@ export default function Join() {
             fullWidth
             color="primary"
           >
-            Join
+            Host
           </Button>
 
           <Button onClick={close} size="large" variant="outlined" fullWidth>
@@ -90,5 +84,5 @@ const Transition = React.forwardRef(function Transition(
   },
   ref: React.Ref<unknown>
 ) {
-  return <Slide direction="down" ref={ref} {...props} timeout={600} />;
+  return <Slide direction="up" ref={ref} {...props} timeout={600} />;
 });

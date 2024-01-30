@@ -33,13 +33,11 @@ export default function ContentRating({ size }: ContentRatingProps) {
   return (
     <Box
       sx={{
-        width: 200,
         display: "flex",
         alignItems: "center",
       }}
     >
       <Rating
-        name="hover-feedback"
         value={value}
         precision={0.5}
         size={size || "medium"}

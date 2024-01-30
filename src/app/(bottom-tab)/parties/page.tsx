@@ -1,19 +1,14 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
 import ActionButtonGroup from "./_page/ActionButtonGroup";
-import Chip from "@mui/material/Chip";
 import Container from "@mui/material/Container";
 import { APP_NAME } from "@/app/constants";
 import { Metadata } from "next";
-import Join from "./_page/Join";
-import Host from "./_page/Host";
-import ItemCard from "./_page/ItemCard";
-import ItemModal from "./_page/ItemModal";
 import { Item } from "./types";
 import FilterChip from "./_page/FilterChip";
 import ItemList from "./_page/ItemList";
+import { FAKE_DATA } from "./data";
 
 export const metadata: Metadata = {
   title: `${APP_NAME} | Parties`,
@@ -91,58 +86,6 @@ export default async function Page({ searchParams }: PageProps) {
           <ItemList data={data} />
         </Container>
       </Container>
-
-      <Join />
-      <Host />
-      <ItemModal data={data} />
     </React.Fragment>
   );
 }
-
-const FAKE_PERSON: Item["members"][number] = {
-  id: "1",
-  name: "John Doe",
-  avatarUrl: "https://i.pravatar.cc/300?img=1",
-};
-
-function getPersonArray(num: number) {
-  return Array.from({ length: num }, (_, i) => ({
-    ...FAKE_PERSON,
-    id: i.toString(),
-  }));
-}
-
-const FAKE_DATA: Item[] = [
-  {
-    id: "1",
-    title: "With Members",
-    description: "Some nice party",
-    results: [],
-    createdAt: new Date("2021-10-10"),
-    members: getPersonArray(3),
-    hosts: getPersonArray(1),
-    pin: "1234",
-  },
-
-  {
-    id: "2",
-    title: "Some other party",
-    description: "Some other nice party",
-    results: [],
-    createdAt: new Date("2018-10-10"),
-    members: [],
-    hosts: [],
-    pin: "1234",
-  },
-
-  {
-    id: "3",
-    title: "Third party",
-    description: "Yes, with results!",
-    results: [3, 4, 5],
-    createdAt: new Date("2013-10-10"),
-    members: [],
-    hosts: [],
-    pin: "1234",
-  },
-] as const;

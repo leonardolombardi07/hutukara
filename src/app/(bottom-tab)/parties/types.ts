@@ -2,10 +2,10 @@ export interface Item {
   id: string;
   title: string;
   description: string;
-  results: any[];
+  results: Result[];
   createdAt: Date;
   members: Member[];
-  hosts: Host[];
+  host: Member;
   pin: string;
 }
 
@@ -15,8 +15,9 @@ interface Member {
   name: string;
 }
 
-interface Host {
+interface Result {
   id: string;
-  avatarUrl: string;
-  name: string;
+  Title: string;
+  Poster: string;
+  score: number;
 }

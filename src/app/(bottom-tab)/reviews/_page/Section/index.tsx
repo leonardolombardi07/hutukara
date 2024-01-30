@@ -9,13 +9,14 @@ interface SectionProps {
 
 export default function Section({ title, children, right }: SectionProps) {
   return (
-    <Box sx={{ mb: 3 }}>
+    <Box sx={{ mt: 3 }}>
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
           width: "100%",
+          px: 1,
         }}
       >
         <Typography variant="h5" sx={{ fontWeight: "bold" }}>
@@ -25,7 +26,7 @@ export default function Section({ title, children, right }: SectionProps) {
         {right}
       </Box>
 
-      <Box sx={{ pt: 1 }}>{children}</Box>
+      <Box>{children}</Box>
     </Box>
   );
 }
