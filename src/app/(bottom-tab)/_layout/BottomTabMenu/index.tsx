@@ -1,21 +1,22 @@
 "use client";
 
 import * as React from "react";
-import Box from "@mui/material/Box";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import StarRateIcon from "@mui/icons-material/StarRate";
 import Link from "next/link";
 import Divider from "@mui/material/Divider";
 import { usePathname } from "next/navigation";
-import PopcornIcon from "@/components/icons/PopcornIcon";
 import ProfileIcon from "@mui/icons-material/AccountCircle";
+import SearchIcon from "@mui/icons-material/Search";
 import Paper from "@mui/material/Paper";
+import HomeIcon from "@mui/icons-material/Home";
 
 const PATHNAME = {
-  PARTIES: "parties",
+  HOME: "",
   PROFILE: "profile",
-  REVIEWS: "reviews",
+  RATED: "rated",
+  SEARCH: "search",
 } as const;
 
 export default function BottomTabMenu({
@@ -25,37 +26,47 @@ export default function BottomTabMenu({
 }) {
   const pathname = usePathname();
 
-  const value = pathname.includes(PATHNAME.REVIEWS)
-    ? PATHNAME.REVIEWS
+  const value = pathname.includes(PATHNAME.RATED)
+    ? PATHNAME.RATED
     : pathname.includes(PATHNAME.PROFILE)
     ? PATHNAME.PROFILE
-    : PATHNAME.PARTIES;
+    : pathname.includes(PATHNAME.SEARCH)
+    ? PATHNAME.SEARCH
+    : PATHNAME.HOME;
 
   return (
     <Paper sx={sx}>
       <Divider />
       <BottomNavigation showLabels value={value}>
         <BottomNavigationAction
-          label="Parties"
-          icon={<PopcornIcon />}
+          label="Home"
+          icon={<HomeIcon />}
           LinkComponent={Link}
-          href="/parties"
-          value={PATHNAME.PARTIES}
+          href={`/${PATHNAME.HOME}`}
+          value={PATHNAME.HOME}
         />
 
         <BottomNavigationAction
-          label="Reviews"
+          label="Search"
+          icon={<SearchIcon />}
+          LinkComponent={Link}
+          href={PATHNAME.SEARCH}
+          value={PATHNAME.SEARCH}
+        />
+
+        <BottomNavigationAction
+          label="Rated"
           icon={<StarRateIcon />}
           LinkComponent={Link}
-          href="/reviews"
-          value={PATHNAME.REVIEWS}
+          href={PATHNAME.RATED}
+          value={PATHNAME.RATED}
         />
 
         <BottomNavigationAction
           label="Profile"
           icon={<ProfileIcon />}
           LinkComponent={Link}
-          href="/profile"
+          href={PATHNAME.PROFILE}
           value={PATHNAME.PROFILE}
         />
       </BottomNavigation>
