@@ -5,12 +5,29 @@ import { FAKE_DATA } from "../../../(home)/data";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import RatableContentItem from "@/components/surfaces/RatableContentItem";
+import { useUserRatedContent } from "@/modules/api/client";
+import { useUser } from "@/app/_layout/UserProvider";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
 export default function ItemList() {
+  const { user } = useUser();
   const cols = useNumberOfColumns();
-  const data = FAKE_DATA.map((item) => item.results)
-    .flat()
-    .slice(0, 2);
+  const [{ data = [] }, isLoading, error] = useUserRatedContent(user.uid);
+
+  if (isLoading) {
+    // TODO: add skeleton loader
+    return null;
+  }
+
+  if (error) {
+    return (
+      <Alert severity="error">
+        <AlertTitle>Error</AlertTitle>
+        {error.message}
+      </Alert>
+    );
+  }
 
   return (
     <ImageList variant="masonry" cols={cols} gap={8}>

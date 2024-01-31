@@ -12,5 +12,5 @@ export function useCollectionDataWithIds<T = DocumentData>(
     id: doc.id,
   }));
 
-  return [dataWithIds, loading, error];
+  return [dataWithIds, loading, error] as const;
 }

@@ -4,31 +4,17 @@ import * as React from "react";
 import MUIRating from "@mui/material/Rating";
 import Box from "@mui/material/Box";
 import StarIcon from "@mui/icons-material/Star";
-
-const labels: { [index: string]: string } = {
-  0.5: "Useless",
-  1: "Useless+",
-  1.5: "Poor",
-  2: "Poor+",
-  2.5: "Ok",
-  3: "Ok+",
-  3.5: "Good",
-  4: "Good+",
-  4.5: "Excellent",
-  5: "Excellent+",
-};
-
-function getLabelText(value: number) {
-  return `${value} Star${value !== 1 ? "s" : ""}, ${labels[value]}`;
-}
+import { deleteContentRating, rateContent } from "@/modules/api/client";
+import { useUser } from "@/app/_layout/UserProvider";
 
 interface RatingProps {
+  value: number | null;
+  contentId: string;
   size?: "small" | "medium" | "large";
 }
 
-export default function ContentRating({ size }: RatingProps) {
-  const [value, setValue] = React.useState<number | null>(2);
-  const [hover, setHover] = React.useState(-1);
+export default function ContentRating({ value, contentId, size }: RatingProps) {
+  const { user } = useUser();
 
   return (
     <Box
@@ -41,18 +27,19 @@ export default function ContentRating({ size }: RatingProps) {
         value={value}
         precision={0.5}
         size={size || "medium"}
-        getLabelText={getLabelText}
         onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
-        onChangeActive={(event, newHover) => {
-          setHover(newHover);
+          if (newValue === null) {
+            return deleteContentRating({ userId: user.uid, contentId });
+          }
+
+          rateContent({
+            userId: user.uid,
+            contentId,
+            value: newValue,
+          });
         }}
         emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />}
       />
-      {/* {value !== null && (
-        <Box sx={{ ml: 2 }}>{labels[hover !== -1 ? hover : value]}</Box>
-      )} */}
     </Box>
   );
 }

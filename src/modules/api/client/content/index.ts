@@ -1,11 +1,4 @@
-import {
-  query,
-  where,
-  documentId,
-  setDoc,
-  doc,
-  writeBatch,
-} from "firebase/firestore";
+import { query, where, documentId, doc, writeBatch } from "firebase/firestore";
 import { useCollectionDataWithIds } from "../utils/hooks";
 import { getCollections } from "../utils";
 import { useUserRatings } from "../users";
@@ -31,11 +24,35 @@ function useUserRatedContent(userId: string) {
     userRatedContentQuery
   );
 
-  return [{ data, ratings }, loading || loadingRatings, error || errorRatings];
+  return [
+    { data, ratings },
+    loading || loadingRatings,
+    error || errorRatings,
+  ] as const;
 }
 
 function useContentToBrowse() {
-  return [CONTENT_SAMPLE, false, undefined] as const;
+  upsertSampleOnce();
+  const withIds = CONTENT_SAMPLE.map((item) => ({ ...item, id: item.imdbID }));
+  return [withIds, false, undefined] as const;
+}
+
+const upsertSampleOnce = (function () {
+  let hasRun = false;
+  return async function () {
+    if (hasRun) return;
+
+    alert("Running upsertSampleOnce...");
+    await upsertOnFirestore(CONTENT_SAMPLE);
+    hasRun = true;
+  };
+})();
+
+function useContent(id: string) {
+  const [data, ...rest] = useCollectionDataWithIds(
+    query(contentCol, where(documentId(), "==", id))
+  );
+  return [data?.[0], ...rest] as const;
 }
 
 async function searchContent(searchQuery: string): Promise<ContentCol.Doc[]> {
@@ -47,16 +64,16 @@ async function searchContent(searchQuery: string): Promise<ContentCol.Doc[]> {
     // TODO: log error or something like that, but don't throw
   }
   return ombdResponse;
-
-  function upsertOnFirestore(items: OMBDBResponse[]) {
-    const batch = writeBatch(firestore);
-
-    for (const item of items) {
-      batch.set(doc(contentCol, item.imdbID), item);
-    }
-
-    return batch.commit();
-  }
 }
 
-export { useUserRatedContent, searchContent, useContentToBrowse };
+function upsertOnFirestore(items: OMBDBResponse[]) {
+  const batch = writeBatch(firestore);
+
+  for (const item of items) {
+    batch.set(doc(contentCol, item.imdbID), item);
+  }
+
+  return batch.commit();
+}
+
+export { useUserRatedContent, searchContent, useContent, useContentToBrowse };

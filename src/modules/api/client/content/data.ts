@@ -2,7 +2,7 @@ import { OMBDBResponse } from "@/modules/OMDBApi";
 
 // This is a sample of movies from the OMBDB API...
 // In the future, we shall fetch this from an API based on user preferences
-export const CONTENT_SAMPLE: Readonly<OMBDBResponse[]> = [
+export const CONTENT_SAMPLE: OMBDBResponse[] = [
   {
     Title: "City of God",
     Year: "2002",

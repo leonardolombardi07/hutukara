@@ -4,12 +4,16 @@ import * as React from "react";
 import { FAKE_DATA } from "@/app/(bottom-tab)/(home)/data";
 import { useQueryState } from "nuqs";
 import { useDebounce } from "@uidotdev/usehooks";
+import OMBDBApi from "@/modules/OMDBApi";
 
 const AVALIABLE_RESULTS = FAKE_DATA.map((item) => item.results).flat();
 
+// Currently, we don't have the api key, so we know we'll get an error
+const UNREALISTIC_DEBOUNCE_DELAY = 4000;
+
 export default function useSearch() {
   const [query] = useQueryState("query");
-  const debouncedQuery = useDebounce(query, 500);
+  const debouncedQuery = useDebounce(query, UNREALISTIC_DEBOUNCE_DELAY);
 
   const [results, setResults] = React.useState<any[]>([]);
   const [isSearching, setIsSearching] = React.useState(false);
@@ -43,6 +47,7 @@ export default function useSearch() {
   }, [debouncedQuery]);
 
   return {
+    query,
     results,
     isSearching,
     error,
@@ -62,6 +67,5 @@ async function searchOnAvaliableData<T extends { Title: string }>({
 }
 
 async function searchOnAPI(q: string) {
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-  return [];
+  return OMBDBApi.search(q);
 }

@@ -10,11 +10,13 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Box from "@mui/material/Box";
+import { useContentToBrowse } from "@/modules/api/client";
 
 export default function ItemList() {
   const cols = useNumberOfColumns();
 
-  const { results: searchResults, isSearching, error } = useSearch();
+  const [data] = useContentToBrowse();
+  const { results: searchResults, isSearching, error, query } = useSearch();
 
   if (isSearching) {
     return (
@@ -40,12 +42,22 @@ export default function ItemList() {
     );
   }
 
-  if (searchResults.length === 0) {
+  if (query && searchResults.length === 0) {
     return (
       <Alert severity="info">
         <AlertTitle>No Results!</AlertTitle>
         Please try a different search term.
       </Alert>
+    );
+  }
+
+  if (!query) {
+    return (
+      <ImageList variant="masonry" cols={cols} gap={8}>
+        {data.map((item) => (
+          <RatableContentItem key={item.id} {...item} />
+        ))}
+      </ImageList>
     );
   }
 
