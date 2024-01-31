@@ -18,14 +18,6 @@ export const metadata: Metadata = {
 interface PageProps {
   searchParams: {
     id?: string;
-
-    // Host
-    host?: "true" | string;
-
-    // Join
-    join?: "true" | string;
-
-    // Filter
     filter?: "ongoing" | "finished" | string;
   };
 }

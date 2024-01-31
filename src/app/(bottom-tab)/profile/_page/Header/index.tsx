@@ -11,9 +11,9 @@ import RequestChangePasswordButton from "./RequestChangePasswordButton";
 
 interface HeaderProps {
   user: {
-    name: string;
-    email: string;
-    avatarUrl: string;
+    displayName: string | null;
+    email: string | null;
+    photoURL: string | null;
   };
 }
 
@@ -28,24 +28,32 @@ export default function Header({ user }: HeaderProps) {
             }}
           >
             <Avatar
-              src={user?.avatarUrl || undefined}
+              src={user?.photoURL || undefined}
               sx={{ bgcolor: "primary", width: 60, height: 60 }}
             >
-              {user?.name ? user?.name[0].toUpperCase() : "C"}
+              {user?.displayName ? user?.displayName[0].toUpperCase() : "C"}
             </Avatar>
 
             <Box sx={{ mr: 2 }} />
 
             <Box>
               <Typography variant="h5" component="div">
-                {user?.name || user?.email || "-"}
+                {user?.displayName || "Anonymous"}
+              </Typography>
+
+              <Typography
+                variant="body2"
+                component="div"
+                color="text.secondary"
+              >
+                {user?.email || ""}
               </Typography>
             </Box>
           </Box>
         </CardContent>
 
         <CardActions>
-          <RequestChangePasswordButton email={user?.email} />
+          {user?.email && <RequestChangePasswordButton email={user.email} />}
 
           <SignOutButton />
         </CardActions>

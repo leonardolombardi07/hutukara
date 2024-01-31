@@ -2,7 +2,7 @@ export namespace UsersCol {
   export interface Doc {
     name: string;
     groupIds: string[];
-    profileURL: string;
+    photoURL: string;
   }
 
   export namespace RatingsSubCol {

@@ -1,22 +1,16 @@
+"use client";
+
 import React from "react";
 import Box from "@mui/material/Box";
 import Header from "./_page/Header";
 import Container from "@mui/material/Container";
-import { Metadata } from "next";
 import PersonalPreferences from "./_page/PersonalPreferences";
-import { APP_NAME } from "@/app/constants";
+import { useUser } from "@/app/_layout/UserProvider";
+import { useFirestoreUser } from "@/modules/api/client";
 
-export const metadata: Metadata = {
-  title: `${APP_NAME} | Perfil`,
-  description: "Visualize e edite suas informações pessoais",
-};
-
-export default async function Page() {
-  const user = {
-    name: "hey",
-    email: "a@email.com",
-    avatarUrl: "https://picsum.photos/200/300",
-  };
+export default function Page() {
+  const { user: authUser } = useUser();
+  const [firestoreUser] = useFirestoreUser();
 
   return (
     <Container
@@ -25,7 +19,15 @@ export default async function Page() {
         py: 4,
       }}
     >
-      <Header user={user} />
+      {authUser && firestoreUser && (
+        <Header
+          user={{
+            displayName: firestoreUser.name,
+            email: authUser.email,
+            photoURL: firestoreUser.photoURL,
+          }}
+        />
+      )}
       <Box sx={{ my: 3 }} />
       <PersonalPreferences />
     </Container>

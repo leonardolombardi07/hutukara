@@ -4,6 +4,8 @@ import "./globals.css";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { APP_NAME } from "./constants";
 import ThemeProvider from "./_layout/ThemeProvider";
+import UserProvider from "./_layout/UserProvider";
+import AuthenticationRouter from "./_layout/AuthenticationRouter";
 
 const roboto = Roboto({
   weight: ["300", "400", "500", "700"],
@@ -23,7 +25,11 @@ export default function RootLayout({
     <html>
       <body className={roboto.className}>
         <AppRouterCacheProvider>
-          <ThemeProvider>{children}</ThemeProvider>
+          <ThemeProvider>
+            <UserProvider>
+              <AuthenticationRouter>{children}</AuthenticationRouter>
+            </UserProvider>
+          </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
     </html>

@@ -4,13 +4,17 @@ import React from "react";
 import Button from "@mui/material/Button";
 import ConfirmDialog from "@/components/feedback/ConfirmDialog";
 import SignOutIcon from "@mui/icons-material/Logout";
+import { signOut } from "@/modules/api/client";
+import { useRouter } from "next/navigation";
 
 function SignOutButton() {
+  const router = useRouter();
   const [isConfirming, setIsConfirming] = React.useState(false);
 
-  function onConfirm() {
-    alert("Not yet implemented.");
+  async function onConfirm() {
+    await signOut();
     setIsConfirming(false);
+    router.push("/signin");
   }
 
   return (

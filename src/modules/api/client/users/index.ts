@@ -10,7 +10,10 @@ import {
 import { useCollectionDataWithIds } from "../utils/hooks";
 import { getUserSubCollections } from "./utils";
 import { getCollections } from "../utils";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import { getServices } from "../services";
 
+const { auth } = getServices();
 const { usersCol } = getCollections();
 
 function useUserRatings(userId: string) {
@@ -28,6 +31,15 @@ async function getUser(userId: string) {
     id: snap.id,
     ...snap.data(),
   };
+}
+
+function useFirestoreUser() {
+  const userId = auth.currentUser?.uid;
+  if (!userId) {
+    throw new Error("User not found");
+  }
+
+  return useDocumentData(doc(usersCol, userId));
 }
 
 function useUsers(userIds: string[]) {
@@ -67,4 +79,11 @@ function deleteContentRating({
   return deleteDoc(doc(ratingsCol, contentId));
 }
 
-export { useUserRatings, getUser, useUsers, rateContent, deleteContentRating };
+export {
+  useUserRatings,
+  getUser,
+  useUsers,
+  rateContent,
+  useFirestoreUser,
+  deleteContentRating,
+};
