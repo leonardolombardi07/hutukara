@@ -27,7 +27,7 @@ export default function FilterChip({
   return (
     <Chip
       label={label}
-      variant="outlined"
+      variant={isActive ? "filled" : "outlined"}
       size="medium"
       color={isActive ? "primary" : "default"}
       onClick={onClick}

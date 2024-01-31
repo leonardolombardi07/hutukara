@@ -38,7 +38,12 @@ export default function FindMatchesTrigger({
 
   return (
     <React.Fragment>
-      <Button onClick={_open} variant="contained" color="success">
+      <Button
+        disabled={disabled}
+        onClick={_open}
+        variant="contained"
+        color="success"
+      >
         Find Matches
       </Button>
 

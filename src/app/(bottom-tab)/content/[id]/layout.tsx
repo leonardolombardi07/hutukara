@@ -44,7 +44,7 @@ export default function Layout({ children }: Props) {
           {isXs ? (
             <CloseButtonBehindImage />
           ) : (
-            <IconButton>
+            <IconButton edge="start" color="inherit" onClick={router.back}>
               <GoBackIcon />
             </IconButton>
           )}
