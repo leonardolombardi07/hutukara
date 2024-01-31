@@ -2,41 +2,53 @@
 
 import React from "react";
 import Button from "@mui/material/Button";
-import ConfirmDialog from "@/components/feedback/ConfirmDialog";
 import ChangePasswordIcon from "@mui/icons-material/Lock";
-import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import AlertTitle from "@mui/material/AlertTitle";
+import { updatePassword } from "@/modules/api/client";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
+import PasswordTextField from "@/components/inputs/PasswordTextField";
 
-interface RequestChangePasswordButtonProps {
-  email: string;
-}
+export default function RequestChangePasswordButton() {
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
 
-export default function RequestChangePasswordButton({
-  email,
-}: RequestChangePasswordButtonProps) {
-  const [isConfirming, setIsConfirming] = React.useState(false);
-  const [isLoadingConfirm, setIsLoadingConfirm] = React.useState(false);
-  const [confirmError, setConfirmError] = React.useState<string | null>(null);
-  const [success, setSuccess] = React.useState(false);
+  const fullScreen = useFullScreen();
 
-  async function onConfirm() {
-    setConfirmError(null);
-    setIsLoadingConfirm(true);
+  function closeDialog() {
+    setIsDialogOpen(false);
+  }
 
-    const { error } = await sendSetPasswordEmail(email);
-    setIsLoadingConfirm(false);
+  async function onFormSubmission(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
 
-    if (error) return setConfirmError(error);
+    setError(null);
+    setIsLoading(true);
 
-    setIsConfirming(false);
-    setSuccess(true);
+    try {
+      const formData = new FormData(event.currentTarget);
+      const newPassword = String(formData.get("newPassword"));
+      if (!newPassword) return setError("Password is required");
+      await updatePassword(newPassword);
+      setIsDialogOpen(false);
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
     <React.Fragment>
       <Button
         onClick={() => {
-          setIsConfirming(true);
+          setIsDialogOpen(true);
         }}
         size="small"
         startIcon={<ChangePasswordIcon />}
@@ -44,35 +56,54 @@ export default function RequestChangePasswordButton({
         Change password
       </Button>
 
-      <ConfirmDialog
-        open={isConfirming}
-        onClose={() => setIsConfirming(false)}
-        onConfirm={onConfirm}
-        title="Do you want to change your password?"
-        description="You will receive an e-mail in your inbox with a link to change your password. Remember to check your spam box."
-        confirmText={isLoadingConfirm ? "Loading..." : "Send e-mail"}
-        cancelText="Cancel"
-        error={confirmError}
-      />
-
-      <Snackbar
-        open={success}
-        autoHideDuration={10000}
-        onClose={() => setSuccess(false)}
+      <Dialog
+        open={isDialogOpen}
+        onClose={closeDialog}
+        PaperProps={{
+          component: "form",
+          onSubmit: onFormSubmission,
+          sx: {
+            minWidth: {
+              sm: 600,
+            },
+          },
+        }}
+        fullScreen={fullScreen}
       >
-        <Alert
-          onClose={() => setSuccess(false)}
-          severity="success"
-          sx={{ width: "100%" }}
-        >
-          E-mail enviado com sucesso!
-        </Alert>
-      </Snackbar>
+        <DialogTitle>Change your password</DialogTitle>
+        <DialogContent>
+          <PasswordTextField
+            autoFocus
+            required
+            id="newPassword"
+            name="newPassword"
+            label="New Password"
+            type="password"
+            fullWidth
+            sx={{ my: 3 }} // For some reason we need to add margin to the text field
+          />
+
+          {error && (
+            <Alert severity="error">
+              <AlertTitle>Error</AlertTitle>
+              {error}
+            </Alert>
+          )}
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={closeDialog}>Cancel</Button>
+
+          <Button type="submit" color="primary" disabled={isLoading}>
+            {isLoading ? "Loading..." : "Change password"}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </React.Fragment>
   );
 }
 
-async function sendSetPasswordEmail(email: string) {
-  alert("Not yet implemented.");
-  return { error: null };
+function useFullScreen() {
+  const theme = useTheme();
+  return useMediaQuery(theme.breakpoints.down("md"));
 }

@@ -2,12 +2,13 @@
 
 import * as React from "react";
 import ImageList from "@mui/material/ImageList";
-import { Item } from "../../../types";
 import MatchContentItem from "@/components/surfaces/MatchContentItem";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 
-export default function ItemList({ data }: { data: Item["results"] }) {
+type Item = React.ComponentPropsWithoutRef<typeof MatchContentItem>;
+
+export default function ItemList({ data }: { data: Item[] }) {
   const cols = useNumberOfColumns();
 
   return (

@@ -15,15 +15,18 @@ import Box from "@mui/material/Box";
 import InviteButton from "./InviteButton";
 import { INVITE_BUTTONS } from "./buttons";
 import Divider from "@mui/material/Divider";
+import ShareIcon from "@mui/icons-material/Share";
+
+const TRIGGER_BUTTON_TEXT = "Share";
 
 interface InviteTriggerProps {
-  title: string;
+  name: string;
   pin: string;
   disabled: boolean;
 }
 
 export default function InviteTrigger({
-  title,
+  name,
   pin,
   disabled,
 }: InviteTriggerProps) {
@@ -43,7 +46,7 @@ export default function InviteTrigger({
       <InviteButton
         button={item.button}
         icon={item.icon}
-        message={item.getMessage({ title, pin })}
+        message={item.getMessage({ name, pin })}
         disabled={disabled}
         key={item.id}
       />
@@ -52,8 +55,8 @@ export default function InviteTrigger({
 
   return (
     <React.Fragment>
-      <Button onClick={_open} variant="contained" color="secondary">
-        Invite
+      <Button onClick={_open} variant="outlined" endIcon={<ShareIcon />}>
+        {TRIGGER_BUTTON_TEXT}
       </Button>
 
       <Dialog
@@ -69,7 +72,7 @@ export default function InviteTrigger({
           },
         }}
       >
-        <DialogTitle>Invite to Party</DialogTitle>
+        <DialogTitle>{TRIGGER_BUTTON_TEXT}</DialogTitle>
         <IconButton
           onClick={close}
           sx={{

@@ -1,25 +1,12 @@
-import {
-  query,
-  doc,
-  getDoc,
-  where,
-  documentId,
-  setDoc,
-  deleteDoc,
-} from "firebase/firestore";
+import { query, doc, getDoc, where, documentId } from "firebase/firestore";
 import { useCollectionDataWithIds } from "../utils/hooks";
-import { getUserSubCollections } from "./utils";
 import { getCollections } from "../utils";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { getServices } from "../services";
+import { UsersCol } from "../../types";
 
 const { auth } = getServices();
 const { usersCol } = getCollections();
-
-function useUserRatings(userId: string) {
-  const { ratingsCol } = getUserSubCollections(userId);
-  return useCollectionDataWithIds(query(ratingsCol));
-}
 
 async function getUser(userId: string) {
   const snap = await getDoc(doc(usersCol, userId));
@@ -42,48 +29,16 @@ function useFirestoreUser() {
   return useDocumentData(doc(usersCol, userId));
 }
 
-function useUsers(userIds: string[]) {
-  return useCollectionDataWithIds(
-    query(usersCol, where(documentId(), "in", userIds))
-  );
+function useUsers(
+  userIds: string[]
+): [(UsersCol.Doc & { id: string })[] | undefined, boolean, Error | undefined] {
+  const usersQuery =
+    userIds.length === 0
+      ? null
+      : query(usersCol, where(documentId(), "in", userIds));
+
+  return useCollectionDataWithIds(usersQuery);
 }
 
-function rateContent({
-  userId,
-  contentId,
-  value,
-}: {
-  userId: string;
-  contentId: string;
-  value: number;
-}) {
-  const { ratingsCol } = getUserSubCollections(userId);
-  return setDoc(
-    doc(ratingsCol, contentId),
-    {
-      contentId,
-      value,
-    },
-    { merge: true }
-  );
-}
-
-function deleteContentRating({
-  userId,
-  contentId,
-}: {
-  userId: string;
-  contentId: string;
-}) {
-  const { ratingsCol } = getUserSubCollections(userId);
-  return deleteDoc(doc(ratingsCol, contentId));
-}
-
-export {
-  useUserRatings,
-  getUser,
-  useUsers,
-  rateContent,
-  useFirestoreUser,
-  deleteContentRating,
-};
+export { getUser, useUsers, useFirestoreUser };
+export * from "./rating";

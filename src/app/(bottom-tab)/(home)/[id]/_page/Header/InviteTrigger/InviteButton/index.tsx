@@ -15,21 +15,15 @@ export interface InviteButtonProps {
   button: React.ComponentType<InviteButtonContainerProps>;
   icon: React.ComponentType<InviteButtonIconProps>;
   message: string;
-  disabled: boolean;
 }
 
 export default function InviteButton({
   button: Button,
   icon: Icon,
   message,
-  disabled,
 }: InviteButtonProps) {
   return (
-    <Button
-      url={FAKE_TRUTHY_URL_PLACEHOLDER}
-      title={message}
-      disabled={disabled}
-    >
+    <Button url={FAKE_TRUTHY_URL_PLACEHOLDER} title={message}>
       <Icon size={DEFAULT_ICON_SIZE} round />
     </Button>
   );

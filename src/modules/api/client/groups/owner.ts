@@ -17,7 +17,7 @@ const { groupsCol } = getCollections();
 export async function getGroupOwner(groupId: string) {
   const snap = await getDoc(doc(groupsCol, groupId));
   if (!snap.exists()) {
-    throw new Error("Group not found");
+    throw new Error("Not found");
   }
   return getUser(snap.data().ownerId);
 }

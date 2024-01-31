@@ -5,26 +5,50 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useRouter } from "next/navigation";
+import { joinGroup } from "@/modules/api/client";
+import { useUser } from "@/app/_layout/UserProvider";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
 export default function Page() {
   const router = useRouter();
+  const { user } = useUser();
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
 
   function close() {
     router.back();
   }
 
-  function onFormSubmission(event: React.FormEvent<HTMLFormElement>) {
+  async function onFormSubmission(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
-    const pin = String(formData.get("pin"));
-    close();
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const formData = new FormData(event.currentTarget);
+      const pin = String(formData.get("pin"));
+      if (!pin) return setError("PIN is required");
+      const group = await joinGroup({ userId: user.uid, pin });
+      router.replace(`/${group.id}`);
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
     <form onSubmit={onFormSubmission}>
       <Box sx={{ py: 4, px: 2 }}>
-        <TextField autoFocus fullWidth label="Party PIN" />
+        <TextField name="pin" autoFocus fullWidth label="Party PIN" />
+        {error && (
+          <Alert severity="error" sx={{ mt: 2 }}>
+            <AlertTitle>Error</AlertTitle>
+            {error}
+          </Alert>
+        )}
       </Box>
 
       <Box
@@ -43,7 +67,7 @@ export default function Page() {
           fullWidth
           color="primary"
         >
-          Join
+          {isLoading ? "Joining..." : "Join"}
         </Button>
 
         <Button onClick={close} size="large" variant="outlined" fullWidth>

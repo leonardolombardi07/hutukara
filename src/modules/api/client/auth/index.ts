@@ -7,6 +7,7 @@ import {
   createUserWithEmailAndPassword,
   UserCredential,
   updateProfile,
+  updatePassword as firebaseUpdatePassword,
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { _signInWithPopup } from "./internal";
@@ -129,4 +130,19 @@ function sendPasswordResetEmail(email: string) {
   return firebaseSendPasswordResetEmail(auth, email);
 }
 
-export { signOut, onAuthStateChanged, sendPasswordResetEmail, signIn, signUp };
+function updatePassword(newPassword: string) {
+  if (!auth.currentUser) {
+    throw new Error("User not found");
+  }
+
+  return firebaseUpdatePassword(auth.currentUser, newPassword);
+}
+
+export {
+  signOut,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  signIn,
+  signUp,
+  updatePassword,
+};

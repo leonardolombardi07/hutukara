@@ -5,26 +5,41 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useRouter } from "next/navigation";
+import { createGroup } from "@/modules/api/client";
+import { useUser } from "@/app/_layout/UserProvider";
 
 export default function Page() {
   const router = useRouter();
+  const { user } = useUser();
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
 
   function close() {
     router.back();
   }
 
-  function onFormSubmission(event: React.FormEvent<HTMLFormElement>) {
+  async function onFormSubmission(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
-    const title = String(formData.get("title"));
-    close();
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const formData = new FormData(event.currentTarget);
+      const name = String(formData.get("name"));
+      const { id } = await createGroup({ ownerId: user.uid, name });
+      router.replace(`/${id}`);
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
     <form onSubmit={onFormSubmission}>
       <Box sx={{ py: 4, px: 2, flexGrow: 1 }}>
-        <TextField autoFocus fullWidth label="Title" />
+        <TextField autoFocus fullWidth name="name" required label="Name" />
       </Box>
 
       <Box

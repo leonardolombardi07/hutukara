@@ -2,7 +2,6 @@ import React from "react";
 import Container from "@mui/material/Container";
 import Header from "./_page/Header";
 import Paper from "@mui/material/Paper";
-import { FAKE_DATA } from "../data";
 import Tabs from "./_page/Tabs";
 
 interface PageProps {
@@ -13,12 +12,7 @@ interface PageProps {
 
 export default function Page({ params }: PageProps) {
   if (!params.id) {
-    throw new Error("No id");
-  }
-
-  const item = FAKE_DATA.find((item) => item.id === params.id);
-  if (!item) {
-    throw new Error("No item");
+    throw new Error("No group id provided");
   }
 
   return (
@@ -39,8 +33,8 @@ export default function Page({ params }: PageProps) {
           height: "100%",
         }}
       >
-        <Header {...item} />
-        <Tabs item={item} />
+        <Header id={params.id} />
+        <Tabs id={params.id} />
       </Paper>
     </Container>
   );

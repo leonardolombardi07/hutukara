@@ -1,11 +1,35 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { Item } from "../../types";
 import TopPick from "./TopPick";
 import ItemList from "./ItemList";
+import { useGroupMostRecentMatch } from "@/modules/api/client/";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
-export default function Summary({ data }: { data: Item["results"] }) {
+export default function Summary({ id }: { id: string }) {
+  const [item, isLoading, error] = useGroupMostRecentMatch(id);
+
+  if (isLoading) {
+    // TODO: add skeleton loader
+    return null;
+  }
+
+  if (error) {
+    return (
+      <Alert severity="error">
+        <AlertTitle>Error</AlertTitle>
+        {error ? error.message : "No match found"}
+      </Alert>
+    );
+  }
+
+  if (!item) {
+    return <NoResults />;
+  }
+
+  const data = item.recommendations;
+
   if (data.length === 0) {
     return <NoResults />;
   }
@@ -19,13 +43,14 @@ export default function Summary({ data }: { data: Item["results"] }) {
 
   return (
     <Box sx={{ my: 2 }}>
-      <TopPick {...first} />
+      <TopPick id={first.imdbID} {...first} />
+
       <Box sx={{ my: 5 }}>
         <Typography variant="h4" sx={{ fontWeight: "bold", m: 2 }}>
           Other Matches
         </Typography>
 
-        <ItemList data={rest} />
+        <ItemList data={rest.map((i) => ({ ...i, id: i.imdbID }))} />
       </Box>
     </Box>
   );

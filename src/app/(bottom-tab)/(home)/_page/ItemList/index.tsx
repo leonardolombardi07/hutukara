@@ -7,27 +7,56 @@ import ItemCard from "./ItemCard";
 import { useQueryState } from "nuqs";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
+import { useUser } from "@/app/_layout/UserProvider";
+import { useUserGroups } from "@/modules/api/client";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import MUILink from "@mui/material/Link";
 
 interface ItemListProps {
   data: Item[];
 }
 
-export default function ItemList({ data }: ItemListProps) {
+export default function ItemList(props: ItemListProps) {
+  const { user } = useUser();
+  const [data = [], isLoading, error] = useUserGroups(user.uid);
+
   const [filter] = useQueryState("filter", {
     history: "push",
   });
 
+  if (error) {
+    return (
+      <Alert severity="error">
+        <AlertTitle>Error</AlertTitle>
+        {error.message}
+      </Alert>
+    );
+  }
+
+  if (isLoading) {
+    // TODO: add skeleton loader
+    return null;
+  }
+
   if (data.length === 0) {
     return (
       <Typography variant="body1" color="textSecondary">
-        You don&apos;t have any items yet. <Link href="?host=true">Host</Link>{" "}
-        or <Link href="?host=true">join</Link> a party!
+        You don&apos;t have any items yet.{" "}
+        <MUILink component={Link} href="/host">
+          Host
+        </MUILink>{" "}
+        or{" "}
+        <MUILink component={Link} href="/join">
+          join
+        </MUILink>{" "}
+        a party!
       </Typography>
     );
   }
 
   const withStatus = data.map((item) => ({
-    status: item.results.length > 0 ? "finished" : "ongoing",
+    status: item.matchIds.length > 0 ? "finished" : "ongoing",
     ...item,
   }));
 
@@ -50,7 +79,7 @@ export default function ItemList({ data }: ItemListProps) {
   if (filteredData.length === 0) {
     return (
       <Typography variant="body1" color="textSecondary">
-        No items found.
+        No filtered items found.
       </Typography>
     );
   }
@@ -60,7 +89,12 @@ export default function ItemList({ data }: ItemListProps) {
       {filteredData.map((item) => {
         return (
           <Grid item key={item.id} xs={12} md={6} xl={4}>
-            <ItemCard {...item} />
+            <ItemCard
+              totalNumberOfMembers={
+                item.matchIds.length + item.hostIds.length + 1
+              }
+              {...item}
+            />
           </Grid>
         );
       })}

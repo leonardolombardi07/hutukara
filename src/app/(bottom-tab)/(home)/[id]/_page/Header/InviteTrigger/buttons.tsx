@@ -8,7 +8,7 @@ import { InviteButtonProps } from "./InviteButton";
 import { APP_NAME } from "@/app/constants";
 
 interface GetMessageArgs {
-  title: string;
+  name: string;
   pin: string;
 }
 
@@ -16,11 +16,11 @@ interface InviteButtonItem {
   id: string;
   button: InviteButtonProps["button"];
   icon: InviteButtonProps["icon"];
-  getMessage: ({ title, pin }: GetMessageArgs) => string;
+  getMessage: ({ name, pin }: GetMessageArgs) => string;
 }
 
-function defaultGetMessage({ title, pin }: GetMessageArgs) {
-  return `Join my party "${title}" on ${APP_NAME}! The pin is ${pin}.`;
+function defaultGetMessage({ name, pin }: GetMessageArgs) {
+  return `Join my party "${name}" on ${APP_NAME}! The pin is ${pin}.`;
 }
 
 export const INVITE_BUTTONS: InviteButtonItem[] = [

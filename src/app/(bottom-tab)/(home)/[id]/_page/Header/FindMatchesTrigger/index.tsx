@@ -11,19 +11,21 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import Box from "@mui/material/Box";
 import DialogContentText from "@mui/material/DialogContentText";
-import Divider from "@mui/material/Divider";
 import DialogActions from "@mui/material/DialogActions";
+import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
+import ConfirmDialog from "@/components/feedback/ConfirmDialog";
+
+const TRIGGER_BUTTON_TEXT = "Find Matches";
 
 interface FindMatchesTriggerProps {
-  id: string;
-  disabled: boolean;
+  tooManyMatches: boolean;
+  notAllowed: boolean;
 }
 
 export default function FindMatchesTrigger({
-  id,
-  disabled,
+  tooManyMatches,
+  notAllowed,
 }: FindMatchesTriggerProps) {
   const fullScreen = useFullScreen();
   const [open, setOpen] = React.useState(false);
@@ -36,72 +38,84 @@ export default function FindMatchesTrigger({
     setOpen(false);
   }
 
+  const confirmDialogTitle = notAllowed ? "Not allowed!" : "Too many matches!";
+
+  const confirmDialogDescription = notAllowed
+    ? "Only the owner and hosts can find matches. Ask the owner to find matches or add you as a host."
+    : "Currently, we only support one round of matches.";
+
   return (
     <React.Fragment>
       <Button
-        disabled={disabled}
         onClick={_open}
         variant="contained"
         color="success"
+        endIcon={<AutoFixHighIcon />}
       >
-        Find Matches
+        {TRIGGER_BUTTON_TEXT}
       </Button>
 
-      <Dialog
-        fullScreen={fullScreen}
-        scroll="paper"
-        open={open}
-        onClose={close}
-        TransitionComponent={Transition}
-        sx={{
-          "& .MuiDialog-container": {
-            "& .MuiPaper-root": {
-              minWidth: 350,
-            },
-          },
-        }}
-      >
-        <DialogTitle>Find Matches</DialogTitle>
-        <IconButton
-          onClick={close}
+      {tooManyMatches || notAllowed ? (
+        <ConfirmDialog
+          title={confirmDialogTitle}
+          description={confirmDialogDescription}
+          open={open}
+          confirmText="Ok"
+          onClose={close}
+          onConfirm={close}
+        />
+      ) : (
+        <Dialog
+          fullScreen={fullScreen}
+          scroll="paper"
+          open={open}
+          onClose={close}
+          TransitionComponent={Transition}
           sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
+            "& .MuiDialog-container": {
+              "& .MuiPaper-root": {
+                minWidth: 350,
+              },
+            },
           }}
         >
-          <CloseIcon />
-        </IconButton>
-
-        <DialogContent dividers>
-          <DialogContentText>
-            {[...new Array(50)]
-              .map(
-                () => `Cras mattis consectetur purus sit amet fermentum.
-Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
-              )
-              .join("\n")}
-          </DialogContentText>
-        </DialogContent>
-
-        <DialogActions>
-          <Button size="large" onClick={close}>
-            Cancel
-          </Button>
-
-          <Button
-            size="large"
+          <DialogTitle>{TRIGGER_BUTTON_TEXT}</DialogTitle>
+          <IconButton
             onClick={close}
-            color="primary"
-            variant="contained"
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
           >
-            Find
-          </Button>
-        </DialogActions>
-      </Dialog>
+            <CloseIcon />
+          </IconButton>
+
+          <DialogContent dividers>
+            <DialogContentText>
+              We will find the best matches for you based on the combined
+              ratings of the members in the group.
+            </DialogContentText>
+          </DialogContent>
+
+          <DialogActions>
+            <Button size="large" onClick={close}>
+              Cancel
+            </Button>
+
+            <Button
+              size="large"
+              onClick={close}
+              variant="contained"
+              endIcon={<AutoFixHighIcon />}
+              color="success"
+            >
+              Find
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </React.Fragment>
   );
 }

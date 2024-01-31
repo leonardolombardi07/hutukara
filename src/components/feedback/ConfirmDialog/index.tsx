@@ -38,8 +38,10 @@ export default function ConfirmDialog({
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={onClose}>{cancelText || "Cancelar"}</Button>
-          <Button onClick={onConfirm}>{confirmText || "Confirmar"}</Button>
+          {cancelText && (
+            <Button onClick={onClose}>{cancelText || "Cancel"}</Button>
+          )}
+          <Button onClick={onConfirm}>{confirmText || "Ok"}</Button>
         </DialogActions>
 
         {error && (

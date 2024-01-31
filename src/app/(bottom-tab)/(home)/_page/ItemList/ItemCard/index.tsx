@@ -8,24 +8,23 @@ import GroupsIcon from "@mui/icons-material/Groups";
 
 interface ItemCardProps {
   id: string;
-  title: string;
-  createdAt: Date;
-  members: any[];
+  name: string;
+  createdAt: number;
+  totalNumberOfMembers: number;
 }
 
 export default function ItemCard(props: ItemCardProps) {
-  const { id, title } = props;
+  const { id, name } = props;
   return (
     <Card variant="outlined">
       <CardActionArea LinkComponent={Link} href={`/${id}`}>
-        <CardHeader title={title} subheader={<CardSubheader {...props} />} />
+        <CardHeader title={name} subheader={<CardSubheader {...props} />} />
       </CardActionArea>
     </Card>
   );
 }
 
-function CardSubheader({ createdAt, members }: ItemCardProps) {
-  const totalNumberOfMembers = members.length + 1; // add 1 for the host
+function CardSubheader({ createdAt, totalNumberOfMembers }: ItemCardProps) {
   return (
     <Box
       sx={{
@@ -66,7 +65,9 @@ function containText({ lines }: { lines: number }) {
   };
 }
 
-function humanReadableDate(date: Date) {
+function humanReadableDate(timestamp: number) {
+  const date = new Date(timestamp);
+
   const now = new Date();
   const diff = now.getTime() - date.getTime();
   const diffInMinutes = diff / 1000 / 60;

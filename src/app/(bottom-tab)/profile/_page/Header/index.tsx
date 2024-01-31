@@ -53,7 +53,7 @@ export default function Header({ user }: HeaderProps) {
         </CardContent>
 
         <CardActions>
-          {user?.email && <RequestChangePasswordButton email={user.email} />}
+          {user?.email && <RequestChangePasswordButton />}
 
           <SignOutButton />
         </CardActions>

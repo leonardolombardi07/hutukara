@@ -1,31 +1,46 @@
+"use client";
+
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import React from "react";
 import InviteTrigger from "./InviteTrigger";
 import CopyAlert from "./CopyAlert";
 import FindMatchesTrigger from "./FindMatchesTrigger";
+import { useGroup } from "@/modules/api/client";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
+import { useUser } from "@/app/_layout/UserProvider";
 
 interface HeaderProps {
   id: string;
-  title: string;
-  description: string;
-  createdAt: Date;
-  host: {
-    name: string;
-  };
-  results: any[];
-  pin: string;
 }
 
-export default function Header({
-  id,
-  title,
-  description,
-  createdAt,
-  host,
-  results,
-  pin,
-}: HeaderProps) {
+export default function Header({ id }: HeaderProps) {
+  const { user } = useUser();
+  const [item, isLoading, error] = useGroup(id);
+
+  if (isLoading) {
+    // TODO: add skeleton loader
+    return null;
+  }
+
+  if (error || !item) {
+    return (
+      <Alert severity="error">
+        <AlertTitle>Error</AlertTitle>
+        {error ? error.message : "No data found"}
+      </Alert>
+    );
+  }
+
+  // TODO: find out why the `useGroup` hook returns a partial group object when the group was recently created
+  const isValidItem = item?.matchIds?.length !== undefined;
+  if (!isValidItem) {
+    return null;
+  }
+
+  const { name, createdAt, pin, matchIds } = item;
+
   return (
     <Box sx={{ p: 3 }}>
       <Box
@@ -46,31 +61,24 @@ export default function Header({
           <Typography
             sx={{
               fontWeight: "bold",
+              mb: 1,
             }}
             variant="h4"
           >
-            {title}
-          </Typography>
-
-          <Typography variant="body1" sx={{ mb: 1 }}>
-            {description}
+            {name}
           </Typography>
 
           <Typography variant="body2" color="text.secondary">
-            Started at: {createdAt.toDateString()}
-          </Typography>
-
-          <Typography variant="body2" color="text.secondary">
-            Hosted by <b>{host.name}</b>
+            Started at: {new Date(createdAt).toLocaleString()}
           </Typography>
         </Box>
 
-        {results.length === 0 && (
+        {matchIds.length === 0 && (
           <CopyAlert title="Party PIN" subtitle={pin} valueToCopy={pin} />
         )}
       </Box>
 
-      {results.length === 0 && (
+      {matchIds.length === 0 && (
         <Box
           sx={{
             display: "flex",
@@ -79,13 +87,14 @@ export default function Header({
             my: 2,
           }}
         >
-          <InviteTrigger
-            disabled={results.length > 0}
-            title={title}
-            pin={pin}
-          />
+          <InviteTrigger name={name} pin={pin} />
 
-          <FindMatchesTrigger disabled={results.length > 0} id={id} />
+          <FindMatchesTrigger
+            tooManyMatches={matchIds.length > 0}
+            notAllowed={
+              [item.ownerId, ...item.hostIds].includes(user.uid) === false
+            }
+          />
         </Box>
       )}
     </Box>
