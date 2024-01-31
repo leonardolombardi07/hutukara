@@ -17,7 +17,7 @@ export namespace GroupsCol {
   export interface Doc {
     name: string;
     pin: string;
-    createdAt: Date;
+    createdAt: number;
     ownerId: string;
     hostIds: string[];
     memberIds: string[];
@@ -26,7 +26,7 @@ export namespace GroupsCol {
   export namespace MatchesSubCol {
     export interface Doc {
       group: GroupsCol.Doc;
-      createdAt: Date;
+      createdAt: number;
       recommendations: (ContentCol.Doc & { score: number })[];
     }
 
@@ -78,3 +78,5 @@ export namespace ContentCol {
     Response: string;
   }
 }
+
+export type CollectionName = "users" | "content" | "groups";
