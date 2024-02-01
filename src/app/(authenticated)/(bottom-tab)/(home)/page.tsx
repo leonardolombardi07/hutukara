@@ -5,10 +5,8 @@ import ActionButtonGroup from "./_page/ActionButtonGroup";
 import Container from "@mui/material/Container";
 import { APP_NAME } from "@/app/constants";
 import { Metadata } from "next";
-import { Item } from "./types";
 import FilterChip from "./_page/FilterChip";
 import ItemList from "./_page/ItemList";
-import { FAKE_DATA } from "./data";
 
 export const metadata: Metadata = {
   title: `${APP_NAME} | Parties`,
@@ -17,22 +15,11 @@ export const metadata: Metadata = {
 
 interface PageProps {
   searchParams: {
-    id?: string;
     filter?: "ongoing" | "finished" | string;
   };
 }
 
-async function getData(): Promise<{
-  data: Item[];
-}> {
-  return {
-    data: FAKE_DATA,
-  };
-}
-
-export default async function Page({ searchParams }: PageProps) {
-  const { data } = await getData();
-
+export default function Page({ searchParams }: PageProps) {
   return (
     <React.Fragment>
       <Container
@@ -75,7 +62,7 @@ export default async function Page({ searchParams }: PageProps) {
             </Box>
           </Box>
 
-          <ItemList data={data} />
+          <ItemList />
         </Container>
       </Container>
     </React.Fragment>

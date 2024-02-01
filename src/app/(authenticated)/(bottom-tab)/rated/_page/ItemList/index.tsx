@@ -1,25 +1,21 @@
 "use client";
 
 import ImageList from "@mui/material/ImageList";
-import { FAKE_DATA } from "../../../(home)/data";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import RatableContentItem from "@/components/surfaces/RatableContentItem";
-import { useUserRatedContent } from "@/modules/api/client";
-import { useUser } from "@/app/_layout/UserProvider";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
+import { useLayoutContext } from "../../layout";
 
 export default function ItemList() {
-  const { user } = useUser();
   const cols = useNumberOfColumns();
-  const [{ data = [], ratings }, isLoading, error] = useUserRatedContent(
-    user.uid
-  );
 
-  if (data.length === 0 && isLoading) {
+  const [data, isLoading, error] = useLayoutContext();
+
+  if (isLoading) {
     // TODO: add skeleton loader
-    return null;
+    return <h1>Loading</h1>;
   }
 
   if (error) {
@@ -31,16 +27,15 @@ export default function ItemList() {
     );
   }
 
+  if (data.length === 0) {
+    // TODO: add empty state
+    return <h1>No items!</h1>;
+  }
+
   return (
     <ImageList variant="masonry" cols={cols} gap={8}>
       {data.map((item) => (
-        <RatableContentItem
-          key={item.id}
-          userRatingValue={
-            ratings?.find((rating) => rating.contentId === item.id)?.value
-          }
-          {...item}
-        />
+        <RatableContentItem key={item.id} {...item} />
       ))}
     </ImageList>
   );

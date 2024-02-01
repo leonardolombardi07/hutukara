@@ -1,7 +1,6 @@
 import { query, where, documentId, doc, writeBatch } from "firebase/firestore";
 import { useCollectionDataWithIds } from "../utils/hooks";
 import { getCollections } from "../utils";
-import { useUserRatings } from "../users";
 import { ContentCol } from "../../types";
 import { CONTENT_SAMPLE } from "./data";
 import OMBDBApi, { OMBDBResponse } from "@/modules/OMDBApi";
@@ -10,25 +9,11 @@ import { getServices } from "../services";
 const { firestore } = getServices();
 const { contentCol } = getCollections();
 
-function useUserRatedContent(userId: string) {
-  const [ratings, loadingRatings, errorRatings] = useUserRatings(userId);
-
-  const contentIds = ratings?.map((r) => r.contentId) || [];
-
-  const userRatedContentQuery =
-    contentIds.length === 0
-      ? null
-      : query(contentCol, where(documentId(), "in", contentIds));
-
-  const [data, loading, error] = useCollectionDataWithIds(
-    userRatedContentQuery
-  );
-
-  return [
-    { data, ratings },
-    loading || loadingRatings,
-    error || errorRatings,
-  ] as const;
+function useContentData(ids: string[]) {
+  // TODO: rename this to "useContent"
+  const q =
+    ids.length === 0 ? null : query(contentCol, where(documentId(), "in", ids));
+  return useCollectionDataWithIds(q);
 }
 
 function useContentToBrowse() {
@@ -50,6 +35,7 @@ const upsertSampleOnce = (function () {
 })();
 
 function useContent(id: string) {
+  // TODO: rename this to "useContentById"
   const [data, ...rest] = useCollectionDataWithIds(
     query(contentCol, where(documentId(), "==", id))
   );
@@ -77,4 +63,4 @@ function upsertOnFirestore(items: OMBDBResponse[]) {
   return batch.commit();
 }
 
-export { useUserRatedContent, searchContent, useContent, useContentToBrowse };
+export { searchContent, useContent, useContentToBrowse, useContentData };

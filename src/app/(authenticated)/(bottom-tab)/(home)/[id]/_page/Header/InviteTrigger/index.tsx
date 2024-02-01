@@ -22,14 +22,9 @@ const TRIGGER_BUTTON_TEXT = "Share";
 interface InviteTriggerProps {
   name: string;
   pin: string;
-  disabled: boolean;
 }
 
-export default function InviteTrigger({
-  name,
-  pin,
-  disabled,
-}: InviteTriggerProps) {
+export default function InviteTrigger({ name, pin }: InviteTriggerProps) {
   const fullScreen = useFullScreen();
   const [open, setOpen] = React.useState(false);
 
@@ -47,7 +42,6 @@ export default function InviteTrigger({
         button={item.button}
         icon={item.icon}
         message={item.getMessage({ name, pin })}
-        disabled={disabled}
         key={item.id}
       />
     );

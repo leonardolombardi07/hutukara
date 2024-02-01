@@ -2,7 +2,6 @@
 
 import React from "react";
 import Box from "@mui/material/Box";
-import { FAKE_DATA } from "../../(home)/data";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import ContentRating from "@/components/surfaces/ContentRating";

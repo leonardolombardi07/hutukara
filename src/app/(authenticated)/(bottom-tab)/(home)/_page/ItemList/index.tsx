@@ -2,7 +2,6 @@
 
 import React from "react";
 import Grid from "@mui/material/Grid";
-import { Item } from "../../types";
 import ItemCard from "./ItemCard";
 import { useQueryState } from "nuqs";
 import Typography from "@mui/material/Typography";
@@ -12,14 +11,10 @@ import { useUserGroups } from "@/modules/api/client";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import MUILink from "@mui/material/Link";
+import { useLayoutContext } from "../../layout";
 
-interface ItemListProps {
-  data: Item[];
-}
-
-export default function ItemList(props: ItemListProps) {
-  const { user } = useUser();
-  const [data = [], isLoading, error] = useUserGroups(user.uid);
+export default function ItemList() {
+  const [data, isLoading, error] = useLayoutContext();
 
   const [filter] = useQueryState("filter", {
     history: "push",

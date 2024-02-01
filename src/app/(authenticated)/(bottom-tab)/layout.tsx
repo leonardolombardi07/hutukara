@@ -1,7 +1,7 @@
 import BottomTabMenu from "./_layout/BottomTabMenu";
-import Header from "./_layout/Header";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
+import Header from "./_layout/Header";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
