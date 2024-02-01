@@ -13,21 +13,29 @@ interface ContentWithUserRating extends ContentCol.Doc {
 
 export default function useSearch({ data }: { data: ContentWithUserRating[] }) {
   const [query] = useQueryState("query");
-  const debouncedQuery = useDebounce(query, 2000);
+  const debouncedQuery = useDebounce(query, 500);
 
   const [results, setResults] = React.useState<ContentWithUserRating[]>([]);
   const [isSearching, setIsSearching] = React.useState(false);
   const [error, setError] = React.useState<Error | null>(null);
 
   React.useEffect(() => {
-    async function search_() {
+    if (query) {
       setIsSearching(true);
+    } else {
+      setIsSearching(false);
+    }
+  }, [query]);
+
+  React.useEffect(() => {
+    async function search_() {
       setError(null);
+      setIsSearching(true);
 
       try {
         if (!debouncedQuery) return setResults([]);
 
-        const resultsOnAvaliableData = await searchOnAvaliableData({
+        const resultsOnAvaliableData = searchOnAvaliableData({
           query: debouncedQuery,
           data: data,
         });
@@ -61,7 +69,7 @@ export default function useSearch({ data }: { data: ContentWithUserRating[] }) {
   };
 }
 
-async function searchOnAvaliableData<T extends { Title: string }>({
+function searchOnAvaliableData<T extends { Title: string }>({
   query,
   data,
 }: {
@@ -82,6 +90,5 @@ async function searchOnAPI(q: string): Promise<OMBDBResponse[]> {
 }
 
 function randomMSBetween(min: number, max: number) {
-  console.log(Math.floor(Math.random() * (max - min + 1) + min));
   return Math.floor(Math.random() * (max - min + 1) + min);
 }

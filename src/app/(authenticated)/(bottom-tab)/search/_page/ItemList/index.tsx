@@ -36,7 +36,7 @@ export default function ItemList() {
     );
   }
 
-  if (!isSearching && searchResults.length === 0) {
+  if (!isSearching && query && searchResults.length === 0) {
     return (
       <Alert severity="info">
         <AlertTitle>No Results!</AlertTitle>
