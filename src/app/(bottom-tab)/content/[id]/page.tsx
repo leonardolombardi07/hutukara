@@ -12,13 +12,13 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { useUser } from "@/app/_layout/UserProvider";
 
-interface Props {
+export interface PageProps {
   params: {
     id?: string;
   };
 }
 
-export default function Page({ params }: Props) {
+export default function Page({ params }: PageProps) {
   if (!params.id) {
     throw new Error("No id");
   }

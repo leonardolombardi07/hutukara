@@ -3,23 +3,19 @@
 import * as React from "react";
 import { useQueryState } from "nuqs";
 import { useDebounce } from "@uidotdev/usehooks";
-import OMBDBApi from "@/modules/OMDBApi";
+import { OMBDBResponse } from "@/modules/OMDBApi";
 import { ContentCol } from "@/modules/api/types";
 
-// Currently, we don't have the api key, so we know we'll get an error
-const UNREALISTIC_DEBOUNCE_DELAY = 4000;
+interface ContentWithUserRating extends ContentCol.Doc {
+  id: string;
+  userRatingValue: number | undefined;
+}
 
-export default function useSearch({
-  data,
-}: {
-  data: (ContentCol.Doc & { id: string })[];
-}) {
+export default function useSearch({ data }: { data: ContentWithUserRating[] }) {
   const [query] = useQueryState("query");
-  const debouncedQuery = useDebounce(query, UNREALISTIC_DEBOUNCE_DELAY);
+  const debouncedQuery = useDebounce(query, 500);
 
-  const [results, setResults] = React.useState<
-    (ContentCol.Doc & { id: string })[]
-  >([]);
+  const [results, setResults] = React.useState<ContentWithUserRating[]>([]);
   const [isSearching, setIsSearching] = React.useState(false);
   const [error, setError] = React.useState<Error | null>(null);
 
@@ -38,7 +34,14 @@ export default function useSearch({
         if (resultsOnAvaliableData.length) return setResults(data);
 
         const resultsFromApiSearch = await searchOnAPI(debouncedQuery);
-        setResults(resultsFromApiSearch.map((r) => ({ ...r, id: r.imdbID })));
+        setResults(
+          resultsFromApiSearch.map((r) => ({
+            ...r,
+            id: r.imdbID,
+            userRatingValue: data.find((d) => d.id === r.imdbID)
+              ?.userRatingValue,
+          }))
+        );
       } catch (error: any) {
         setError(new Error(error?.message || "Something went wrong"));
       } finally {
@@ -69,6 +72,14 @@ async function searchOnAvaliableData<T extends { Title: string }>({
   );
 }
 
-async function searchOnAPI(q: string) {
-  return OMBDBApi.search(q);
+async function searchOnAPI(q: string): Promise<OMBDBResponse[]> {
+  await new Promise((resolve) =>
+    setTimeout(resolve, randomMSBetween(300, 1000))
+  );
+  return [];
+  // return OMBDBApi.search(q);
+}
+
+function randomMSBetween(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }
