@@ -24,9 +24,7 @@ function UserProvider({ children }: { children: React.ReactNode }) {
           setUser(user);
         }
       },
-      error: (error) => {
-        console.log(error);
-      },
+      error: (error) => {},
       complete: () => {
         setIsLoading(false);
       },

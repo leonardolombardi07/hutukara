@@ -10,15 +10,28 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Box from "@mui/material/Box";
-import { useContentToBrowse } from "@/modules/api/client";
+import { useContentToBrowse, useUserRatings } from "@/modules/api/client";
+import { useUser } from "@/app/_layout/UserProvider";
 
 export default function ItemList() {
   const cols = useNumberOfColumns();
 
-  const [data] = useContentToBrowse();
-  const { results: searchResults, isSearching, error, query } = useSearch();
+  const { user } = useUser();
 
-  if (isSearching) {
+  const [content = [], isLoadingContent, contentError] = useContentToBrowse();
+
+  const [ratings, isLoadingRatings, ratingError] = useUserRatings(user.uid);
+
+  const {
+    results: searchResults,
+    isSearching,
+    error: searchError,
+    query,
+  } = useSearch({ data: content });
+
+  const error = contentError || ratingError || searchError;
+
+  if (isLoadingContent || isSearching) {
     return (
       <Box
         sx={{
@@ -37,7 +50,7 @@ export default function ItemList() {
     return (
       <Alert severity="error">
         <AlertTitle>Error</AlertTitle>
-        {error}
+        {error.message}
       </Alert>
     );
   }
@@ -51,20 +64,18 @@ export default function ItemList() {
     );
   }
 
-  if (!query) {
-    return (
-      <ImageList variant="masonry" cols={cols} gap={8}>
-        {data.map((item) => (
-          <RatableContentItem key={item.id} {...item} />
-        ))}
-      </ImageList>
-    );
-  }
+  const data = query ? searchResults : content;
 
   return (
     <ImageList variant="masonry" cols={cols} gap={8}>
-      {searchResults.map((item) => (
-        <RatableContentItem key={item.id} {...item} />
+      {data.map((item) => (
+        <RatableContentItem
+          key={item.id}
+          userRatingValue={
+            ratings?.find((rating) => rating.contentId === item.id)?.value
+          }
+          {...item}
+        />
       ))}
     </ImageList>
   );

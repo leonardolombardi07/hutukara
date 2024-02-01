@@ -13,9 +13,11 @@ import AlertTitle from "@mui/material/AlertTitle";
 export default function ItemList() {
   const { user } = useUser();
   const cols = useNumberOfColumns();
-  const [{ data = [] }, isLoading, error] = useUserRatedContent(user.uid);
+  const [{ data = [], ratings }, isLoading, error] = useUserRatedContent(
+    user.uid
+  );
 
-  if (isLoading) {
+  if (data.length === 0 && isLoading) {
     // TODO: add skeleton loader
     return null;
   }
@@ -32,7 +34,13 @@ export default function ItemList() {
   return (
     <ImageList variant="masonry" cols={cols} gap={8}>
       {data.map((item) => (
-        <RatableContentItem key={item.id} {...item} />
+        <RatableContentItem
+          key={item.id}
+          userRatingValue={
+            ratings?.find((rating) => rating.contentId === item.id)?.value
+          }
+          {...item}
+        />
       ))}
     </ImageList>
   );

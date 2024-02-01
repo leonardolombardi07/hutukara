@@ -1,8 +1,12 @@
 import type { FirebaseApp } from "firebase/app";
 import { initializeApp, getApps } from "firebase/app";
 import type { Firestore } from "firebase/firestore";
-import { connectFirestoreEmulator } from "firebase/firestore";
-import { getFirestore } from "firebase/firestore";
+import {
+  connectFirestoreEmulator,
+  initializeFirestore,
+  persistentLocalCache,
+  persistentMultipleTabManager,
+} from "firebase/firestore";
 import type { Auth } from "firebase/auth";
 import { connectAuthEmulator, getAuth } from "firebase/auth";
 import { connectStorageEmulator } from "firebase/storage";
@@ -21,7 +25,11 @@ interface FirebaseClientServices {
 function getRawServices(): FirebaseClientServices {
   const app = initializeApp(FIREBASE_CONFIG);
   const auth = getAuth(app);
-  const firestore = getFirestore(app);
+  const firestore = initializeFirestore(app, {
+    localCache: persistentLocalCache({
+      tabManager: persistentMultipleTabManager(),
+    }),
+  });
   const storage = getStorage();
   return { app, auth, firestore, storage };
 }

@@ -6,35 +6,20 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import ContentRating from "../ContentRating";
-import { useUserRatings } from "@/modules/api/client";
-import { useUser } from "@/app/_layout/UserProvider";
 
 interface RatableContentItemProps {
   id: string;
   Title: string;
   Poster: string;
+  userRatingValue: number | null | undefined;
 }
 
 export default function RatableContentItem({
   id,
   Title,
   Poster,
+  userRatingValue,
 }: RatableContentItemProps) {
-  const { user } = useUser();
-  const [ratings, isLoadingRatings, error] = useUserRatings(user.uid);
-
-  if (isLoadingRatings) {
-    // TODO: add skeleton loader
-    return null;
-  }
-
-  if (error || !ratings) {
-    // TODO: handle error
-    return null;
-  }
-
-  const userRating = ratings.find((rating) => rating.contentId === id);
-
   return (
     <ImageListItem>
       <Link
@@ -70,16 +55,19 @@ export default function RatableContentItem({
 
       <ImageListItemBar
         title={
-          <Typography variant="body2" sx={{ fontWeight: "bold", mx: "5px" }}>
+          <Typography
+            variant="body2"
+            sx={{
+              fontWeight: "bold",
+              mx: "5px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
             {Title}
           </Typography>
         }
-        subtitle={
-          <ContentRating
-            value={userRating ? userRating.value : null}
-            contentId={id}
-          />
-        }
+        subtitle={<ContentRating value={userRatingValue} contentId={id} />}
         position="below"
         sx={{
           px: "5px",

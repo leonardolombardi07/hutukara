@@ -1,23 +1,27 @@
 "use client";
 
 import * as React from "react";
-import { FAKE_DATA } from "@/app/(bottom-tab)/(home)/data";
 import { useQueryState } from "nuqs";
 import { useDebounce } from "@uidotdev/usehooks";
 import OMBDBApi from "@/modules/OMDBApi";
-
-const AVALIABLE_RESULTS = FAKE_DATA.map((item) => item.results).flat();
+import { ContentCol } from "@/modules/api/types";
 
 // Currently, we don't have the api key, so we know we'll get an error
 const UNREALISTIC_DEBOUNCE_DELAY = 4000;
 
-export default function useSearch() {
+export default function useSearch({
+  data,
+}: {
+  data: (ContentCol.Doc & { id: string })[];
+}) {
   const [query] = useQueryState("query");
   const debouncedQuery = useDebounce(query, UNREALISTIC_DEBOUNCE_DELAY);
 
-  const [results, setResults] = React.useState<any[]>([]);
+  const [results, setResults] = React.useState<
+    (ContentCol.Doc & { id: string })[]
+  >([]);
   const [isSearching, setIsSearching] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
+  const [error, setError] = React.useState<Error | null>(null);
 
   React.useEffect(() => {
     async function search_() {
@@ -25,19 +29,18 @@ export default function useSearch() {
       setError(null);
 
       try {
-        if (!debouncedQuery) return setResults(AVALIABLE_RESULTS);
+        if (!debouncedQuery) return setResults([]);
 
         const resultsOnAvaliableData = await searchOnAvaliableData({
           query: debouncedQuery,
-          data: AVALIABLE_RESULTS,
+          data: data,
         });
-        if (resultsOnAvaliableData.length)
-          return setResults(resultsOnAvaliableData);
+        if (resultsOnAvaliableData.length) return setResults(data);
 
         const resultsFromApiSearch = await searchOnAPI(debouncedQuery);
-        setResults(resultsFromApiSearch);
+        setResults(resultsFromApiSearch.map((r) => ({ ...r, id: r.imdbID })));
       } catch (error: any) {
-        setError(error?.message || "Something went wrong");
+        setError(new Error(error?.message || "Something went wrong"));
       } finally {
         setIsSearching(false);
       }

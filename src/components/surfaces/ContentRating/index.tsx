@@ -8,7 +8,7 @@ import { deleteContentRating, rateContent } from "@/modules/api/client";
 import { useUser } from "@/app/_layout/UserProvider";
 
 interface RatingProps {
-  value: number | null;
+  value: number | null | undefined;
   contentId: string;
   size?: "small" | "medium" | "large";
 }
@@ -24,7 +24,7 @@ export default function ContentRating({ value, contentId, size }: RatingProps) {
       }}
     >
       <MUIRating
-        value={value}
+        value={value === undefined ? null : value}
         precision={0.5}
         size={size || "medium"}
         onChange={(event, newValue) => {

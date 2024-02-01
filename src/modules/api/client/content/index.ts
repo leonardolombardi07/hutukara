@@ -42,7 +42,8 @@ const upsertSampleOnce = (function () {
   return async function () {
     if (hasRun) return;
 
-    alert("Running upsertSampleOnce...");
+    process.env.NODE_ENV === "development" &&
+      alert("Running upsertSampleOnce...");
     await upsertOnFirestore(CONTENT_SAMPLE);
     hasRun = true;
   };

@@ -32,12 +32,12 @@ function useFirestoreUser() {
 function useUsers(
   userIds: string[]
 ): [(UsersCol.Doc & { id: string })[] | undefined, boolean, Error | undefined] {
-  const usersQuery =
+  const q =
     userIds.length === 0
       ? null
       : query(usersCol, where(documentId(), "in", userIds));
 
-  return useCollectionDataWithIds(usersQuery);
+  return useCollectionDataWithIds(q);
 }
 
 export { getUser, useUsers, useFirestoreUser };
