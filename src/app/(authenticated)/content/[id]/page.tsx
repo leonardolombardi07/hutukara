@@ -4,7 +4,7 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import ContentRating from "@/components/surfaces/ContentRating";
+import ContentRating from "@/components/modules/content/ContentRating";
 import Paper from "@mui/material/Paper";
 import { useContent, useUserRatings } from "@/modules/api/client";
 import Alert from "@mui/material/Alert";

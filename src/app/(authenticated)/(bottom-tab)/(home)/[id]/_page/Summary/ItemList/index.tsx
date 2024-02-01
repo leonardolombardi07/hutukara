@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import ImageList from "@mui/material/ImageList";
-import MatchContentItem from "@/components/surfaces/MatchContentItem";
+import MatchContentItem from "@/components/modules/content/MatchContentItem";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 

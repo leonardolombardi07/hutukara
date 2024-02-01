@@ -4,18 +4,21 @@ import * as React from "react";
 import ImageList from "@mui/material/ImageList";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import RatableContentItem from "@/components/surfaces/RatableContentItem";
+import RatableContentItem, {
+  RatableContentItemSkeleton,
+} from "@/components/modules/content/RatableContentItem";
 import useSearch from "./useSearch";
-import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import Box from "@mui/material/Box";
 import { useLayoutContext } from "../../layout";
+import { calculateSizesFromColumns } from "@/modules/image";
+import useDelay from "@/modules/hooks/useDelay";
 
 export default function ItemList() {
-  const cols = useNumberOfColumns();
+  const cols = useResponsiveCols();
 
   const [data, isLoading, error] = useLayoutContext();
+  const delayedIsLoading = useDelay(isLoading);
 
   const {
     results: searchResults,
@@ -23,21 +26,6 @@ export default function ItemList() {
     error: searchError,
     query,
   } = useSearch({ data });
-
-  if (isLoading || isSearching) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          mt: 10,
-        }}
-      >
-        <CircularProgress color="inherit" />
-      </Box>
-    );
-  }
 
   if (error || searchError) {
     return (
@@ -48,7 +36,7 @@ export default function ItemList() {
     );
   }
 
-  if (query && searchResults.length === 0) {
+  if (!isSearching && searchResults.length === 0) {
     return (
       <Alert severity="info">
         <AlertTitle>No Results!</AlertTitle>
@@ -57,25 +45,51 @@ export default function ItemList() {
     );
   }
 
+  const imageSizes = calculateSizesFromColumns(cols.perBreakpoint);
   const toRender = query ? searchResults : data;
 
   return (
-    <ImageList variant="masonry" cols={cols} gap={8}>
-      {toRender.map((item) => (
-        <RatableContentItem key={item.id} {...item} />
-      ))}
+    <ImageList variant="masonry" cols={cols.value} gap={8}>
+      {delayedIsLoading || isSearching ? (
+        <ListOfSkeletonItems numOfItems={5} />
+      ) : (
+        toRender.map((item) => (
+          <RatableContentItem key={item.id} imageSizes={imageSizes} {...item} />
+        ))
+      )}
     </ImageList>
   );
 }
 
-function useNumberOfColumns() {
+function useResponsiveCols() {
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.only("xs"));
   const isSm = useMediaQuery(theme.breakpoints.only("sm"));
   const isMd = useMediaQuery(theme.breakpoints.only("md"));
 
-  if (isXs) return 2;
-  if (isSm) return 3;
-  if (isMd) return 4;
-  else return 5;
+  const breakpointColumnMap = {
+    xs: 2,
+    sm: 3,
+    md: 4,
+    lg: 5,
+  };
+
+  const cols = {
+    value: isXs
+      ? breakpointColumnMap.xs
+      : isSm
+      ? breakpointColumnMap.sm
+      : isMd
+      ? breakpointColumnMap.md
+      : breakpointColumnMap.lg,
+    perBreakpoint: breakpointColumnMap,
+  };
+
+  return cols;
+}
+
+function ListOfSkeletonItems({ numOfItems }: { numOfItems: number }) {
+  return new Array(numOfItems)
+    .fill(null)
+    .map((_, index) => <RatableContentItemSkeleton key={index} />);
 }

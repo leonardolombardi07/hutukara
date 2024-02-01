@@ -78,24 +78,31 @@ function humanReadableDate(timestamp: number) {
   const diffInYears = diffInDays / 365;
 
   if (diffInMinutes < 60) {
-    return `${Math.round(diffInMinutes)} minutes ago`;
+    return getWithCorrectPluralForm(diffInMinutes, "minute");
   }
 
   if (diffInHours < 24) {
-    return `${Math.round(diffInHours)} hours ago`;
+    return getWithCorrectPluralForm(diffInHours, "hour");
   }
 
   if (diffInDays < 7) {
-    return `${Math.round(diffInDays)} days ago`;
+    return getWithCorrectPluralForm(diffInDays, "day");
   }
 
   if (diffInWeeks < 4) {
-    return `${Math.round(diffInWeeks)} weeks ago`;
+    return getWithCorrectPluralForm(diffInWeeks, "week");
   }
 
   if (diffInMonths < 12) {
-    return `${Math.round(diffInMonths)} months ago`;
+    return getWithCorrectPluralForm(diffInMonths, "month");
   }
 
-  return `${Math.round(diffInYears)} years ago`;
+  return getWithCorrectPluralForm(diffInYears, "year");
+
+  function getWithCorrectPluralForm(diff: number, word: string) {
+    const roundedDiff = Math.round(diff);
+    const isPlural = roundedDiff === 0 || roundedDiff > 1;
+    const pluralizedWord = isPlural ? `${word}s` : word;
+    return `${roundedDiff} ${pluralizedWord} ago`;
+  }
 }

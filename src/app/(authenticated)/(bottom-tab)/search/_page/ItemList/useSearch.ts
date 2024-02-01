@@ -13,7 +13,7 @@ interface ContentWithUserRating extends ContentCol.Doc {
 
 export default function useSearch({ data }: { data: ContentWithUserRating[] }) {
   const [query] = useQueryState("query");
-  const debouncedQuery = useDebounce(query, 500);
+  const debouncedQuery = useDebounce(query, 2000);
 
   const [results, setResults] = React.useState<ContentWithUserRating[]>([]);
   const [isSearching, setIsSearching] = React.useState(false);
@@ -31,7 +31,8 @@ export default function useSearch({ data }: { data: ContentWithUserRating[] }) {
           query: debouncedQuery,
           data: data,
         });
-        if (resultsOnAvaliableData.length) return setResults(data);
+        if (resultsOnAvaliableData.length)
+          return setResults(resultsOnAvaliableData);
 
         const resultsFromApiSearch = await searchOnAPI(debouncedQuery);
         setResults(
@@ -74,12 +75,13 @@ async function searchOnAvaliableData<T extends { Title: string }>({
 
 async function searchOnAPI(q: string): Promise<OMBDBResponse[]> {
   await new Promise((resolve) =>
-    setTimeout(resolve, randomMSBetween(300, 1000))
+    setTimeout(resolve, randomMSBetween(4000, 6000))
   );
   return [];
   // return OMBDBApi.search(q);
 }
 
 function randomMSBetween(min: number, max: number) {
+  console.log(Math.floor(Math.random() * (max - min + 1) + min));
   return Math.floor(Math.random() * (max - min + 1) + min);
 }

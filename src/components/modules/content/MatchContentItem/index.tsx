@@ -1,9 +1,9 @@
 import * as React from "react";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
+import Image from "next/image";
 
 interface MatchContentItemProps {
   id: string;
@@ -24,30 +24,18 @@ export default function MatchContentItem({
         href={`/content/${id}`}
         style={{
           display: "block",
-          height: "100%",
+          height: 300,
+          position: "relative",
         }}
       >
-        {Poster ? (
-          <img
-            srcSet={`${Poster}?w=248&fit=crop&auto=format&dpr=2 2x`}
-            src={`${Poster}?w=248&fit=crop&auto=format`}
-            alt={Title}
-            loading="lazy"
-            style={{
-              objectFit: "cover",
-              width: "100%",
-              height: "100%",
-            }}
-          />
-        ) : (
-          <Box
-            sx={{
-              width: "100%",
-              height: "100%",
-              backgroundColor: "grey.700",
-            }}
-          />
-        )}
+        <Image
+          src={Poster}
+          alt={`Image of ${Title}`}
+          fill={true}
+          style={{
+            objectFit: "contain",
+          }}
+        />
       </Link>
 
       <ImageListItemBar

@@ -29,7 +29,7 @@ export default function ImageButton({
 
       <ImageBackdrop className="MuiImageBackdrop-root" />
 
-      <Image>
+      <ImageContainer>
         <Typography
           component="span"
           variant="subtitle1"
@@ -44,7 +44,7 @@ export default function ImageButton({
           {title}
           <ImageMarked className="MuiImageMarked-root" />
         </Typography>
-      </Image>
+      </ImageContainer>
     </ImageButtonBase>
   );
 }
@@ -80,7 +80,7 @@ const ImageSrc = styled("span")({
   backgroundPosition: "center 40%",
 });
 
-const Image = styled("span")(({ theme }) => ({
+const ImageContainer = styled("span")(({ theme }) => ({
   position: "absolute",
   left: 0,
   right: 0,
