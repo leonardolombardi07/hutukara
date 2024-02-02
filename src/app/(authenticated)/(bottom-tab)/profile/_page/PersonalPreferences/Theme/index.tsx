@@ -7,6 +7,11 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useUserTheme } from "@/app/_layout/ThemeProvider";
+import { UserTheme } from "@/app/_layout/ThemeProvider/UserThemeProvider/constants";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { SALGUEIRO_THEME } from "@/app/_layout/ThemeProvider/UserThemeProvider/themes/salgueiro";
+import { BLUE_THEME } from "@/app/_layout/ThemeProvider/UserThemeProvider/themes/blue";
 
 export default function Theme() {
   const { theme, setTheme } = useUserTheme();
@@ -25,12 +30,66 @@ export default function Theme() {
 
   return (
     <Box>
-      <Typography variant="h6">Theme</Typography>
+      <Typography variant="h6" gutterBottom>
+        Theme
+      </Typography>
+
+      <Stack spacing={2} direction="row" sx={{ alignItems: "center" }}>
+        <ThemeNameCircle
+          name="salgueiro"
+          backgroundColor={SALGUEIRO_THEME.palette.primary.main}
+          borderRadiusColor={SALGUEIRO_THEME.palette.secondary.main}
+        />
+
+        <ThemeNameCircle
+          name="blue"
+          backgroundColor={BLUE_THEME.palette.primary.main}
+          borderRadiusColor={BLUE_THEME.palette.secondary.main}
+        />
+      </Stack>
+
+      <Box sx={{ my: 2 }} />
+
       <Stack spacing={2} direction="row" sx={{ alignItems: "center" }}>
         <Typography variant="body1">{humanReadableThemeMode}</Typography>
         <MaterialUISwitch checked={checked} onChange={handleChange} />
       </Stack>
     </Box>
+  );
+}
+
+function ThemeNameCircle({
+  name,
+  backgroundColor,
+  borderRadiusColor,
+}: {
+  name: UserTheme["name"];
+  backgroundColor: string;
+  borderRadiusColor: string;
+}) {
+  const { theme, setTheme } = useUserTheme();
+
+  function handleChange() {
+    setTheme({
+      ...theme,
+      name,
+    });
+  }
+
+  const isActive = theme.name === name;
+
+  return (
+    <IconButton
+      onClick={handleChange}
+      sx={{
+        backgroundColor,
+        width: 40,
+        height: 40,
+        border: isActive
+          ? `2px solid ${borderRadiusColor}`
+          : "2px solid transparent",
+      }}
+    ></IconButton>
   );
 }
 

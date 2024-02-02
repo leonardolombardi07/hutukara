@@ -43,8 +43,8 @@ function useUserTheme() {
 
 class ThemeCache {
   static readonly _defaultTheme: UserTheme = {
-    name: "blue",
-    mode: "dark",
+    name: "salgueiro",
+    mode: "light",
   };
 
   static get(): UserTheme {
