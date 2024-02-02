@@ -1,7 +1,7 @@
 import React from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
+import Logo from "@/components/elements/Logo";
 
 export default function Header() {
   return (
@@ -10,15 +10,10 @@ export default function Header() {
         sx={{
           display: "flex",
           alignItems: "center",
+          py: 1,
         }}
       >
-        <Typography
-          variant="h6"
-          component="div"
-          sx={{ flexGrow: 1, display: "block" }}
-        >
-          LOGO
-        </Typography>
+        <Logo size="small" />
       </Toolbar>
     </AppBar>
   );
