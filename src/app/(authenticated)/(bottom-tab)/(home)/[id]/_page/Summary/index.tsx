@@ -1,11 +1,12 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import TopPick from "./TopPick";
 import ItemList from "./ItemList";
 import { useGroupMostRecentMatch } from "@/modules/api/client/";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
+import { MatchContentItemProps } from "@/components/modules/content/MatchContentItem";
+import { GroupsCol } from "@/modules/api/types";
 
 export default function Summary({ id }: { id: string }) {
   const [item, isLoading, error] = useGroupMostRecentMatch(id);
@@ -28,7 +29,7 @@ export default function Summary({ id }: { id: string }) {
     return <NoResults />;
   }
 
-  const data = item.recommendations;
+  const data = getData(item);
 
   if (data.length === 0) {
     return <NoResults />;
@@ -38,20 +39,13 @@ export default function Summary({ id }: { id: string }) {
     return b.score - a.score;
   });
 
-  const first = sorted[0];
-  const rest = sorted.slice(1);
-
   return (
-    <Box sx={{ my: 2 }}>
-      <TopPick id={first.imdbID} {...first} />
+    <Box sx={{ p: 2 }}>
+      <Typography variant="h4" sx={{ fontWeight: "bold", m: 2 }}>
+        Your Matches
+      </Typography>
 
-      <Box sx={{ my: 5 }}>
-        <Typography variant="h4" sx={{ fontWeight: "bold", m: 2 }}>
-          Other Matches
-        </Typography>
-
-        <ItemList data={rest.map((i) => ({ ...i, id: i.imdbID }))} />
-      </Box>
+      <ItemList data={sorted} />
     </Box>
   );
 }
@@ -72,4 +66,30 @@ function NoResults() {
       </Typography>
     </Box>
   );
+}
+
+function getData(match: GroupsCol.MatchesSubCol.Doc): MatchContentItemProps[] {
+  const {
+    output: { recommendations, content },
+  } = match;
+
+  const data: MatchContentItemProps[] = [];
+
+  for (const recommendation of recommendations) {
+    const hasFoundContent = content.find(
+      (c) => c.id === recommendation.possibleIMDBId
+    );
+
+    if (hasFoundContent) {
+      data.push(hasFoundContent);
+    } else {
+      data.push({
+        ...recommendation,
+        id: undefined,
+        Poster: undefined,
+      });
+    }
+  }
+
+  return data;
 }

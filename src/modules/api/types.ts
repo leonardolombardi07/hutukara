@@ -1,4 +1,5 @@
 import { OMBDBResponse } from "../OMDBApi";
+import { WithId } from "../tsUtils";
 
 export namespace UsersCol {
   export interface Doc {
@@ -28,13 +29,28 @@ export namespace GroupsCol {
   }
 
   export namespace MatchesSubCol {
+    interface Recommendation {
+      Title: string;
+      score: number;
+      possibleIMDBId: string;
+      possiblePoster: string;
+    }
+
     export interface Doc {
-      group: GroupsCol.Doc;
       createdAt: number;
-      recommendations: (ContentCol.Doc & { score: number })[];
-      allMembers: Omit<UsersCol.Doc, "groups">[];
-      content: ContentCol.Doc[];
-      ratings: UsersCol.RatingsSubCol.Doc[];
+      output: {
+        recommendations: Recommendation[];
+        content: WithId<ContentCol.Doc & { score: number }>[];
+      };
+    }
+
+    export namespace InputSubCol {
+      export interface Doc {
+        group: GroupsCol.Doc;
+        allMembers: Omit<WithId<UsersCol.Doc>, "groupIds">[];
+        content: WithId<ContentCol.Doc>[];
+        ratings: UsersCol.RatingsSubCol.Doc[];
+      }
     }
   }
 }

@@ -15,6 +15,9 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import ConfirmDialog from "@/components/feedback/ConfirmDialog";
+import useSubmit from "./useSubmit";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
 const TRIGGER_BUTTON_TEXT = "Find Matches";
 
@@ -28,18 +31,18 @@ export default function FindMatchesTrigger({
   notAllowed,
 }: FindMatchesTriggerProps) {
   const fullScreen = useFullScreen();
-  const [open, setOpen] = React.useState(false);
+  const { isOpen, openModal, closeModal } = useModal();
 
-  function _open() {
-    setOpen(true);
-  }
+  const { submit, isLoading, status, error } = useSubmit();
 
-  function close() {
-    setOpen(false);
+  async function onSubmit() {
+    const { success } = await submit();
+    if (success) {
+      closeModal();
+    }
   }
 
   const confirmDialogTitle = notAllowed ? "Not allowed!" : "Too many matches!";
-
   const confirmDialogDescription = notAllowed
     ? "Only the owner and hosts can find matches. Ask the owner to find matches or add you as a host."
     : "Currently, we only support one round of matches.";
@@ -47,7 +50,7 @@ export default function FindMatchesTrigger({
   return (
     <React.Fragment>
       <Button
-        onClick={_open}
+        onClick={openModal}
         variant="contained"
         color="success"
         endIcon={<AutoFixHighIcon />}
@@ -59,17 +62,17 @@ export default function FindMatchesTrigger({
         <ConfirmDialog
           title={confirmDialogTitle}
           description={confirmDialogDescription}
-          open={open}
+          open={isOpen}
           confirmText="Ok"
-          onClose={close}
-          onConfirm={close}
+          onClose={closeModal}
+          onConfirm={closeModal}
         />
       ) : (
         <Dialog
           fullScreen={fullScreen}
           scroll="paper"
-          open={open}
-          onClose={close}
+          open={isOpen}
+          onClose={closeModal}
           TransitionComponent={Transition}
           sx={{
             "& .MuiDialog-container": {
@@ -81,7 +84,7 @@ export default function FindMatchesTrigger({
         >
           <DialogTitle>{TRIGGER_BUTTON_TEXT}</DialogTitle>
           <IconButton
-            onClick={close}
+            onClick={closeModal}
             sx={{
               position: "absolute",
               right: 8,
@@ -93,25 +96,30 @@ export default function FindMatchesTrigger({
           </IconButton>
 
           <DialogContent dividers>
-            <DialogContentText>
-              We will find the best matches for you based on the combined
-              ratings of the members in the group.
-            </DialogContentText>
+            <DialogContentFromStatus status={status} />
+
+            {error && (
+              <Alert severity="error" sx={{ mt: 2 }}>
+                <AlertTitle>Error</AlertTitle>
+                {error?.message || "Something went wrong"}
+              </Alert>
+            )}
           </DialogContent>
 
           <DialogActions>
-            <Button size="large" onClick={close}>
+            <Button size="large" onClick={closeModal}>
               Cancel
             </Button>
 
             <Button
               size="large"
-              onClick={close}
+              onClick={onSubmit}
               variant="contained"
               endIcon={<AutoFixHighIcon />}
               color="success"
+              disabled={isLoading}
             >
-              Find
+              {isLoading ? "Loading..." : "Find matches"}
             </Button>
           </DialogActions>
         </Dialog>
@@ -129,8 +137,55 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+function DialogContentFromStatus({
+  status,
+}: {
+  status: ReturnType<typeof useSubmit>["status"];
+}) {
+  if (status === "loadingInput") {
+    return (
+      <DialogContentText>
+        Gathering all data from this group to find the best matches...
+      </DialogContentText>
+    );
+  }
+
+  if (status === "loadingOutput") {
+    return (
+      <DialogContentText>
+        Using advanced machine learning algorithms to find the best matches...
+      </DialogContentText>
+    );
+  }
+
+  return (
+    <DialogContentText>
+      We will find the best matches for you based on the combined ratings of the
+      members in the group.
+    </DialogContentText>
+  );
+}
+
 function useFullScreen() {
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.only("xs"));
   return isXs;
+}
+
+function useModal() {
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  return {
+    isOpen,
+    openModal,
+    closeModal,
+  };
 }

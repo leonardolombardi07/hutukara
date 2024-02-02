@@ -5,9 +5,9 @@ import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import Image from "next/image";
 
-interface MatchContentItemProps {
-  id: string;
-  Poster: string;
+export interface MatchContentItemProps {
+  id?: string;
+  Poster?: string;
   Title: string;
   score: number;
 }
@@ -20,23 +20,25 @@ export default function MatchContentItem({
 }: MatchContentItemProps) {
   return (
     <ImageListItem>
-      <Link
-        href={`/content/${id}`}
-        style={{
-          display: "block",
-          height: 300,
-          position: "relative",
-        }}
-      >
-        <Image
-          src={Poster}
-          alt={`Image of ${Title}`}
-          fill={true}
+      {Poster && id ? (
+        <Link
+          href={`/content/${id}`}
           style={{
-            objectFit: "contain",
+            display: "block",
+            height: 300,
+            position: "relative",
           }}
-        />
-      </Link>
+        >
+          <Image
+            src={Poster}
+            alt={`Image of ${Title}`}
+            fill={true}
+            style={{
+              objectFit: "contain",
+            }}
+          />
+        </Link>
+      ) : null}
 
       <ImageListItemBar
         title={
@@ -52,7 +54,7 @@ export default function MatchContentItem({
               color: "success.main",
             }}
           >
-            {score * 10}% Match
+            {score * 100}% Match
           </Typography>
         }
         position="below"

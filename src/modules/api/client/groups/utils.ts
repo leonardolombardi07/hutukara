@@ -8,7 +8,7 @@ function getGroupsSubCollections(groupId: string) {
   const matchesCol = collection(
     groupsCol,
     groupId,
-    "ratings"
+    "matches"
   ) as CollectionReference<GroupsCol.MatchesSubCol.Doc>;
 
   return { matchesCol };

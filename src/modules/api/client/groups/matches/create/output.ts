@@ -1,0 +1,109 @@
+import { getContentByIds, getUsers } from "../../../index";
+import OpenAIApi from "@/modules/OpenAIApi";
+import { z } from "zod";
+
+export async function getMatchOutput(dataAsCSV: string) {
+  const { recommendations } = await requestRecommendationsToOpenAI(dataAsCSV);
+
+  const content = await getContentFromRecommendations(recommendations);
+
+  return {
+    recommendations,
+    content,
+  };
+}
+
+// Interface to copy on the text below
+// TODO: ideally we should have a function able to generate a string from the interface at runtime
+interface Recommendation {
+  /* Title of the movie or series */
+  Title: string;
+
+  /* Score, from 0 to 1, based on how much the recommended content matches the preferences of all users.*/
+  score: number;
+
+  /* Possible IMDB id of the recommended content */
+  possibleIMDBId: string;
+
+  /* Possible URL of the recommended content's poster */
+  possiblePoster: string;
+}
+
+async function requestRecommendationsToOpenAI(dataAsCSV: string) {
+  const promptInitialMessage = `You are a movie and series recomender. Below, you'll find a text with a list of titles and the scores (from 0 to 5) given by users, in the CSV format of "Title,Person 1,Person 2,...":`;
+
+  const promptFinalMessage = `Based on the titles and scores above,  give a list of 5 recommended movies and series (necessarily not in the list above) conforming to the following interface:
+
+  interface Recommendation {
+    /* Title of the movie or series */
+    Title: string;
+  
+    /* Score, from 0 to 1, based on how much the recommended content matches the preferences of all users.*/
+    score: number;
+  
+    /* Possible IMDB id of the recommended content */
+    possibleIMDBId: string;
+  
+    /* Possible URL of the recommended content's poster */
+    possiblePoster: string;
+  }
+  
+  Answer with a JSON - and only a JSON.`;
+
+  const prompt = `${promptInitialMessage}\n${dataAsCSV}\n${promptFinalMessage}`;
+
+  const completion = await OpenAIApi.chat.completions.create({
+    model: "gpt-3.5-turbo",
+    messages: [{ role: "system", content: prompt }],
+  });
+
+  const maybeJSONAsString = completion.choices[0].message.content;
+  if (!maybeJSONAsString) {
+    throw new Error("AI did not return a JSON");
+  }
+
+  // TODO: maybe sanitize the JSON here
+  const json = parseToJson(maybeJSONAsString);
+  const recommendations = validateJSON(json);
+
+  return { recommendations };
+}
+
+function validateJSON(json: any) {
+  const Recommendation: z.ZodType<Recommendation> = z.object({
+    Title: z.string(),
+    score: z.number().gte(0).lte(1),
+    possibleIMDBId: z.string(),
+    possiblePoster: z.string(),
+  });
+  const array = z.array(Recommendation);
+  return array.parse(json);
+}
+
+function parseToJson(jsonAsString: string) {
+  // TODO: handle errors
+  return JSON.parse(jsonAsString);
+}
+
+async function getContentFromRecommendations(
+  recommendations: Recommendation[]
+) {
+  const contentIds = recommendations.map((r) => r.possibleIMDBId);
+
+  // TODO: We should use something lime Promise.allSettled here,
+  // and handle the errors in a way that makes sense for the user
+  const content = await getContentByIds(contentIds);
+
+  const contentWithScores = content.map((c) => {
+    const recommendation = recommendations.find(
+      (r) => r.possibleIMDBId === c.imdbID
+    );
+    if (!recommendation) {
+      throw new Error("Recommendation not found");
+    }
+
+    return { ...c, score: recommendation.score };
+  });
+
+  return contentWithScores;
+}

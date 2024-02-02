@@ -9,15 +9,12 @@ import { createGroup } from "@/modules/api/client";
 import { useUser } from "@/app/_layout/UserProvider";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import useDelay from "@/modules/hooks/useDelay";
 
 export default function Page() {
   const router = useRouter();
   const { user } = useUser();
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-
-  const delayedIsLoading = useDelay(isLoading);
 
   function close() {
     router.back();
@@ -70,9 +67,9 @@ export default function Page() {
           variant="contained"
           fullWidth
           color="primary"
-          disabled={delayedIsLoading}
+          disabled={isLoading}
         >
-          {delayedIsLoading ? "Loading..." : "Host"}
+          {isLoading ? "Loading..." : "Host"}
         </Button>
 
         <Button onClick={close} size="large" variant="outlined" fullWidth>

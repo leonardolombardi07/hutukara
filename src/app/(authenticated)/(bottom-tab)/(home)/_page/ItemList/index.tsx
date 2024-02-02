@@ -86,7 +86,7 @@ export default function ItemList() {
           <Grid item key={item.id} xs={12} md={6} xl={4}>
             <ItemCard
               totalNumberOfMembers={
-                item.matchIds.length + item.hostIds.length + 1
+                item.memberIds.length + item.hostIds.length + 1
               }
               {...item}
             />
