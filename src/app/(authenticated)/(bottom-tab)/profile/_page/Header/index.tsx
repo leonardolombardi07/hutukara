@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import SignOutButton from "./SignOutButton";
 import RequestChangePasswordButton from "./RequestChangePasswordButton";
+import Skeleton from "@mui/material/Skeleton";
 
 interface HeaderProps {
   user: {
@@ -52,12 +53,54 @@ export default function Header({ user }: HeaderProps) {
           </Box>
         </CardContent>
 
-        <CardActions>
-          {user?.email && <RequestChangePasswordButton />}
-
-          <SignOutButton />
-        </CardActions>
+        <HeaderCardActions />
       </Card>
     </Paper>
+  );
+}
+
+export function HeaderSkeleton() {
+  return (
+    <Paper
+      sx={{
+        height: 150,
+      }}
+    >
+      <Card sx={{ width: "100%" }}>
+        <CardContent>
+          <Box
+            sx={{
+              display: "flex",
+            }}
+          >
+            <Skeleton
+              animation="wave"
+              variant="circular"
+              width={80}
+              height={80}
+            />
+
+            <Box sx={{ mr: 2 }} />
+
+            <Box>
+              <Skeleton width="70%" animation="wave" variant="text" />
+
+              <Skeleton animation="wave" variant="text" width={250} />
+            </Box>
+          </Box>
+        </CardContent>
+
+        <HeaderCardActions />
+      </Card>
+    </Paper>
+  );
+}
+
+function HeaderCardActions() {
+  return (
+    <CardActions>
+      <RequestChangePasswordButton />
+      <SignOutButton />
+    </CardActions>
   );
 }

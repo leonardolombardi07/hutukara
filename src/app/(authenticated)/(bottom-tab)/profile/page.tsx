@@ -2,15 +2,17 @@
 
 import React from "react";
 import Box from "@mui/material/Box";
-import Header from "./_page/Header";
+import Header, { HeaderSkeleton } from "./_page/Header";
 import Container from "@mui/material/Container";
 import PersonalPreferences from "./_page/PersonalPreferences";
 import { useUser } from "@/app/_layout/UserProvider";
 import { useFirestoreUser } from "@/modules/api/client";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
 export default function Page() {
   const { user: authUser } = useUser();
-  const [firestoreUser] = useFirestoreUser();
+  const [firestoreUser, isLoading, error] = useFirestoreUser();
 
   return (
     <Container
@@ -19,7 +21,14 @@ export default function Page() {
         py: 4,
       }}
     >
-      {authUser && firestoreUser && (
+      {error && (
+        <Alert severity="error">
+          <AlertTitle>Error</AlertTitle>
+          {error?.message}
+        </Alert>
+      )}
+
+      {firestoreUser ? (
         <Header
           user={{
             displayName: firestoreUser.name,
@@ -27,7 +36,10 @@ export default function Page() {
             photoURL: firestoreUser.photoURL,
           }}
         />
+      ) : (
+        <HeaderSkeleton />
       )}
+
       <Box sx={{ my: 3 }} />
       <PersonalPreferences />
     </Container>

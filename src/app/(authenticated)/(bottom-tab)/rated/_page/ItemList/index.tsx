@@ -11,6 +11,8 @@ import AlertTitle from "@mui/material/AlertTitle";
 import { useLayoutContext } from "../../layout";
 import { calculateSizesFromColumns } from "@/modules/image";
 import useDelay from "@/modules/hooks/useDelay";
+import MUILink from "@mui/material/Link";
+import Link from "next/link";
 
 export default function ItemList() {
   const cols = useResponsiveCols();
@@ -30,7 +32,12 @@ export default function ItemList() {
   if (!isLoading && data.length === 0) {
     return (
       <Alert severity="info">
-        <AlertTitle>No items!</AlertTitle>
+        <AlertTitle>No rated content!</AlertTitle>
+        Go to{" "}
+        <MUILink component={Link} href="/search">
+          search
+        </MUILink>{" "}
+        and rate some content!
       </Alert>
     );
   }

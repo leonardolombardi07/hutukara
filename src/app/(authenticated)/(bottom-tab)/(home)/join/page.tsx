@@ -9,6 +9,7 @@ import { joinGroup } from "@/modules/api/client";
 import { useUser } from "@/app/_layout/UserProvider";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
+import useDelay from "@/modules/hooks/useDelay";
 
 export default function Page() {
   const router = useRouter();
@@ -16,12 +17,16 @@ export default function Page() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
+  const delayedIsLoading = useDelay(isLoading);
+
   function close() {
     router.back();
   }
 
   async function onFormSubmission(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    if (isLoading) return;
 
     setIsLoading(true);
     setError(null);
@@ -42,7 +47,7 @@ export default function Page() {
   return (
     <form onSubmit={onFormSubmission}>
       <Box sx={{ py: 4, px: 2 }}>
-        <TextField name="pin" autoFocus fullWidth label="Party PIN" />
+        <TextField name="pin" autoFocus fullWidth required label="Party PIN" />
         {error && (
           <Alert severity="error" sx={{ mt: 2 }}>
             <AlertTitle>Error</AlertTitle>
@@ -66,8 +71,9 @@ export default function Page() {
           variant="contained"
           fullWidth
           color="primary"
+          disabled={delayedIsLoading}
         >
-          {isLoading ? "Joining..." : "Join"}
+          {delayedIsLoading ? "Loading..." : "Join"}
         </Button>
 
         <Button onClick={close} size="large" variant="outlined" fullWidth>
