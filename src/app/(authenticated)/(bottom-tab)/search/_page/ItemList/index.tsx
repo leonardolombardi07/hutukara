@@ -12,14 +12,10 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { useLayoutContext } from "../../layout";
 import { calculateSizesFromColumns } from "@/modules/image";
-import useDelay from "@/modules/hooks/useDelay";
 
 export default function ItemList() {
   const cols = useResponsiveCols();
-
   const [data, isLoading, error] = useLayoutContext();
-  const delayedIsLoading = useDelay(isLoading);
-
   const {
     results: searchResults,
     isSearching,
@@ -50,7 +46,7 @@ export default function ItemList() {
 
   return (
     <ImageList variant="masonry" cols={cols.value} gap={8}>
-      {delayedIsLoading || isSearching ? (
+      {isLoading || isSearching ? (
         <ListOfSkeletonItems numOfItems={5} />
       ) : (
         toRender.map((item) => (

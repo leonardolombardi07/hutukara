@@ -1,4 +1,11 @@
-import { query, where, documentId, doc, writeBatch } from "firebase/firestore";
+import {
+  query,
+  where,
+  documentId,
+  doc,
+  writeBatch,
+  getDocs,
+} from "firebase/firestore";
 import { useCollectionDataWithIds } from "../utils/hooks";
 import { getCollections } from "../utils";
 import { ContentCol } from "../../types";
@@ -63,4 +70,19 @@ function upsertOnFirestore(items: OMBDBResponse[]) {
   return batch.commit();
 }
 
-export { searchContent, useContent, useContentToBrowse, useContentData };
+async function getContentByIds(ids: string[]) {
+  const q = query(contentCol, where(documentId(), "in", ids));
+  const snap = await getDocs(q);
+  return snap.docs.map((d) => ({
+    id: d.id,
+    ...d.data(),
+  }));
+}
+
+export {
+  searchContent,
+  useContent,
+  useContentToBrowse,
+  useContentData,
+  getContentByIds,
+};

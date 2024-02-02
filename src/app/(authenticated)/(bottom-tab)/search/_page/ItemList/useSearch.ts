@@ -30,7 +30,6 @@ export default function useSearch({ data }: { data: ContentWithUserRating[] }) {
   React.useEffect(() => {
     async function search_() {
       setError(null);
-      setIsSearching(true);
 
       try {
         if (!debouncedQuery) return setResults([]);
@@ -42,6 +41,7 @@ export default function useSearch({ data }: { data: ContentWithUserRating[] }) {
         if (resultsOnAvaliableData.length)
           return setResults(resultsOnAvaliableData);
 
+        setIsSearching(true);
         const resultsFromApiSearch = await searchOnAPI(debouncedQuery);
         setResults(
           resultsFromApiSearch.map((r) => ({
