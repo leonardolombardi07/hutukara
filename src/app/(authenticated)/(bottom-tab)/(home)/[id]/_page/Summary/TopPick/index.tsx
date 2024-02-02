@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Item } from "../../../types";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
@@ -8,12 +7,14 @@ import Paper from "@mui/material/Paper";
 import CardActionArea from "@mui/material/CardActionArea";
 import Link from "next/link";
 
-export default function TopPick({
-  id,
-  Poster,
-  Title,
-  score,
-}: Item["results"][number]) {
+interface TopPickProps {
+  id: string;
+  Poster: string;
+  Title: string;
+  score: number;
+}
+
+export default function TopPick({ id, Poster, Title, score }: TopPickProps) {
   const scoreAsPercentage = score * 10;
   return (
     <Card component={Paper}>
