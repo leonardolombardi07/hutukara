@@ -9,10 +9,13 @@ import { useUser } from "@/app/_layout/UserProvider";
 import { useFirestoreUser } from "@/modules/api/client";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
+import useDelay from "@/modules/hooks/useDelay";
 
 export default function Page() {
   const { user: authUser } = useUser();
-  const [firestoreUser, isLoading, error] = useFirestoreUser();
+  const [firestoreUser, _, error] = useFirestoreUser();
+
+  const delayedIsLoading = useDelay(!Boolean(firestoreUser));
 
   return (
     <Container
@@ -28,16 +31,14 @@ export default function Page() {
         </Alert>
       )}
 
-      {firestoreUser ? (
-        <Header
-          user={{
-            displayName: firestoreUser.name,
-            email: authUser.email,
-            photoURL: firestoreUser.photoURL,
-          }}
-        />
-      ) : (
+      {delayedIsLoading ? (
         <HeaderSkeleton />
+      ) : (
+        <Header
+          displayName={firestoreUser?.name}
+          email={authUser.email}
+          photoURL={firestoreUser?.photoURL}
+        />
       )}
 
       <Box sx={{ my: 3 }} />

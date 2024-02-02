@@ -11,14 +11,12 @@ import RequestChangePasswordButton from "./RequestChangePasswordButton";
 import Skeleton from "@mui/material/Skeleton";
 
 interface HeaderProps {
-  user: {
-    displayName: string | null;
-    email: string | null;
-    photoURL: string | null;
-  };
+  displayName: string | undefined;
+  email: string | null | undefined;
+  photoURL: string | undefined;
 }
 
-export default function Header({ user }: HeaderProps) {
+export default function Header({ displayName, email, photoURL }: HeaderProps) {
   return (
     <Paper>
       <Card sx={{ width: "100%" }}>
@@ -29,17 +27,17 @@ export default function Header({ user }: HeaderProps) {
             }}
           >
             <Avatar
-              src={user?.photoURL || undefined}
+              src={photoURL || undefined}
               sx={{ bgcolor: "primary", width: 60, height: 60 }}
             >
-              {user?.displayName ? user?.displayName[0].toUpperCase() : "C"}
+              {displayName ? displayName[0].toUpperCase() : "C"}
             </Avatar>
 
             <Box sx={{ mr: 2 }} />
 
             <Box>
               <Typography variant="h5" component="div">
-                {user?.displayName || "Anonymous"}
+                {displayName}
               </Typography>
 
               <Typography
@@ -47,7 +45,7 @@ export default function Header({ user }: HeaderProps) {
                 component="div"
                 color="text.secondary"
               >
-                {user?.email || ""}
+                {email}
               </Typography>
             </Box>
           </Box>
