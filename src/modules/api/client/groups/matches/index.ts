@@ -1,7 +1,7 @@
 import { orderBy, limit, query } from "firebase/firestore";
-import { getGroupsSubCollections } from "./utils";
-import { useCollectionDataWithIds } from "../utils/hooks";
-import { GroupsCol } from "../../types";
+import { getGroupsSubCollections } from "../utils";
+import { useCollectionDataWithIds } from "../../utils/hooks";
+import { GroupsCol } from "../../../types";
 
 function useGroupMostRecentMatch(
   groupId: string
@@ -14,3 +14,4 @@ function useGroupMostRecentMatch(
 }
 
 export { useGroupMostRecentMatch };
+export * from "./findMatches";

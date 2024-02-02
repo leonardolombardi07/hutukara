@@ -37,6 +37,7 @@ function rateContent({
   return setDoc(
     doc(ratingsCol, contentId),
     {
+      userId,
       contentId,
       value,
     },

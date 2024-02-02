@@ -9,6 +9,7 @@ export namespace UsersCol {
 
   export namespace RatingsSubCol {
     export interface Doc {
+      userId: string;
       contentId: string;
       value: number;
     }
@@ -31,18 +32,9 @@ export namespace GroupsCol {
       group: GroupsCol.Doc;
       createdAt: number;
       recommendations: (ContentCol.Doc & { score: number })[];
-    }
-
-    export namespace ParticipantsSubCol {
-      export type Doc = Omit<UsersCol.Doc, "groups">;
-    }
-
-    export namespace InputContentSubCol {
-      export type Doc = ContentCol.Doc;
-    }
-
-    export namespace InputUserRatingsSubCol {
-      export type Doc = UsersCol.RatingsSubCol.Doc & { userId: string };
+      allMembers: Omit<UsersCol.Doc, "groups">[];
+      content: ContentCol.Doc[];
+      ratings: UsersCol.RatingsSubCol.Doc[];
     }
   }
 }

@@ -8,11 +8,22 @@ import {
   or,
   arrayUnion,
   addDoc,
+  getDoc,
 } from "firebase/firestore";
 import { useCollectionDataWithIds } from "../utils/hooks";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 
 const { groupsCol } = getCollections();
+
+async function getGroupById(id: string) {
+  const snap = await getDoc(doc(groupsCol, id));
+
+  if (!snap.exists()) {
+    throw new Error("Not found");
+  }
+
+  return { id: snap.id, ...snap.data() };
+}
 
 function useUserGroups(userId: string) {
   return useCollectionDataWithIds(
@@ -73,6 +84,6 @@ async function createGroup({
   return { id: doc.id };
 }
 
-export { useUserGroups, joinGroup, createGroup, useGroup };
+export { useUserGroups, joinGroup, createGroup, useGroup, getGroupById };
 export * from "./matches";
 export * from "./owner";

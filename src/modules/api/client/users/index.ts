@@ -1,4 +1,11 @@
-import { query, doc, getDoc, where, documentId } from "firebase/firestore";
+import {
+  query,
+  doc,
+  getDoc,
+  where,
+  documentId,
+  getDocs,
+} from "firebase/firestore";
 import { useCollectionDataWithIds } from "../utils/hooks";
 import { getCollections } from "../utils";
 import { useDocumentData } from "react-firebase-hooks/firestore";
@@ -11,7 +18,7 @@ const { usersCol } = getCollections();
 async function getUser(userId: string) {
   const snap = await getDoc(doc(usersCol, userId));
   if (!snap.exists()) {
-    throw new Error("User not found");
+    throw new Error("Not found");
   }
 
   return {
@@ -20,10 +27,23 @@ async function getUser(userId: string) {
   };
 }
 
+async function getUsers(ids: string[]) {
+  const snap = await getDocs(query(usersCol, where(documentId(), "in", ids)));
+  if (snap.empty) {
+    throw new Error("Not found");
+  }
+
+  if (snap.size !== ids.length) {
+    throw new Error("Some not found");
+  }
+
+  return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+}
+
 function useFirestoreUser() {
   const userId = auth.currentUser?.uid;
   if (!userId) {
-    throw new Error("User not found");
+    throw new Error("Not found");
   }
 
   return useDocumentData(doc(usersCol, userId));
@@ -40,5 +60,5 @@ function useUsers(
   return useCollectionDataWithIds(q);
 }
 
-export { getUser, useUsers, useFirestoreUser };
+export { getUser, useUsers, useFirestoreUser, getUsers };
 export * from "./rating";
