@@ -52,7 +52,7 @@ export default function FindMatchesTrigger({
       <Button
         onClick={openModal}
         variant="contained"
-        color="success"
+        color="primary"
         endIcon={<AutoFixHighIcon />}
       >
         {TRIGGER_BUTTON_TEXT}
@@ -116,7 +116,7 @@ export default function FindMatchesTrigger({
               onClick={onSubmit}
               variant="contained"
               endIcon={<AutoFixHighIcon />}
-              color="success"
+              color="primary"
               disabled={isLoading}
             >
               {isLoading ? "Loading..." : "Find matches"}

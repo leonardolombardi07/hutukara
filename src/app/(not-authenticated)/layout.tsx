@@ -4,7 +4,7 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 
-const BANNER_IMAGE_URL = "/images/RemoteControlAndTV/RemoteControlAndTV.jpg";
+const BANNER_IMAGE_URL = "/images/Logo/Logo.jpg";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

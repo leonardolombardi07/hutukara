@@ -19,6 +19,7 @@ import Copyright from "../_components/Copyright";
 import Backdrop from "@mui/material/Backdrop";
 import { useContinueWithProvider } from "../_hooks";
 import { useSignInWithForm } from "./_page/hooks";
+import PasswordTextField from "@/components/inputs/PasswordTextField";
 
 export default function Page() {
   const {
@@ -76,7 +77,7 @@ export default function Page() {
           }}
         />
 
-        <TextField
+        <PasswordTextField
           inputRef={passwordRef}
           margin="normal"
           required

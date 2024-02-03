@@ -19,6 +19,7 @@ import { useContinueWithProvider } from "../_hooks";
 import GoogleButton from "@/components/elements/GoogleButton";
 import Divider from "@mui/material/Divider";
 import Backdrop from "@mui/material/Backdrop";
+import PasswordTextField from "@/components/inputs/PasswordTextField";
 
 export default function Page() {
   const {
@@ -91,7 +92,7 @@ export default function Page() {
           }}
         />
 
-        <TextField
+        <PasswordTextField
           inputRef={passwordRef}
           margin="normal"
           required

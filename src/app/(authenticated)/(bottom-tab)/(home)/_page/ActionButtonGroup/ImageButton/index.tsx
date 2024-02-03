@@ -2,6 +2,7 @@ import * as React from "react";
 import { styled } from "@mui/material/styles";
 import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
+import Image from "next/image";
 
 interface ImageButtonProps {
   src: string;
@@ -17,15 +18,33 @@ export default function ImageButton({
   onClick,
 }: ImageButtonProps) {
   return (
-    <ImageButtonBase
+    <ButtonBase
       focusRipple
-      key={title}
-      style={{
-        width: width,
+      sx={{
+        width: {
+          xs: "100%",
+          sm: width,
+        },
+        height: {
+          xs: 100,
+          sm: 200,
+        },
+        "&:hover, &.Mui-focusVisible": {
+          zIndex: 1,
+          "& .MuiImageBackdrop-root": {
+            opacity: 0.15,
+          },
+          "& .MuiImageMarked-root": {
+            opacity: 0,
+          },
+          "& .MuiTypography-root": {
+            border: "4px solid currentColor",
+          },
+        },
       }}
       onClick={onClick}
     >
-      <ImageSrc style={{ backgroundImage: `url(${src})` }} />
+      <ImageSrc src={src} alt={title} fill />
 
       <ImageBackdrop className="MuiImageBackdrop-root" />
 
@@ -45,40 +64,24 @@ export default function ImageButton({
           <ImageMarked className="MuiImageMarked-root" />
         </Typography>
       </ImageContainer>
-    </ImageButtonBase>
+    </ButtonBase>
   );
 }
 
-const ImageButtonBase = styled(ButtonBase)(({ theme }) => ({
-  position: "relative",
-  height: 200,
-  [theme.breakpoints.down("sm")]: {
-    width: "100% !important", // Overrides inline-style
-    height: 100,
-  },
-  "&:hover, &.Mui-focusVisible": {
-    zIndex: 1,
-    "& .MuiImageBackdrop-root": {
-      opacity: 0.15,
-    },
-    "& .MuiImageMarked-root": {
-      opacity: 0,
-    },
-    "& .MuiTypography-root": {
-      border: "4px solid currentColor",
-    },
-  },
-}));
-
-const ImageSrc = styled("span")({
+const ImageSrc = styled(Image)(({ theme }) => ({
   position: "absolute",
   left: 0,
   right: 0,
   top: 0,
   bottom: 0,
-  backgroundSize: "cover",
-  backgroundPosition: "center 40%",
-});
+  objectFit: "cover",
+
+  [theme.breakpoints.down("sm")]: {
+    objectPosition: "center 30%",
+  },
+
+  objectPosition: "center 40%",
+}));
 
 const ImageContainer = styled("span")(({ theme }) => ({
   position: "absolute",

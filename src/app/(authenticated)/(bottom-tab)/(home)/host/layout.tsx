@@ -10,6 +10,7 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import { useRouter } from "next/navigation";
 import Typography from "@mui/material/Typography";
+import { GROUP_TITLE } from "@/app/constants";
 
 interface PageProps {
   children: React.ReactNode;
@@ -31,7 +32,7 @@ export default function Layout({ children }: PageProps) {
           </IconButton>
 
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-            Host a Party
+            Host a {GROUP_TITLE}
           </Typography>
         </Toolbar>
       </AppBar>

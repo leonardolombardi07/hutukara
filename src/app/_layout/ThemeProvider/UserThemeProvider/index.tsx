@@ -41,19 +41,19 @@ function useUserTheme() {
   return userTheme;
 }
 
-class ThemeCache {
-  static readonly _defaultTheme: UserTheme = {
-    name: "salgueiro",
-    mode: "light",
-  };
+const DEFAULT_THEME: UserTheme = {
+  name: "salgueiro",
+  mode: "light",
+};
 
+class ThemeCache {
   static get(): UserTheme {
     try {
       const theme = JSON.parse(window?.localStorage?.getItem("theme") || "");
-      if (!this._validateTheme(theme)) return this._defaultTheme;
+      if (!this._validateTheme(theme)) return DEFAULT_THEME;
       return theme as UserTheme;
     } catch (error) {
-      return this._defaultTheme;
+      return DEFAULT_THEME;
     }
   }
 

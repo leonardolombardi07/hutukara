@@ -9,7 +9,7 @@ export const { light: SALGUEIRO_THEME, dark: DARK_SALGUEIRO_THEME } =
       palette: {
         mode: "light",
         primary: {
-          main: "#FB0303",
+          main: "#760000",
         },
         secondary: {
           main: "#FFD700",

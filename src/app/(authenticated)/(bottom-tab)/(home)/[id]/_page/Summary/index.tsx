@@ -7,6 +7,7 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { MatchContentItemProps } from "@/components/modules/content/MatchContentItem";
 import { GroupsCol } from "@/modules/api/types";
+import { GROUP_TITLE } from "@/app/constants";
 
 export default function Summary({ id }: { id: string }) {
   const [item, isLoading, error] = useGroupMostRecentMatch(id);
@@ -62,7 +63,7 @@ function NoResults() {
       </Typography>
 
       <Typography variant="body1" component="p" color="textSecondary">
-        Invite your friends to join the party and start matching!
+        Invite your friends to join the {GROUP_TITLE} and start matching!
       </Typography>
     </Box>
   );

@@ -12,6 +12,7 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import MUILink from "@mui/material/Link";
 import { useLayoutContext } from "../../layout";
+import { GROUP_TITLE } from "@/app/constants";
 
 export default function ItemList() {
   const [data, isLoading, error] = useLayoutContext();
@@ -45,7 +46,7 @@ export default function ItemList() {
         <MUILink component={Link} href="/join">
           join
         </MUILink>{" "}
-        a party!
+        a {GROUP_TITLE}!
       </Typography>
     );
   }

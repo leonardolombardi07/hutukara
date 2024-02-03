@@ -3,14 +3,15 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import ActionButtonGroup from "./_page/ActionButtonGroup";
 import Container from "@mui/material/Container";
-import { APP_NAME } from "@/app/constants";
+import { APP_NAME, PLURALIZED_GROUP_TITLE } from "@/app/constants";
 import { Metadata } from "next";
 import FilterChip from "./_page/FilterChip";
 import ItemList from "./_page/ItemList";
+import Paper from "@mui/material/Paper";
 
 export const metadata: Metadata = {
-  title: `${APP_NAME} | Parties`,
-  description: "Visualize and manage your parties",
+  title: `${APP_NAME} | ${PLURALIZED_GROUP_TITLE}`,
+  description: `Visualize and manage your ${PLURALIZED_GROUP_TITLE.toLowerCase()}.`,
 };
 
 interface PageProps {
@@ -41,13 +42,23 @@ export default function Page({ searchParams }: PageProps) {
         </Box>
 
         <Container
-          component={"section"}
+          component={Paper}
+          variant="outlined"
           sx={{
             mt: 5,
+            height: "100%",
+            p: {
+              xs: 1,
+              sm: 3,
+            },
+            borderStyle: {
+              xs: "none",
+              sm: "solid",
+            },
           }}
         >
           <Box sx={{ mb: 3 }}>
-            <Typography variant="h3">Your Parties</Typography>
+            <Typography variant="h3">Your {PLURALIZED_GROUP_TITLE}</Typography>
 
             <Box
               sx={{

@@ -10,6 +10,7 @@ import { useUser } from "@/app/_layout/UserProvider";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import useDelay from "@/modules/hooks/useDelay";
+import { GROUP_TITLE } from "@/app/constants";
 
 export default function Page() {
   const router = useRouter();
@@ -47,7 +48,13 @@ export default function Page() {
   return (
     <form onSubmit={onFormSubmission}>
       <Box sx={{ py: 4, px: 2 }}>
-        <TextField name="pin" autoFocus fullWidth required label="Party PIN" />
+        <TextField
+          name="pin"
+          autoFocus
+          fullWidth
+          required
+          label={`${GROUP_TITLE} PIN`}
+        />
         {error && (
           <Alert severity="error" sx={{ mt: 2 }}>
             <AlertTitle>Error</AlertTitle>

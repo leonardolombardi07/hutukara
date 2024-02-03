@@ -9,9 +9,9 @@ import Box from "@mui/material/Box";
 import { useUserTheme } from "@/app/_layout/ThemeProvider";
 import { UserTheme } from "@/app/_layout/ThemeProvider/UserThemeProvider/constants";
 import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { SALGUEIRO_THEME } from "@/app/_layout/ThemeProvider/UserThemeProvider/themes/salgueiro";
 import { BLUE_THEME } from "@/app/_layout/ThemeProvider/UserThemeProvider/themes/blue";
+import Tooltip from "@mui/material/Tooltip";
 
 export default function Theme() {
   const { theme, setTheme } = useUserTheme();
@@ -39,12 +39,14 @@ export default function Theme() {
           name="salgueiro"
           backgroundColor={SALGUEIRO_THEME.palette.primary.main}
           borderRadiusColor={SALGUEIRO_THEME.palette.secondary.main}
+          label="Salgueiro"
         />
 
         <ThemeNameCircle
           name="blue"
           backgroundColor={BLUE_THEME.palette.primary.main}
           borderRadiusColor={BLUE_THEME.palette.secondary.main}
+          label="Blue"
         />
       </Stack>
 
@@ -62,10 +64,12 @@ function ThemeNameCircle({
   name,
   backgroundColor,
   borderRadiusColor,
+  label,
 }: {
   name: UserTheme["name"];
   backgroundColor: string;
   borderRadiusColor: string;
+  label: string;
 }) {
   const { theme, setTheme } = useUserTheme();
 
@@ -79,17 +83,19 @@ function ThemeNameCircle({
   const isActive = theme.name === name;
 
   return (
-    <IconButton
-      onClick={handleChange}
-      sx={{
-        backgroundColor,
-        width: 40,
-        height: 40,
-        border: isActive
-          ? `2px solid ${borderRadiusColor}`
-          : "2px solid transparent",
-      }}
-    ></IconButton>
+    <Tooltip title={label} placement="bottom">
+      <IconButton
+        onClick={handleChange}
+        sx={{
+          backgroundColor,
+          width: 40,
+          height: 40,
+          border: isActive
+            ? `2px solid ${borderRadiusColor}`
+            : "2px solid transparent",
+        }}
+      ></IconButton>
+    </Tooltip>
   );
 }
 

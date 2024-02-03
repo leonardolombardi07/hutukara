@@ -10,6 +10,7 @@ import { useGroup } from "@/modules/api/client";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { useUser } from "@/app/_layout/UserProvider";
+import { GROUP_TITLE } from "@/app/constants";
 
 interface HeaderProps {
   id: string;
@@ -74,7 +75,11 @@ export default function Header({ id }: HeaderProps) {
         </Box>
 
         {matchIds.length === 0 && (
-          <CopyAlert title="Party PIN" subtitle={pin} valueToCopy={pin} />
+          <CopyAlert
+            title={`${GROUP_TITLE} PIN`}
+            subtitle={pin}
+            valueToCopy={pin}
+          />
         )}
       </Box>
 
