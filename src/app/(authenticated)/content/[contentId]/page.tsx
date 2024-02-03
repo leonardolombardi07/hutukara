@@ -13,21 +13,23 @@ import { useUser } from "@/app/_layout/UserProvider";
 
 export interface PageProps {
   params: {
-    id?: string;
+    contentId?: string;
   };
 }
 
 export default function Page({ params }: PageProps) {
-  if (!params.id) {
+  if (!params.contentId) {
     throw new Error("No id");
   }
 
   const { user } = useUser();
 
-  const [item, isLoading, error] = useContent(params.id);
+  const [item, isLoading, error] = useContent(params.contentId);
   const [ratings, isLoadingRatings, ratingsError] = useUserRatings(user.uid);
 
-  const userRating = ratings?.find((rating) => rating.contentId === params.id);
+  const userRating = ratings?.find(
+    (rating) => rating.contentId === params.contentId
+  );
 
   if (isLoading || isLoadingRatings) {
     return null;
@@ -77,7 +79,7 @@ export default function Page({ params }: PageProps) {
         <ContentRating
           value={userRating ? userRating.value : null}
           size="large"
-          contentId={params.id}
+          contentId={params.contentId}
         />
       </Paper>
 
