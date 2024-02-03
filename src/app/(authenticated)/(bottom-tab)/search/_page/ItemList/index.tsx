@@ -10,7 +10,7 @@ import RatableContentItem, {
 import useSearch from "./useSearch";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import { useLayoutContext } from "../../layout";
+import { useLayoutContext } from "../../_layout/LayoutProvider";
 import { calculateSizesFromColumns } from "@/modules/image";
 
 export default function ItemList() {

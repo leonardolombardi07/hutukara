@@ -6,12 +6,10 @@ import ItemCard from "./ItemCard";
 import { useQueryState } from "nuqs";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
-import { useUser } from "@/app/_layout/UserProvider";
-import { useUserGroups } from "@/modules/api/client";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import MUILink from "@mui/material/Link";
-import { useLayoutContext } from "../../layout";
+import { useLayoutContext } from "../../_layout/LayoutProvider";
 import { GROUP_TITLE } from "@/app/constants";
 
 export default function ItemList() {
