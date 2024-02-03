@@ -1,13 +1,13 @@
 "use client";
 
 import * as React from "react";
+import { Suspense } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useUserContext } from "../UserProvider";
 
 function AuthenticationRouter({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   const isInAuthRoute = useIsInAuthRoute();
   const { user, isLoading } = useUserContext();
@@ -26,7 +26,9 @@ function AuthenticationRouter({ children }: { children: React.ReactNode }) {
     return null;
   }
 
-  return <React.Fragment>{children}</React.Fragment>;
+  // See: https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
+  // On why we need to Suspense here
+  return <Suspense>{children}</Suspense>;
 }
 
 const REDIRECT_SEARCH_PARAM_KEY = "redirectTo";
