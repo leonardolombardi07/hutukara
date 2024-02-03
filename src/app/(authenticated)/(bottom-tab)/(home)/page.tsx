@@ -10,7 +10,7 @@ import ItemList from "./_page/ItemList";
 import Paper from "@mui/material/Paper";
 
 export const metadata: Metadata = {
-  title: `${APP_NAME} | ${PLURALIZED_GROUP_TITLE}`,
+  title: `${APP_NAME} | Your ${PLURALIZED_GROUP_TITLE}`,
   description: `Visualize and manage your ${PLURALIZED_GROUP_TITLE.toLowerCase()}.`,
 };
 
