@@ -4,6 +4,8 @@ import * as React from "react";
 import { Suspense } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useUserContext } from "../UserProvider";
+import PageLoader from "@/components/feedback/PageLoader";
+import useDelay from "@/modules/hooks/useDelay";
 
 function AuthenticationRouter({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -11,8 +13,10 @@ function AuthenticationRouter({ children }: { children: React.ReactNode }) {
 
   const isInAuthRoute = useIsInAuthRoute();
   const { user, isLoading } = useUserContext();
-
   const isAuthenticated = Boolean(user);
+
+  const showPageLoader = isLoading || (!isAuthenticated && !isInAuthRoute);
+  const delayedShowPageLoader = useDelay(showPageLoader);
 
   React.useEffect(() => {
     if (!isLoading && !isAuthenticated && !isInAuthRoute) {
@@ -21,14 +25,19 @@ function AuthenticationRouter({ children }: { children: React.ReactNode }) {
     }
   }, [isLoading, isAuthenticated, isInAuthRoute, router, pathname]);
 
-  if (isLoading || (!isAuthenticated && !isInAuthRoute)) {
-    // TODO: maybe add a loading spinner here if it takes too long
+  if (delayedShowPageLoader) {
+    // If we are waiting for data long enough, show the loader
+    return <PageLoader />;
+  }
+
+  if (showPageLoader) {
+    // Do not render children, user may be unauthenticated
     return null;
   }
 
   // See: https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
   // On why we need to Suspense here
-  return <Suspense>{children}</Suspense>;
+  return <Suspense fallback={<PageLoader />}>{children}</Suspense>;
 }
 
 const REDIRECT_SEARCH_PARAM_KEY = "redirectTo";

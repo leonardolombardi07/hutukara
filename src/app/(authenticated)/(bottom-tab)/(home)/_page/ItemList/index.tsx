@@ -84,10 +84,11 @@ export default function ItemList() {
         return (
           <Grid item key={item.id} xs={12} md={6} xl={4}>
             <ItemCard
+              {...item}
               totalNumberOfMembers={
                 item.memberIds.length + item.hostIds.length + 1
               }
-              {...item}
+              createdAt={item.createdAt.toMillis()}
             />
           </Grid>
         );
