@@ -5,7 +5,6 @@ import {
   deleteDoc,
   onSnapshot,
   QuerySnapshot,
-  serverTimestamp,
   orderBy,
 } from "firebase/firestore";
 import { useCollectionDataWithIds } from "../../utils/hooks";
@@ -44,7 +43,7 @@ function rateContent({
       userId,
       contentId,
       value,
-      updatedAt: serverTimestamp(),
+      updatedAt: Date.now(),
     },
     { merge: true }
   );

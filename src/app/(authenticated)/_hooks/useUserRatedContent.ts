@@ -3,7 +3,6 @@
 import * as React from "react";
 import { getContentByIds, onUserRatingsSnapshot } from "@/modules/api/client";
 import { ContentCol, UsersCol } from "@/modules/api/types";
-import { Timestamp } from "firebase/firestore";
 
 export default function useUserRatedContent(uid: string) {
   const [isLoading, setIsLoading] = React.useState(true);
@@ -11,7 +10,7 @@ export default function useUserRatedContent(uid: string) {
     (ContentCol.Doc & {
       id: string;
       userRatingValue: number | undefined;
-      userRatingUpdatedAt: Timestamp | undefined;
+      userRatingUpdatedAt: number | undefined;
     })[]
   >([]);
   const [error, setError] = React.useState<Error | null | undefined>();
@@ -61,10 +60,7 @@ export default function useUserRatedContent(uid: string) {
             );
             return modified.sort((a, b) => {
               if (a.userRatingUpdatedAt && b.userRatingUpdatedAt) {
-                return (
-                  b.userRatingUpdatedAt.toMillis() -
-                  a.userRatingUpdatedAt.toMillis()
-                );
+                return b.userRatingUpdatedAt - a.userRatingUpdatedAt;
               }
               return 0;
             });
@@ -110,7 +106,7 @@ function getPrevStateWithoutDeleted(
   prev: (ContentCol.Doc & {
     id: string;
     userRatingValue: number | undefined;
-    userRatingUpdatedAt: Timestamp | undefined;
+    userRatingUpdatedAt: number | undefined;
   })[],
   deletedContentIds: string[]
 ) {
@@ -121,7 +117,7 @@ function applyModificationsOnPrevState(
   prev: (ContentCol.Doc & {
     id: string;
     userRatingValue: number | undefined;
-    userRatingUpdatedAt: Timestamp | undefined;
+    userRatingUpdatedAt: number | undefined;
   })[],
   modifiedRatings: UsersCol.RatingsSubCol.Doc[]
 ) {

@@ -1,10 +1,4 @@
-import {
-  addDoc,
-  doc,
-  setDoc,
-  arrayUnion,
-  serverTimestamp,
-} from "firebase/firestore";
+import { addDoc, doc, setDoc, arrayUnion } from "firebase/firestore";
 import { getGroupsSubCollections } from "../../utils";
 import { GroupsCol } from "@/modules/api/types";
 import { getMatchesSubCollections } from "./types";
@@ -27,7 +21,7 @@ async function createMatch(
   const matchId = Math.random().toString(36).substring(7);
   const docToAdd = doc(matchesCol, matchId);
   await setDoc(docToAdd, {
-    createdAt: serverTimestamp(),
+    createdAt: Date.now(),
     output,
   });
 

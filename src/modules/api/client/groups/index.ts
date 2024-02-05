@@ -9,7 +9,6 @@ import {
   arrayUnion,
   addDoc,
   getDoc,
-  serverTimestamp,
   orderBy,
   deleteDoc,
 } from "firebase/firestore";
@@ -60,7 +59,7 @@ async function createGroup({
   const doc = await addDoc(groupsCol, {
     ownerId,
     name,
-    createdAt: serverTimestamp(),
+    createdAt: Date.now(),
     pin: Math.random().toString(36).substring(7),
     hostIds: [],
     memberIds: [],

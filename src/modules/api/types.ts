@@ -1,4 +1,3 @@
-import { Timestamp } from "firebase/firestore";
 import { OMBDBResponse } from "../OMDBApi";
 import { WithId } from "../tsUtils";
 
@@ -14,7 +13,7 @@ export namespace UsersCol {
       userId: string;
       contentId: string;
       value: number;
-      updatedAt: Timestamp;
+      updatedAt: number;
     }
   }
 }
@@ -23,7 +22,7 @@ export namespace GroupsCol {
   export interface Doc {
     name: string;
     pin: string;
-    createdAt: Timestamp;
+    createdAt: number;
     ownerId: string;
     hostIds: string[];
     memberIds: string[];
@@ -39,7 +38,7 @@ export namespace GroupsCol {
     }
 
     export interface Doc {
-      createdAt: Timestamp;
+      createdAt: number;
       output: {
         recommendations: Recommendation[];
         content: WithId<ContentCol.Doc & { score: number }>[];
