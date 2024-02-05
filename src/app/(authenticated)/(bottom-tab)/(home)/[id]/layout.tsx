@@ -9,23 +9,24 @@ import CloseIcon from "@mui/icons-material/Close";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import { useRouter } from "next/navigation";
+import { useSafeGoBack } from "@/modules/navigation";
 
 interface PageProps {
   children: React.ReactNode;
 }
 
 export default function Layout({ children }: PageProps) {
-  const router = useRouter();
+  const safeGoBack = useSafeGoBack();
   return (
     <Dialog
       fullScreen
       open
       TransitionComponent={Transition}
-      onClose={router.back}
+      onClose={safeGoBack}
     >
       <AppBar sx={{ position: "relative" }}>
         <Toolbar>
-          <IconButton edge="start" color="inherit" onClick={router.back}>
+          <IconButton edge="start" color="inherit" onClick={safeGoBack}>
             <CloseIcon />
           </IconButton>
         </Toolbar>

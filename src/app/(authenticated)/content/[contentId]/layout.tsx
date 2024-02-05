@@ -8,17 +8,17 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import { useRouter } from "next/navigation";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import GoBackIcon from "@mui/icons-material/ArrowBackIosNew";
+import { useSafeGoBack } from "@/modules/navigation";
 
 interface Props {
   children: React.ReactNode;
 }
 
 export default function Layout({ children }: Props) {
-  const router = useRouter();
+  const safeGoBack = useSafeGoBack();
   const theme = useTheme();
   const isXs = useMediaQuery(theme.breakpoints.only("xs"));
 
@@ -27,7 +27,7 @@ export default function Layout({ children }: Props) {
       fullScreen
       open
       TransitionComponent={Transition}
-      onClose={router.back}
+      onClose={safeGoBack}
     >
       <AppBar
         sx={{
@@ -44,7 +44,7 @@ export default function Layout({ children }: Props) {
           {isXs ? (
             <CloseButtonBehindImage />
           ) : (
-            <IconButton edge="start" color="inherit" onClick={router.back}>
+            <IconButton edge="start" color="inherit" onClick={safeGoBack}>
               <GoBackIcon />
             </IconButton>
           )}
@@ -57,13 +57,13 @@ export default function Layout({ children }: Props) {
 }
 
 function CloseButtonBehindImage() {
-  const router = useRouter();
+  const safeGoBack = useSafeGoBack();
 
   return (
     <IconButton
       edge="start"
       color="inherit"
-      onClick={router.back}
+      onClick={safeGoBack}
       sx={{
         boxShadow: (t) => t.shadows[0],
         bgcolor: (t) => {

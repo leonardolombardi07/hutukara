@@ -9,16 +9,14 @@ import { createGroup } from "@/modules/api/client";
 import { useUser } from "@/app/_layout/UserProvider";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
+import { useSafeGoBack } from "@/modules/navigation";
 
 export default function Page() {
   const router = useRouter();
+  const safeGoBack = useSafeGoBack();
   const { user } = useUser();
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-
-  function close() {
-    router.back();
-  }
 
   async function onFormSubmission(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -72,7 +70,7 @@ export default function Page() {
           {isLoading ? "Loading..." : "Host"}
         </Button>
 
-        <Button onClick={close} size="large" variant="outlined" fullWidth>
+        <Button onClick={safeGoBack} size="large" variant="outlined" fullWidth>
           Cancel
         </Button>
       </Box>
