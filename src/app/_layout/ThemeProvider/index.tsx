@@ -2,23 +2,24 @@
 
 import * as React from "react";
 import { ThemeProvider as MUIThemeProvider } from "@mui/material/styles";
-import UserThemeProvider, {
-  useUserTheme,
-  USER_THEMES,
-} from "./UserThemeProvider";
+import PreferredThemeProvider, {
+  usePreferredTheme,
+  THEMES,
+  PreferredTheme,
+} from "./PreferredThemeProvider";
 import CssBaseline from "@mui/material/CssBaseline";
 
-function WithUserTheme({ children }: { children: React.ReactNode }) {
-  const { theme: userTheme } = useUserTheme();
+function WithPreferredTheme({ children }: { children: React.ReactNode }) {
+  const { theme: userTheme } = usePreferredTheme();
 
   const theme = React.useMemo(() => {
     const name = userTheme.name;
     const mode = userTheme.mode;
 
     if (mode === "dark") {
-      return USER_THEMES[name]["dark"];
+      return THEMES[name]["dark"];
     }
-    return USER_THEMES[name]["light"];
+    return THEMES[name]["light"];
   }, [userTheme.name, userTheme.mode]);
 
   return (
@@ -35,10 +36,11 @@ export default function ThemeProvider({
   children: React.ReactNode;
 }) {
   return (
-    <UserThemeProvider>
-      <WithUserTheme>{children}</WithUserTheme>
-    </UserThemeProvider>
+    <PreferredThemeProvider>
+      <WithPreferredTheme>{children}</WithPreferredTheme>
+    </PreferredThemeProvider>
   );
 }
 
-export { useUserTheme };
+export { usePreferredTheme, THEMES };
+export type { PreferredTheme };

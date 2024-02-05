@@ -1,10 +1,10 @@
-import { UserTheme } from "../constants";
+import { PreferredTheme } from "../constants";
 import { BLUE_THEME, DARK_BLUE_THEME } from "./blue";
 import { DARK_SALGUEIRO_THEME, SALGUEIRO_THEME } from "./salgueiro";
 
-export const USER_THEMES: {
-  [key in UserTheme["name"]]: {
-    [key in UserTheme["mode"]]: typeof BLUE_THEME;
+export const THEMES: {
+  [key in PreferredTheme["name"]]: {
+    [key in PreferredTheme["mode"]]: typeof BLUE_THEME;
   };
 } = {
   blue: {

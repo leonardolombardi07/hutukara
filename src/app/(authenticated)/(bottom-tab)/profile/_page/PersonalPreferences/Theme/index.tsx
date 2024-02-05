@@ -6,15 +6,13 @@ import Switch from "@mui/material/Switch";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { useUserTheme } from "@/app/_layout/ThemeProvider";
-import { UserTheme } from "@/app/_layout/ThemeProvider/UserThemeProvider/constants";
+import { usePreferredTheme } from "@/app/_layout/ThemeProvider";
 import IconButton from "@mui/material/IconButton";
-import { SALGUEIRO_THEME } from "@/app/_layout/ThemeProvider/UserThemeProvider/themes/salgueiro";
-import { BLUE_THEME } from "@/app/_layout/ThemeProvider/UserThemeProvider/themes/blue";
 import Tooltip from "@mui/material/Tooltip";
+import { THEMES, PreferredTheme } from "@/app/_layout/ThemeProvider";
 
 export default function Theme() {
-  const { theme, setTheme } = useUserTheme();
+  const { theme, setTheme } = usePreferredTheme();
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setTheme({
@@ -37,15 +35,17 @@ export default function Theme() {
       <Stack spacing={2} direction="row" sx={{ alignItems: "center" }}>
         <ThemeNameCircle
           name="salgueiro"
-          backgroundColor={SALGUEIRO_THEME.palette.primary.main}
-          borderRadiusColor={SALGUEIRO_THEME.palette.secondary.main}
+          backgroundColor={THEMES["salgueiro"][theme.mode].palette.primary.main}
+          borderRadiusColor={
+            THEMES["salgueiro"][theme.mode].palette.secondary.main
+          }
           label="Salgueiro"
         />
 
         <ThemeNameCircle
           name="blue"
-          backgroundColor={BLUE_THEME.palette.primary.main}
-          borderRadiusColor={BLUE_THEME.palette.secondary.main}
+          backgroundColor={THEMES["blue"][theme.mode].palette.primary.main}
+          borderRadiusColor={THEMES["blue"][theme.mode].palette.secondary.main}
           label="Blue"
         />
       </Stack>
@@ -66,12 +66,12 @@ function ThemeNameCircle({
   borderRadiusColor,
   label,
 }: {
-  name: UserTheme["name"];
+  name: PreferredTheme["name"];
   backgroundColor: string;
   borderRadiusColor: string;
   label: string;
 }) {
-  const { theme, setTheme } = useUserTheme();
+  const { theme, setTheme } = usePreferredTheme();
 
   function handleChange() {
     setTheme({
