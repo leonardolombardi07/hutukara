@@ -5,6 +5,8 @@ import {
   deleteDoc,
   onSnapshot,
   QuerySnapshot,
+  serverTimestamp,
+  orderBy,
 } from "firebase/firestore";
 import { useCollectionDataWithIds } from "../../utils/hooks";
 import { getUserSubCollections } from "../utils";
@@ -13,7 +15,9 @@ import { UsersCol } from "../../../types";
 
 function useUserRatings(userId: string) {
   const { ratingsCol } = getUserSubCollections(userId);
-  return useCollectionDataWithIds(query(ratingsCol));
+  return useCollectionDataWithIds(
+    query(ratingsCol, orderBy("updatedAt", "desc"))
+  );
 }
 
 function onUserRatingsSnapshot(
@@ -21,7 +25,7 @@ function onUserRatingsSnapshot(
   observer: Observer<QuerySnapshot<UsersCol.RatingsSubCol.Doc>>
 ) {
   const { ratingsCol } = getUserSubCollections(userId);
-  return onSnapshot(ratingsCol, observer);
+  return onSnapshot(query(ratingsCol, orderBy("updatedAt", "desc")), observer);
 }
 
 function rateContent({
@@ -40,6 +44,7 @@ function rateContent({
       userId,
       contentId,
       value,
+      updatedAt: serverTimestamp(),
     },
     { merge: true }
   );

@@ -4,6 +4,7 @@ import * as React from "react";
 import { getContentByIds, onUserRatingsSnapshot } from "@/modules/api/client";
 import { useUser } from "@/app/_layout/UserProvider";
 import { ContentCol, UsersCol } from "@/modules/api/types";
+import { Timestamp } from "firebase/firestore";
 
 export default function useUserRatedContent() {
   const { user } = useUser();
@@ -13,6 +14,7 @@ export default function useUserRatedContent() {
     (ContentCol.Doc & {
       id: string;
       userRatingValue: number | undefined;
+      userRatingUpdatedAt: Timestamp | undefined;
     })[]
   >([]);
   const [error, setError] = React.useState<Error | null | undefined>();
@@ -53,13 +55,22 @@ export default function useUserRatedContent() {
           });
 
           setData((prev) => {
-            return applyModificationsOnPrevState(
+            const modified = applyModificationsOnPrevState(
               [
                 ...addedContent,
                 ...getPrevStateWithoutDeleted(prev, deletedContentIds),
               ],
               modifiedRatings
             );
+            return modified.sort((a, b) => {
+              if (a.userRatingUpdatedAt && b.userRatingUpdatedAt) {
+                return (
+                  b.userRatingUpdatedAt.toMillis() -
+                  a.userRatingUpdatedAt.toMillis()
+                );
+              }
+              return 0;
+            });
           });
         } catch (error: any) {
           setError(error);
@@ -89,10 +100,11 @@ async function getAddedContent(
   const withoutRatings = ids.length === 0 ? [] : await getContentByIds(ids);
 
   return withoutRatings.map((item) => {
+    const foundRating = ratings.find((rating) => rating.contentId === item.id);
     return {
       ...item,
-      userRatingValue: ratings.find((rating) => rating.contentId === item.id)
-        ?.value,
+      userRatingValue: foundRating?.value,
+      userRatingUpdatedAt: foundRating?.updatedAt,
     };
   });
 }
@@ -101,6 +113,7 @@ function getPrevStateWithoutDeleted(
   prev: (ContentCol.Doc & {
     id: string;
     userRatingValue: number | undefined;
+    userRatingUpdatedAt: Timestamp | undefined;
   })[],
   deletedContentIds: string[]
 ) {
@@ -111,6 +124,7 @@ function applyModificationsOnPrevState(
   prev: (ContentCol.Doc & {
     id: string;
     userRatingValue: number | undefined;
+    userRatingUpdatedAt: Timestamp | undefined;
   })[],
   modifiedRatings: UsersCol.RatingsSubCol.Doc[]
 ) {
@@ -123,6 +137,7 @@ function applyModificationsOnPrevState(
       return {
         ...item,
         userRatingValue: modifiedRating.value,
+        userRatingUpdatedAt: modifiedRating.updatedAt,
       };
     }
 
