@@ -14,6 +14,7 @@ export namespace UsersCol {
       userId: string;
       contentId: string;
       value: number;
+      updatedAt: Timestamp;
     }
   }
 }
