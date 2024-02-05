@@ -49,6 +49,7 @@ export default function ImageButton({
         alt={title}
         fill
         sizes="(max-width: 600px) 100vw, (max-width: 960px) 33vw, 200px"
+        priority
       />
 
       <ImageBackdrop className="MuiImageBackdrop-root" />

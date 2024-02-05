@@ -7,7 +7,9 @@ import { GroupsCol } from "@/modules/api/types";
 const { ratingsCollGroup } = getCollectionGroups();
 const { contentCol } = getCollections();
 
-export async function getMatchInput(groupId: string) {
+export async function getMatchInput(
+  groupId: string
+): Promise<GroupsCol.MatchesSubCol.InputSubCol.Doc> {
   const group = await getGroupById(groupId);
 
   const allMembersIds = [group.ownerId, ...group.hostIds, ...group.memberIds];
@@ -44,24 +46,5 @@ export async function getMatchInput(groupId: string) {
     allMembers,
     ratings: ratingsSnap.docs.map((d) => d.data()),
     content,
-    dataAsCSV: getDataAsCSV({ group, allMembers, content, ratings }),
   };
-}
-
-function getDataAsCSV(input: GroupsCol.MatchesSubCol.InputSubCol.Doc) {
-  const { allMembers, content, ratings } = input;
-
-  const header = ["Title", ...allMembers.map((member) => member.name)];
-  const rows = content.map((item) => {
-    const row = [item.Title];
-    allMembers.forEach((member) => {
-      const rating = ratings.find(
-        (rating) => rating.userId === member.id && rating.contentId === item.id
-      );
-      row.push(rating ? String(rating.value) : "");
-    });
-    return row;
-  });
-
-  return [header, ...rows].map((row) => row.join(",")).join("\n");
 }

@@ -1,9 +1,12 @@
 import { getContentByIds, getUsers } from "../../../index";
 import OpenAIApi from "@/modules/OpenAIApi";
+import { GroupsCol } from "@/modules/api/types";
 import { z } from "zod";
 
-export async function getMatchOutput(dataAsCSV: string) {
-  const { recommendations } = await requestRecommendationsToOpenAI(dataAsCSV);
+export async function getMatchOutput(
+  input: GroupsCol.MatchesSubCol.InputSubCol.Doc
+) {
+  const { recommendations } = await requestRecommendationsToOpenAI(input);
 
   const content = await getContentFromRecommendations(recommendations);
 
@@ -29,7 +32,9 @@ interface Recommendation {
   possiblePoster: string;
 }
 
-async function requestRecommendationsToOpenAI(dataAsCSV: string) {
+async function requestRecommendationsToOpenAI(
+  input: GroupsCol.MatchesSubCol.InputSubCol.Doc
+) {
   const promptInitialMessage = `You are a movie and series recomender. Below, you'll find a text with a list of titles and the scores (from 0 to 5) given by users, in the CSV format of "Title,Person 1,Person 2,...":`;
 
   const promptFinalMessage = `Based on the titles and scores above,  give a list of 5 recommended movies and series (necessarily not in the list above) conforming to the following interface:
@@ -49,6 +54,8 @@ async function requestRecommendationsToOpenAI(dataAsCSV: string) {
   }
   
   Answer with a JSON - and only a JSON.`;
+
+  const dataAsCSV = getDataAsCSV(input);
 
   const prompt = `${promptInitialMessage}\n${dataAsCSV}\n${promptFinalMessage}`;
 
@@ -106,4 +113,22 @@ async function getContentFromRecommendations(
   });
 
   return contentWithScores;
+}
+
+function getDataAsCSV(input: GroupsCol.MatchesSubCol.InputSubCol.Doc) {
+  const { allMembers, content, ratings } = input;
+
+  const header = ["Title", ...allMembers.map((member) => member.name)];
+  const rows = content.map((item) => {
+    const row = [item.Title];
+    allMembers.forEach((member) => {
+      const rating = ratings.find(
+        (rating) => rating.userId === member.id && rating.contentId === item.id
+      );
+      row.push(rating ? String(rating.value) : "");
+    });
+    return row;
+  });
+
+  return [header, ...rows].map((row) => row.join(",")).join("\n");
 }

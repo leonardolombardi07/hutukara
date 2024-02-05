@@ -36,6 +36,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             sm: 4,
             md: 7,
           })}
+          priority
         />
       </Grid>
 

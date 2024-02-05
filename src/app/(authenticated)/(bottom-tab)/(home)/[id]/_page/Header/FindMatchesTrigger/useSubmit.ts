@@ -31,10 +31,9 @@ export default function useSubmit() {
 
     try {
       const input = await getMatchInput(params.id);
-      const { dataAsCSV, ...rest } = input;
       const output = await fakeGetMatchOutput(input);
       createMatch(params.id, {
-        input: rest,
+        input,
         output,
       });
       return { success: true };
