@@ -3,7 +3,7 @@
 import React from "react";
 import { signIn } from "@/modules/api/client";
 import { getHumanReadableErrorMessage } from "../../../_utils";
-import { useNavigateWithPossibleRedirect } from "@/app/_layout/AuthenticationRouter";
+import { useNavigateToInitialUrl } from "@/app/_layout/AuthenticationRouter";
 
 function useSignInWithForm() {
   const emailRef = React.useRef<HTMLInputElement>(null);
@@ -12,7 +12,7 @@ function useSignInWithForm() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [submitError, setSubmitError] = React.useState<string | null>("");
 
-  const navigateWithPossibleRedirect = useNavigateWithPossibleRedirect();
+  const navigateWithPossibleRedirect = useNavigateToInitialUrl();
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();

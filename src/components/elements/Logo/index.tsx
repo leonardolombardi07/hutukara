@@ -30,6 +30,8 @@ export default function Logo({ size = "medium" }: LogoProps) {
         style={{
           objectFit: "contain",
         }}
+        priority
+        sizes={getSizesFromLargestDimensions()}
       />
     </Link>
   );
@@ -55,4 +57,9 @@ function getDimensions(size: "small" | "medium" | "large") {
         height: IMAGE_DIMENSIONS.height / 4,
       };
   }
+}
+
+function getSizesFromLargestDimensions() {
+  const { width, height } = getDimensions("large");
+  return `${width}x${height}`;
 }

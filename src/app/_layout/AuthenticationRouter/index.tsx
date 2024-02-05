@@ -21,7 +21,9 @@ function AuthenticationRouter({ children }: { children: React.ReactNode }) {
   React.useEffect(() => {
     if (!isLoading && !isAuthenticated && !isInAuthRoute) {
       // Preserve the intended route in the URL
-      router.push(`/signin?${REDIRECT_SEARCH_PARAM_KEY}=${pathname}`);
+      router.push(
+        `/signin?${REDIRECT_TO_INITIAL_URL_SEARCH_PARAM_KEY}=${pathname}`
+      );
     }
   }, [isLoading, isAuthenticated, isInAuthRoute, router, pathname]);
 
@@ -40,13 +42,13 @@ function AuthenticationRouter({ children }: { children: React.ReactNode }) {
   return <Suspense fallback={<PageLoader />}>{children}</Suspense>;
 }
 
-const REDIRECT_SEARCH_PARAM_KEY = "redirectTo";
+const REDIRECT_TO_INITIAL_URL_SEARCH_PARAM_KEY = "redirectTo";
 
-function useNavigateWithPossibleRedirect() {
+function useNavigateToInitialUrl() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const redirectTo = searchParams.get(REDIRECT_SEARCH_PARAM_KEY);
+  const redirectTo = searchParams.get(REDIRECT_TO_INITIAL_URL_SEARCH_PARAM_KEY);
 
   const navigateToCorrectRoute = React.useCallback(() => {
     router.push(redirectTo || "/");
@@ -62,6 +64,6 @@ function useIsInAuthRoute() {
   return AUTH_ROUTES.includes(pathname);
 }
 
-export { useNavigateWithPossibleRedirect };
+export { useNavigateToInitialUrl };
 
 export default AuthenticationRouter;

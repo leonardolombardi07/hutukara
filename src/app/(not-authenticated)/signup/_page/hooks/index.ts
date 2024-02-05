@@ -2,7 +2,7 @@
 
 import React from "react";
 import { signUp } from "@/modules/api/client";
-import { useNavigateWithPossibleRedirect } from "@/app/_layout/AuthenticationRouter";
+import { useNavigateToInitialUrl } from "@/app/_layout/AuthenticationRouter";
 
 function useSignUpWithForm() {
   const nameRef = React.useRef<HTMLInputElement>(null);
@@ -12,7 +12,7 @@ function useSignUpWithForm() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [submitError, setSubmitError] = React.useState<string | null>("");
 
-  const navigateWithPossibleRedirect = useNavigateWithPossibleRedirect();
+  const navigateWithPossibleRedirect = useNavigateToInitialUrl();
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();

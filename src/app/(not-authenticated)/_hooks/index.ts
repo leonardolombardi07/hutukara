@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { signIn, signUp } from "@/modules/api/client";
 import { usePathname } from "next/navigation";
 import { getHumanReadableErrorMessage } from "../_utils";
-import { useNavigateWithPossibleRedirect } from "@/app/_layout/AuthenticationRouter";
+import { useNavigateToInitialUrl } from "@/app/_layout/AuthenticationRouter";
 
 function useContinueWithProvider() {
   const pathname = usePathname();
@@ -13,7 +13,7 @@ function useContinueWithProvider() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>("");
 
-  const navigateWithPossibleRedirect = useNavigateWithPossibleRedirect();
+  const navigateWithPossibleRedirect = useNavigateToInitialUrl();
 
   async function continueWithProvider(provider: "google") {
     setIsLoading(true);
