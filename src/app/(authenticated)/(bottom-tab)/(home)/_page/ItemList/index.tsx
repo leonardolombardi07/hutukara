@@ -88,9 +88,7 @@ export default function ItemList() {
               totalNumberOfMembers={
                 item.memberIds.length + item.hostIds.length + 1
               }
-              createdAt={new Date(
-                item.createdAt?.toMillis?.()
-              ).getMilliseconds()}
+              createdAt={item.createdAt?.toMillis?.()}
             />
           </Grid>
         );
