@@ -12,11 +12,21 @@ export function calculateSizesFromColumns(
   const breakpointValues = heuristicallyGetBreakpointsMaxWidths();
   const totalWidth = 100;
 
+  const lastBreakpoint = Object.keys(
+    breakpointColumnMap
+  ).pop() as keyof BreakpointColumnMap;
+
   const sizes = Object.entries(breakpointColumnMap).map(
     ([breakpoint, columns]) => {
+      const roundedWidth = Math.round(totalWidth / columns);
+
+      if (breakpoint === lastBreakpoint) {
+        return `${roundedWidth}vw`;
+      }
+
       return `(max-width: ${
         breakpointValues[breakpoint as keyof typeof breakpointValues]
-      }px) ${totalWidth / columns}vw`;
+      }px) ${roundedWidth}vw`;
     }
   );
 
