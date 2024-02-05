@@ -1,14 +1,14 @@
 "use client";
 
+import useUserRatedContent from "@/app/(authenticated)/_hooks/useUserRatedContent";
 import UserRatingItemList from "@/components/modules/userRating/ItemList";
-import { useLayoutContext } from "../../_layout/LayoutProvider";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import MUILink from "@mui/material/Link";
 import Link from "next/link";
 
-export default function ItemList() {
-  const [data, isLoading, error] = useLayoutContext();
+export default function ItemList({ uid }: { uid: string }) {
+  const [data, isLoading, error] = useUserRatedContent(uid);
   return (
     <UserRatingItemList
       data={data}
@@ -17,14 +17,10 @@ export default function ItemList() {
       emptyComponent={
         <Alert severity="info">
           <AlertTitle>No rated content!</AlertTitle>
-          Go to{" "}
-          <MUILink component={Link} href="/search">
-            search
-          </MUILink>{" "}
-          and rate some content!
+          User has not rated any content yet.
         </Alert>
       }
-      disableRating={false}
+      disableRating
     />
   );
 }

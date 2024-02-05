@@ -11,6 +11,7 @@ import { useGroup, useUsers } from "@/modules/api/client";
 import ListItemButton from "@mui/material/ListItemButton";
 import Role from "./Role";
 import { useUser } from "@/app/_layout/UserProvider";
+import Link from "next/link";
 
 interface MembersProps {
   id: string;
@@ -90,6 +91,12 @@ function MemberListItem(props: {
   return (
     <React.Fragment>
       <ListItem
+        component={Link}
+        href={`/user/${id}`}
+        sx={{
+          textDecoration: "none",
+          color: "inherit",
+        }}
         disablePadding
         secondaryAction={
           <Role

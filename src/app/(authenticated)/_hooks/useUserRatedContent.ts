@@ -2,13 +2,10 @@
 
 import * as React from "react";
 import { getContentByIds, onUserRatingsSnapshot } from "@/modules/api/client";
-import { useUser } from "@/app/_layout/UserProvider";
 import { ContentCol, UsersCol } from "@/modules/api/types";
 import { Timestamp } from "firebase/firestore";
 
-export default function useUserRatedContent() {
-  const { user } = useUser();
-
+export default function useUserRatedContent(uid: string) {
   const [isLoading, setIsLoading] = React.useState(true);
   const [data, setData] = React.useState<
     (ContentCol.Doc & {
@@ -20,7 +17,7 @@ export default function useUserRatedContent() {
   const [error, setError] = React.useState<Error | null | undefined>();
 
   React.useEffect(() => {
-    const unsubscribe = onUserRatingsSnapshot(user.uid, {
+    const unsubscribe = onUserRatingsSnapshot(uid, {
       next: async function getData(snapshot) {
         setIsLoading(true);
         setError(null);
@@ -84,7 +81,7 @@ export default function useUserRatedContent() {
     return () => {
       unsubscribe();
     };
-  }, [user.uid]);
+  }, [uid]);
 
   return [data, isLoading, error] as const;
 }

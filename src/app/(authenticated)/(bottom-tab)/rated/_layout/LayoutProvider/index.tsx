@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import { ContentCol } from "@/modules/api/types";
-import useUserRatedContent from "../hooks/useUserRatedContent";
+import { useUser } from "@/app/_layout/UserProvider";
+import useUserRatedContent from "@/app/(authenticated)/_hooks/useUserRatedContent";
 
 type LayoutContext = [
   (ContentCol.Doc & {
@@ -16,7 +17,8 @@ type LayoutContext = [
 const LayoutContext = React.createContext<LayoutContext | null>(null);
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const [data, isLoading, error] = useUserRatedContent();
+  const { user } = useUser();
+  const [data, isLoading, error] = useUserRatedContent(user.uid);
 
   return (
     <LayoutContext.Provider value={[data, isLoading, error]}>

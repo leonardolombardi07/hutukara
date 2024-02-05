@@ -1,68 +1,29 @@
-[debug] [2024-02-05T17:28:45.399Z] ----------------------------------------------------------------------
-[debug] [2024-02-05T17:28:45.404Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Leonardo\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start
-[debug] [2024-02-05T17:28:45.405Z] CLI Version:   13.1.0
-[debug] [2024-02-05T17:28:45.405Z] Platform:      win32
-[debug] [2024-02-05T17:28:45.406Z] Node Version:  v20.11.0
-[debug] [2024-02-05T17:28:45.406Z] Time:          Mon Feb 05 2024 17:28:45 GMT+0000 (Horário do Meridiano de Greenwich)
-[debug] [2024-02-05T17:28:45.406Z] ----------------------------------------------------------------------
+[debug] [2024-02-05T22:56:20.506Z] ----------------------------------------------------------------------
+[debug] [2024-02-05T22:56:20.512Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Leonardo\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start
+[debug] [2024-02-05T22:56:20.513Z] CLI Version:   13.1.0
+[debug] [2024-02-05T22:56:20.513Z] Platform:      win32
+[debug] [2024-02-05T22:56:20.514Z] Node Version:  v20.11.0
+[debug] [2024-02-05T22:56:20.514Z] Time:          Mon Feb 05 2024 22:56:20 GMT+0000 (Horário do Meridiano de Greenwich)
+[debug] [2024-02-05T22:56:20.514Z] ----------------------------------------------------------------------
 [debug] 
-[debug] [2024-02-05T17:28:45.787Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2024-02-05T17:28:45.788Z] > authorizing via signed-in user (leonardolombardi@poli.ufrj.br)
-[debug] [2024-02-05T17:28:46.482Z] java version "17.0.2" 2022-01-18 LTS
+[debug] [2024-02-05T22:56:20.908Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-02-05T22:56:20.909Z] > authorizing via signed-in user (leonardolombardi@poli.ufrj.br)
+[debug] [2024-02-05T22:56:21.131Z] java version "17.0.2" 2022-01-18 LTS
 
-[debug] [2024-02-05T17:28:46.482Z] Java(TM) SE Runtime Environment (build 17.0.2+8-LTS-86)
+[debug] [2024-02-05T22:56:21.132Z] Java(TM) SE Runtime Environment (build 17.0.2+8-LTS-86)
 Java HotSpot(TM) 64-Bit Server VM (build 17.0.2+8-LTS-86, mixed mode, sharing)
 
-[debug] [2024-02-05T17:28:46.650Z] Parsed Java major version: 17
+[debug] [2024-02-05T22:56:21.193Z] Parsed Java major version: 17
 [info] i  emulators: Starting emulators: auth, firestore, storage {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, firestore, storage"}}
-[debug] [2024-02-05T17:28:46.683Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
-[debug] [2024-02-05T17:28:46.684Z] [auth] Authentication Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
-[debug] [2024-02-05T17:28:46.684Z] [firestore] Firestore Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
-[debug] [2024-02-05T17:28:46.684Z] [firestore.websocket] websocket server for firestore only supports listening on one address (127.0.0.1). Not listening on ::1
-[debug] [2024-02-05T17:28:46.684Z] [storage] Storage Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
-[debug] [2024-02-05T17:28:46.685Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}],"storage":[{"address":"127.0.0.1","family":"IPv4","port":9199}]},"metadata":{"message":"assigned listening specs for emulators"}}
-[debug] [2024-02-05T17:28:46.705Z] [hub] writing locator at C:\Users\Leonardo\AppData\Local\Temp\hub-matcher-da279.json
-[debug] [2024-02-05T17:28:46.741Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
-[debug] [2024-02-05T17:28:46.741Z] Ignoring unsupported arg: single_project_mode_error {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: single_project_mode_error"}}
-[debug] [2024-02-05T17:28:46.741Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","C:\\Users\\Leonardo\\.cache\\firebase\\emulators\\cloud-firestore-emulator-v1.18.2.jar","--host","127.0.0.1","--port",8080,"--websocket_port",9150,"--project_id","matcher-da279","--rules","C:\\Users\\Leonardo\\Desktop\\Programação\\popcorn-party\\firestore.rules","--single_project_mode",true],"optionalArgs":["port","webchannel_port","host","rules","websocket_port","functions_emulator","seed_from_export","project_id","single_project_mode"],"joinArgs":false} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"C:\\\\Users\\\\Leonardo\\\\.cache\\\\firebase\\\\emulators\\\\cloud-firestore-emulator-v1.18.2.jar\",\"--host\",\"127.0.0.1\",\"--port\",8080,\"--websocket_port\",9150,\"--project_id\",\"matcher-da279\",\"--rules\",\"C:\\\\Users\\\\Leonardo\\\\Desktop\\\\Programação\\\\popcorn-party\\\\firestore.rules\",\"--single_project_mode\",true],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"websocket_port\",\"functions_emulator\",\"seed_from_export\",\"project_id\",\"single_project_mode\"],\"joinArgs\":false}"}}
+[debug] [2024-02-05T22:56:21.230Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-02-05T22:56:21.231Z] [auth] Authentication Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-02-05T22:56:21.231Z] [firestore] Firestore Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-02-05T22:56:21.231Z] [firestore.websocket] websocket server for firestore only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-02-05T22:56:21.231Z] [storage] Storage Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-02-05T22:56:21.232Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}],"storage":[{"address":"127.0.0.1","family":"IPv4","port":9199}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2024-02-05T22:56:21.252Z] [hub] writing locator at C:\Users\Leonardo\AppData\Local\Temp\hub-matcher-da279.json
+[debug] [2024-02-05T22:56:21.274Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2024-02-05T22:56:21.275Z] Ignoring unsupported arg: single_project_mode_error {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: single_project_mode_error"}}
+[debug] [2024-02-05T22:56:21.275Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","C:\\Users\\Leonardo\\.cache\\firebase\\emulators\\cloud-firestore-emulator-v1.18.2.jar","--host","127.0.0.1","--port",8080,"--websocket_port",9150,"--project_id","matcher-da279","--rules","C:\\Users\\Leonardo\\Desktop\\Programação\\popcorn-party\\firestore.rules","--single_project_mode",true],"optionalArgs":["port","webchannel_port","host","rules","websocket_port","functions_emulator","seed_from_export","project_id","single_project_mode"],"joinArgs":false} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"C:\\\\Users\\\\Leonardo\\\\.cache\\\\firebase\\\\emulators\\\\cloud-firestore-emulator-v1.18.2.jar\",\"--host\",\"127.0.0.1\",\"--port\",8080,\"--websocket_port\",9150,\"--project_id\",\"matcher-da279\",\"--rules\",\"C:\\\\Users\\\\Leonardo\\\\Desktop\\\\Programação\\\\popcorn-party\\\\firestore.rules\",\"--single_project_mode\",true],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"websocket_port\",\"functions_emulator\",\"seed_from_export\",\"project_id\",\"single_project_mode\"],\"joinArgs\":false}"}}
 [info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
 [info] +  firestore: Firestore Emulator UI websocket is running on 9150. {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator UI websocket is running on 9150."}}
-[debug] [2024-02-05T17:29:11.803Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"storage"},"message":"Ignoring unsupported arg: port"}}
-[debug] [2024-02-05T17:29:13.607Z] Temp file directory for storage emulator: C:\Users\Leonardo\AppData\Local\Temp/firebase/storage/blobs {"metadata":{"emulator":{"name":"storage"},"message":"Temp file directory for storage emulator: C:\\Users\\Leonardo\\AppData\\Local\\Temp/firebase/storage/blobs"}}
-[debug] [2024-02-05T17:29:13.625Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
-[debug] [2024-02-05T17:29:13.625Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
-[debug] [2024-02-05T17:29:13.625Z] Starting Emulator UI with command {"binary":"node","args":["C:\\Users\\Leonardo\\.cache\\firebase\\emulators\\ui-v1.11.7\\server\\server.js"],"optionalArgs":[],"joinArgs":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"C:\\\\Users\\\\Leonardo\\\\.cache\\\\firebase\\\\emulators\\\\ui-v1.11.7\\\\server\\\\server.js\"],\"optionalArgs\":[],\"joinArgs\":false}"}}
-[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
-[debug] [2024-02-05T17:29:13.878Z] Web / API server started at 127.0.0.1:4000
- {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at 127.0.0.1:4000\n"}}
-[debug] [2024-02-05T17:29:13.878Z] Web / API server started at ::1:4000
- {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at ::1:4000\n"}}
-[info] 
-┌─────────────────────────────────────────────────────────────┐
-│ ✔  All emulators ready! It is now safe to connect your app. │
-│ i  View Emulator UI at http://127.0.0.1:4000/               │
-└─────────────────────────────────────────────────────────────┘
-
-┌────────────────┬────────────────┬─────────────────────────────────┐
-│ Emulator       │ Host:Port      │ View in Emulator UI             │
-├────────────────┼────────────────┼─────────────────────────────────┤
-│ Authentication │ 127.0.0.1:9099 │ http://127.0.0.1:4000/auth      │
-├────────────────┼────────────────┼─────────────────────────────────┤
-│ Firestore      │ 127.0.0.1:8080 │ http://127.0.0.1:4000/firestore │
-├────────────────┼────────────────┼─────────────────────────────────┤
-│ Storage        │ 127.0.0.1:9199 │ http://127.0.0.1:4000/storage   │
-└────────────────┴────────────────┴─────────────────────────────────┘
-  Emulator Hub running at 127.0.0.1:4400
-  Other reserved ports: 4500, 9150
-
-Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
- 
-[debug] [2024-02-05T17:30:17.915Z] > refreshing access token with scopes: []
-[debug] [2024-02-05T17:30:17.919Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
-[debug] [2024-02-05T17:30:17.919Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
-[debug] [2024-02-05T17:30:18.164Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
-[debug] [2024-02-05T17:30:18.164Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
-[debug] [2024-02-05T17:30:18.172Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/matcher-da279/adminSdkConfig [none]
-[debug] [2024-02-05T17:30:19.239Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/matcher-da279/adminSdkConfig 200
-[debug] [2024-02-05T17:30:19.239Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/matcher-da279/adminSdkConfig {"projectId":"matcher-da279","storageBucket":"matcher-da279.appspot.com","locationId":"southamerica-east1"}
-[info] i  storage: Change detected, updating rules for Cloud Storage... {"metadata":{"emulator":{"name":"storage"},"message":"Change detected, updating rules for Cloud Storage..."}}

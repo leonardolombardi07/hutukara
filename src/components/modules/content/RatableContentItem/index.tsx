@@ -10,12 +10,13 @@ import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
 import Avatar from "@mui/material/Avatar";
 
-interface RatableContentItemProps {
+export interface RatableContentItemProps {
   id: string;
   Title: string;
   Poster: string;
   userRatingValue: number | null | undefined;
   imageSizes: string;
+  disableRating: boolean;
 }
 
 const IMAGE_HEIGHT = 300;
@@ -26,6 +27,7 @@ export default function RatableContentItem({
   Poster,
   userRatingValue,
   imageSizes,
+  disableRating,
 }: RatableContentItemProps) {
   return (
     <ImageListItem>
@@ -62,7 +64,13 @@ export default function RatableContentItem({
             {Title}
           </Typography>
         }
-        subtitle={<ContentRating value={userRatingValue} contentId={id} />}
+        subtitle={
+          <ContentRating
+            disabled={disableRating}
+            value={userRatingValue}
+            contentId={id}
+          />
+        }
         position="below"
         sx={{
           px: "5px",

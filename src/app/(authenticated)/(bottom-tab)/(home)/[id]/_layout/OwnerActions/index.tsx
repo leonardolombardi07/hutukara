@@ -53,9 +53,11 @@ export default function OwnerActions() {
     }
 
     try {
-      await deleteGroup(params.id);
-      router.replace("/");
       closeModal();
+      router.replace("/");
+
+      // We are assuming that the delete works
+      deleteGroup(params.id);
     } catch (error: any) {
       alert(error.message);
     }

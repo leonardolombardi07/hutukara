@@ -1,8 +1,8 @@
 import Container from "@mui/material/Container";
 import { APP_NAME } from "@/app/constants";
 import { Metadata } from "next";
+import Section from "@/components/modules/userRating/Section";
 import ItemList from "./_page/ItemList";
-import Section from "./_page/Section";
 
 export const metadata: Metadata = {
   title: `${APP_NAME} | Rated`,

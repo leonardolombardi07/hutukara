@@ -11,9 +11,15 @@ interface RatingProps {
   value: number | null | undefined;
   contentId: string;
   size?: "small" | "medium" | "large";
+  disabled?: boolean;
 }
 
-export default function ContentRating({ value, contentId, size }: RatingProps) {
+export default function ContentRating({
+  value,
+  contentId,
+  size,
+  disabled,
+}: RatingProps) {
   const { user } = useUser();
 
   return (
@@ -25,6 +31,7 @@ export default function ContentRating({ value, contentId, size }: RatingProps) {
     >
       <MUIRating
         value={value === undefined ? null : value}
+        disabled={disabled}
         precision={0.5}
         size={size || "medium"}
         onChange={(event, newValue) => {
