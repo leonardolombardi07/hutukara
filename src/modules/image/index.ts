@@ -1,8 +1,9 @@
 interface BreakpointColumnMap {
-  xs: number;
-  sm: number;
-  md: number;
-  lg: number;
+  // Values should be between 1 and 12
+  xs?: number;
+  sm?: number;
+  md?: number;
+  lg?: number;
 }
 
 export function calculateSizesFromColumns(
@@ -22,7 +23,13 @@ export function calculateSizesFromColumns(
   return sizes.join(", ");
 }
 
-export function heuristicallyGetBreakpointsMaxWidths(): BreakpointColumnMap {
+type RequiredBreakpointColumnMap = Required<BreakpointColumnMap>;
+
+type BreakpointValues = {
+  [K in keyof RequiredBreakpointColumnMap]: number;
+};
+
+export function heuristicallyGetBreakpointsMaxWidths(): BreakpointValues {
   // Leo: Breakpoints are part of the theme. The dimensions we need are used at build time, so I don't think we can use the theme here. That's why this is heuristical.
   return {
     xs: 600,

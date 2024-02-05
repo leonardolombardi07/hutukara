@@ -10,6 +10,7 @@ export interface MatchContentItemProps {
   Poster?: string;
   Title: string;
   score: number;
+  imageSizes: string;
 }
 
 export default function MatchContentItem({
@@ -17,6 +18,7 @@ export default function MatchContentItem({
   Poster,
   Title,
   score,
+  imageSizes,
 }: MatchContentItemProps) {
   return (
     <ImageListItem>
@@ -36,6 +38,7 @@ export default function MatchContentItem({
             style={{
               objectFit: "contain",
             }}
+            sizes={imageSizes}
           />
         </Link>
       ) : null}

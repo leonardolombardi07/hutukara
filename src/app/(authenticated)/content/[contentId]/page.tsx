@@ -10,6 +10,7 @@ import { useContent, useUserRatings } from "@/modules/api/client";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { useUser } from "@/app/_layout/UserProvider";
+import Image from "next/image";
 
 export interface PageProps {
   params: {
@@ -95,21 +96,31 @@ function CoverImage({ src }: { src: string | null }) {
     return (
       <Box
         sx={{
-          mt: 2,
-          height: 60, // Account for header height
+          mt: 5,
         }}
       />
     );
+
   return (
     <Box
       sx={{
         height: 250,
-        backgroundImage: `url(${src})`,
-        backgroundSize: "cover",
-        backgroundPosition: "top",
         bgcolor: "grey.700",
-        mb: 2,
+        mb: 3,
+        position: "relative",
+        overflow: "hidden",
       }}
-    />
+    >
+      <Image
+        src={src}
+        alt={`Content poster`}
+        fill={true}
+        style={{
+          objectFit: "cover",
+          objectPosition: "top center",
+        }}
+        sizes={"(max-width: 600px) 100vw, 600px"}
+      />
+    </Box>
   );
 }

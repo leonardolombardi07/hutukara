@@ -44,7 +44,12 @@ export default function ImageButton({
       }}
       onClick={onClick}
     >
-      <ImageSrc src={src} alt={title} fill />
+      <ImageSrc
+        src={src}
+        alt={title}
+        fill
+        sizes="(max-width: 600px) 100vw, (max-width: 960px) 33vw, 200px"
+      />
 
       <ImageBackdrop className="MuiImageBackdrop-root" />
 

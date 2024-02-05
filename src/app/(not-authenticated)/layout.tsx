@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Image from "next/image";
 import { APP_NAME } from "../constants";
+import { calculateSizesFromColumns } from "@/modules/image";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -31,6 +32,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             objectFit: "cover",
             objectPosition: "90% 50%",
           }}
+          sizes={calculateSizesFromColumns({
+            sm: 4,
+            md: 7,
+          })}
         />
       </Grid>
 
