@@ -8,8 +8,9 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import { useRouter } from "next/navigation";
 import { useSafeGoBack } from "@/modules/navigation";
+import Box from "@mui/material/Box";
+import OwnerActions from "./_layout/OwnerActions";
 
 interface PageProps {
   children: React.ReactNode;
@@ -29,6 +30,10 @@ export default function Layout({ children }: PageProps) {
           <IconButton edge="start" color="inherit" onClick={safeGoBack}>
             <CloseIcon />
           </IconButton>
+
+          <Box sx={{ flex: 1 }} />
+
+          <OwnerActions />
         </Toolbar>
       </AppBar>
 

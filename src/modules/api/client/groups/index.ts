@@ -11,6 +11,7 @@ import {
   getDoc,
   serverTimestamp,
   orderBy,
+  deleteDoc,
 } from "firebase/firestore";
 import { useCollectionDataWithIds } from "../utils/hooks";
 import { useDocumentData } from "react-firebase-hooks/firestore";
@@ -69,6 +70,10 @@ async function createGroup({
   return { id: doc.id };
 }
 
+async function deleteGroup(id: string) {
+  await deleteDoc(doc(groupsCol, id));
+}
+
 function useUserGroups(userId: string) {
   return useCollectionDataWithIds(
     query(
@@ -87,5 +92,12 @@ function useGroup(groupId: string) {
   return useDocumentData(doc(groupsCol, groupId));
 }
 
-export { joinGroup, createGroup, getGroupById, useGroup, useUserGroups };
+export {
+  joinGroup,
+  createGroup,
+  getGroupById,
+  useGroup,
+  useUserGroups,
+  deleteGroup,
+};
 export * from "./matches";
