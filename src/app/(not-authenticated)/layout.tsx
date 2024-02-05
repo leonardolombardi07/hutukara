@@ -33,8 +33,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             objectPosition: "90% 50%",
           }}
           sizes={calculateSizesFromColumns({
-            sm: 4,
-            md: 7,
+            sm: 2,
+            md: 1,
           })}
           priority
         />

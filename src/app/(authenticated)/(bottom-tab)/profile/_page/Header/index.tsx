@@ -9,14 +9,15 @@ import Box from "@mui/material/Box";
 import SignOutButton from "./SignOutButton";
 import RequestChangePasswordButton from "./RequestChangePasswordButton";
 import Skeleton from "@mui/material/Skeleton";
+import EditableAvatar from "./EditableAvatar";
+import EditableName from "./EditableName";
 
 interface HeaderProps {
-  displayName: string | undefined;
+  name: string | undefined;
   email: string | null | undefined;
-  photoURL: string | undefined;
 }
 
-export default function Header({ displayName, email, photoURL }: HeaderProps) {
+export default function Header({ name, email }: HeaderProps) {
   return (
     <Paper>
       <Card sx={{ width: "100%" }}>
@@ -26,19 +27,12 @@ export default function Header({ displayName, email, photoURL }: HeaderProps) {
               display: "flex",
             }}
           >
-            <Avatar
-              src={photoURL || undefined}
-              sx={{ bgcolor: "primary", width: 60, height: 60 }}
-            >
-              {displayName ? displayName[0].toUpperCase() : "C"}
-            </Avatar>
+            <EditableAvatar />
 
-            <Box sx={{ mr: 2 }} />
+            <Box sx={{ mr: 3 }} />
 
             <Box>
-              <Typography variant="h5" component="div">
-                {displayName}
-              </Typography>
+              <EditableName name={name} />
 
               <Typography
                 variant="body2"
@@ -73,12 +67,12 @@ export function HeaderSkeleton() {
           >
             <Skeleton
               animation="wave"
-              variant="circular"
-              width={80}
-              height={80}
+              variant="rounded"
+              width={65}
+              height={65}
             />
 
-            <Box sx={{ mr: 2 }} />
+            <Box sx={{ mr: 3 }} />
 
             <Box>
               <Skeleton width="70%" animation="wave" variant="text" />

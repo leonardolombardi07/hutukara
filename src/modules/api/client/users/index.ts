@@ -5,6 +5,7 @@ import {
   where,
   documentId,
   getDocs,
+  setDoc,
 } from "firebase/firestore";
 import { useCollectionDataWithIds } from "../utils/hooks";
 import { getCollections } from "../utils";
@@ -46,7 +47,9 @@ function useFirestoreUser() {
     throw new Error("Not found");
   }
 
-  return useDocumentData(doc(usersCol, userId));
+  const [user, isLoading, error] = useDocumentData(doc(usersCol, userId));
+  const withId = user ? { id: userId, ...user } : undefined;
+  return [withId, isLoading, error] as const;
 }
 
 function useUsers(
@@ -60,5 +63,16 @@ function useUsers(
   return useCollectionDataWithIds(q);
 }
 
-export { getUser, useUsers, useFirestoreUser, getUsers };
+async function updateUser(userId: string, data: Partial<UsersCol.Doc>) {
+  await setDoc(
+    doc(usersCol, userId),
+    {
+      ...data,
+    },
+    { merge: true }
+  );
+}
+
+export { getUser, useUsers, useFirestoreUser, getUsers, updateUser };
 export * from "./rating";
+export * from "./avatar";

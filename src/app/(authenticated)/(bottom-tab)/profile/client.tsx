@@ -34,11 +34,7 @@ export default function ClientPage() {
       {delayedIsLoading ? (
         <HeaderSkeleton />
       ) : (
-        <Header
-          displayName={firestoreUser?.name}
-          email={authUser.email}
-          photoURL={firestoreUser?.photoURL}
-        />
+        <Header name={firestoreUser?.name} email={authUser.email} />
       )}
 
       <Box sx={{ my: 3 }} />
