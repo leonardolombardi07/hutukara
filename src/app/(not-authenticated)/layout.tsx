@@ -3,8 +3,8 @@
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-
-const BANNER_IMAGE_URL = "/images/Logo/Logo.jpg";
+import Image from "next/image";
+import { APP_NAME } from "../constants";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -15,16 +15,24 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         sm={4}
         md={7}
         sx={{
-          backgroundImage: `url(${BANNER_IMAGE_URL})`,
-          backgroundRepeat: "no-repeat",
+          position: "relative",
+          overflow: "hidden",
           backgroundColor: (t) =>
             t.palette.mode === "light"
               ? t.palette.grey[50]
               : t.palette.grey[900],
-          backgroundSize: "cover",
-          backgroundPosition: "center",
         }}
-      />
+      >
+        <Image
+          src={"/images/Logo/Logo.jpg"}
+          alt={`${APP_NAME} authentication cover`}
+          fill={true}
+          style={{
+            objectFit: "cover",
+            objectPosition: "90% 50%",
+          }}
+        />
+      </Grid>
 
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <Box
