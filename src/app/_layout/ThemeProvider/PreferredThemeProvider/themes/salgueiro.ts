@@ -1,11 +1,22 @@
 "use client";
 
+import { Noto_Sans_Tagalog } from "next/font/google";
+
 import { enUS } from "@mui/material/locale";
 import { createTheme, responsiveFontSizes } from "@mui/material";
+
+const font = Noto_Sans_Tagalog({
+  weight: ["400"],
+  subsets: ["latin"],
+  style: "normal",
+});
 
 const SALGUEIRO_THEME = responsiveFontSizes(
   createTheme(
     {
+      typography: {
+        fontFamily: font.style.fontFamily,
+      },
       palette: {
         mode: "light",
         primary: {
@@ -23,6 +34,9 @@ const SALGUEIRO_THEME = responsiveFontSizes(
 const DARK_SALGUEIRO_THEME = responsiveFontSizes(
   createTheme(
     {
+      typography: {
+        fontFamily: font.style.fontFamily,
+      },
       palette: {
         mode: "dark",
         primary: {
