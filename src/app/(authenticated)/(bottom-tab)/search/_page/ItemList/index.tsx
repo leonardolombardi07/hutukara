@@ -50,7 +50,12 @@ export default function ItemList() {
         <ListOfSkeletonItems numOfItems={5} />
       ) : (
         toRender.map((item) => (
-          <RatableContentItem key={item.id} imageSizes={imageSizes} {...item} />
+          <RatableContentItem
+            disableRating={false}
+            key={item.id}
+            imageSizes={imageSizes}
+            {...item}
+          />
         ))
       )}
     </ImageList>
