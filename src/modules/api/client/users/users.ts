@@ -21,10 +21,13 @@ async function getUsers(ids: string[]) {
 function useUsers(
   userIds: string[]
 ): [(UsersCol.Doc & { id: string })[] | undefined, boolean, Error | undefined] {
+  // This way we don't generate a new array every time we change the order of user ids
+  const orderedSet = Array.from(new Set(userIds)).sort();
+
   const q =
-    userIds.length === 0
+    orderedSet.length === 0
       ? null
-      : query(usersCol, where(documentId(), "in", userIds));
+      : query(usersCol, where(documentId(), "in", orderedSet));
 
   return useCollectionDataWithIds(q);
 }

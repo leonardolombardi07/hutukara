@@ -10,6 +10,7 @@ import {
   addDoc,
   getDoc,
   serverTimestamp,
+  orderBy,
 } from "firebase/firestore";
 import { useCollectionDataWithIds } from "../utils/hooks";
 import { useDocumentData } from "react-firebase-hooks/firestore";
@@ -76,7 +77,8 @@ function useUserGroups(userId: string) {
         where("ownerId", "==", userId),
         where("memberIds", "array-contains", userId),
         where("hostIds", "array-contains", userId)
-      )
+      ),
+      orderBy("createdAt", "desc")
     )
   );
 }
