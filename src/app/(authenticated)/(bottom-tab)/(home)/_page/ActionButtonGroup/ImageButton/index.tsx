@@ -48,7 +48,7 @@ export default function ImageButton({
         src={src}
         alt={title}
         fill
-        sizes="(max-width: 600px) 100vw, (max-width: 960px) 33vw, 200px"
+        sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 600px"
         priority
       />
 
