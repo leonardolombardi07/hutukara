@@ -26,23 +26,6 @@ async function getGroupById(id: string) {
   return { id: snap.id, ...snap.data() };
 }
 
-function useUserGroups(userId: string) {
-  return useCollectionDataWithIds(
-    query(
-      groupsCol,
-      or(
-        where("ownerId", "==", userId),
-        where("memberIds", "array-contains", userId),
-        where("hostIds", "array-contains", userId)
-      )
-    )
-  );
-}
-
-function useGroup(groupId: string) {
-  return useDocumentData(doc(groupsCol, groupId));
-}
-
 async function joinGroup({ userId, pin }: { userId: string; pin: string }) {
   const snap = await getDocs(query(groupsCol, where("pin", "==", pin)));
 
@@ -85,6 +68,22 @@ async function createGroup({
   return { id: doc.id };
 }
 
-export { useUserGroups, joinGroup, createGroup, useGroup, getGroupById };
+function useUserGroups(userId: string) {
+  return useCollectionDataWithIds(
+    query(
+      groupsCol,
+      or(
+        where("ownerId", "==", userId),
+        where("memberIds", "array-contains", userId),
+        where("hostIds", "array-contains", userId)
+      )
+    )
+  );
+}
+
+function useGroup(groupId: string) {
+  return useDocumentData(doc(groupsCol, groupId));
+}
+
+export { joinGroup, createGroup, getGroupById, useGroup, useUserGroups };
 export * from "./matches";
-export * from "./owner";

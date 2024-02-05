@@ -16,7 +16,7 @@ export async function getMatchInput(
 
   if (process.env.NODE_ENV === "production" && allMembersIds.length < 2) {
     throw new Error(
-      `Only ${allMembersIds.length} members in the group. Need at least 2 members to create a match`
+      `Only ${allMembersIds.length} members in the group. Need at least 2 members to create a match.`
     );
   }
 
@@ -28,7 +28,7 @@ export async function getMatchInput(
   const contentIds = ratingsSnap.docs.map((d) => d.data().contentId);
   if (contentIds.length === 0) {
     throw new Error(
-      `No rated content for members in the group. Need at least 1 rated content to create a match`
+      `No rated content for members in the group. Need at least 1 rated content to create a match.`
     );
   }
 
@@ -39,7 +39,6 @@ export async function getMatchInput(
     )
   );
 
-  const ratings = ratingsSnap.docs.map((d) => d.data());
   const content = contentSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
   return {
     group,

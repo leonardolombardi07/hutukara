@@ -1,4 +1,4 @@
-import { getServices } from "../services";
+import { getServices } from "../../services";
 import {
   ref,
   getDownloadURL,

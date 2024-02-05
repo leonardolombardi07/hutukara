@@ -69,12 +69,16 @@ function NoResults() {
   );
 }
 
-function getData(match: GroupsCol.MatchesSubCol.Doc): MatchContentItemProps[] {
+type PartialMatchContentProps = Omit<MatchContentItemProps, "imageSizes">;
+
+function getData(
+  match: GroupsCol.MatchesSubCol.Doc
+): PartialMatchContentProps[] {
   const {
     output: { recommendations, content },
   } = match;
 
-  const data: MatchContentItemProps[] = [];
+  const data: PartialMatchContentProps[] = [];
 
   for (const recommendation of recommendations) {
     const hasFoundContent = content.find(

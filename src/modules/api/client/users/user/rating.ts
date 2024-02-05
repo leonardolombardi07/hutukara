@@ -6,10 +6,10 @@ import {
   onSnapshot,
   QuerySnapshot,
 } from "firebase/firestore";
-import { useCollectionDataWithIds } from "../utils/hooks";
-import { getUserSubCollections } from "./utils";
-import { Observer } from "../types";
-import { UsersCol } from "../../types";
+import { useCollectionDataWithIds } from "../../utils/hooks";
+import { getUserSubCollections } from "../utils";
+import { Observer } from "../../types";
+import { UsersCol } from "../../../types";
 
 function useUserRatings(userId: string) {
   const { ratingsCol } = getUserSubCollections(userId);
