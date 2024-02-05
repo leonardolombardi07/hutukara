@@ -70,7 +70,7 @@ export default function Header({ id }: HeaderProps) {
           </Typography>
 
           <Typography variant="body2" color="text.secondary">
-            Created at {createdAt.toDate().toLocaleDateString()}
+            Created at {createdAt?.toDate?.().toLocaleDateString?.()}
           </Typography>
         </Box>
 
