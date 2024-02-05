@@ -91,12 +91,6 @@ function MemberListItem(props: {
   return (
     <React.Fragment>
       <ListItem
-        component={Link}
-        href={`/user/${id}`}
-        sx={{
-          textDecoration: "none",
-          color: "inherit",
-        }}
         disablePadding
         secondaryAction={
           <Role
@@ -107,7 +101,14 @@ function MemberListItem(props: {
           />
         }
       >
-        <ListItemButton>
+        <ListItemButton
+          component={Link}
+          href={`/user/${id}`}
+          sx={{
+            textDecoration: "none",
+            color: "inherit",
+          }}
+        >
           <ListItemAvatar>
             <Avatar alt={`Avatar of ${name}`} src={photoURL} />
           </ListItemAvatar>
