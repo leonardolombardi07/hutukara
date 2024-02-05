@@ -1,7 +1,6 @@
 "use client";
 
 import { Noto_Sans_Tagalog } from "next/font/google";
-
 import { enUS } from "@mui/material/locale";
 import { createTheme, responsiveFontSizes } from "@mui/material";
 
