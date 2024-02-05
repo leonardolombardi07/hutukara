@@ -9,6 +9,7 @@ import {
   arrayUnion,
   addDoc,
   getDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 import { useCollectionDataWithIds } from "../utils/hooks";
 import { useDocumentData } from "react-firebase-hooks/firestore";
@@ -74,7 +75,7 @@ async function createGroup({
   const doc = await addDoc(groupsCol, {
     ownerId,
     name,
-    createdAt: Date.now(),
+    createdAt: serverTimestamp(),
     pin: Math.random().toString(36).substring(7),
     hostIds: [],
     memberIds: [],
