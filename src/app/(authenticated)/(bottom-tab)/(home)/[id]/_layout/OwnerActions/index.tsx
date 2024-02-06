@@ -99,7 +99,7 @@ export default function OwnerActions() {
 
       <ConfirmDialog
         title={`Delete ${GROUP_TITLE}`}
-        description="Are you sure you want to delete this group?"
+        description="Are you sure you want to delete this?"
         open={isOpen}
         onConfirm={onDelete}
         onClose={closeModal}

@@ -51,7 +51,7 @@ export default function ItemList() {
       ) : (
         toRender.map((item) => (
           <RatableContentItem
-            disableRating={false}
+            readOnlyRating={false}
             key={item.id}
             imageSizes={imageSizes}
             {...item}
