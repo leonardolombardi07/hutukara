@@ -16,7 +16,7 @@ export interface RatableContentItemProps {
   Poster: string;
   userRatingValue: number | null | undefined;
   imageSizes: string;
-  disableRating: boolean;
+  readOnlyRating: boolean;
 }
 
 const IMAGE_HEIGHT = 300;
@@ -27,7 +27,7 @@ export default function RatableContentItem({
   Poster,
   userRatingValue,
   imageSizes,
-  disableRating,
+  readOnlyRating,
 }: RatableContentItemProps) {
   return (
     <ImageListItem>
@@ -66,7 +66,7 @@ export default function RatableContentItem({
         }
         subtitle={
           <ContentRating
-            disabled={disableRating}
+            readOnly={readOnlyRating}
             value={userRatingValue}
             contentId={id}
           />

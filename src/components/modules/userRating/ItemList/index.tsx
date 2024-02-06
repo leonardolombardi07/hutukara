@@ -13,11 +13,11 @@ import { calculateSizesFromColumns } from "@/modules/image";
 import useDelay from "@/modules/hooks/useDelay";
 
 interface ItemListProps {
-  data: Omit<RatableContentItemProps, "imageSizes" | "disableRating">[];
+  data: Omit<RatableContentItemProps, "imageSizes" | "readOnlyRating">[];
   isLoading: boolean;
   error: Error | null | undefined;
   emptyComponent: React.ReactNode;
-  disableRating: boolean;
+  readOnlyRating: boolean;
 }
 
 export default function ItemList({
@@ -25,7 +25,7 @@ export default function ItemList({
   isLoading,
   error,
   emptyComponent,
-  disableRating,
+  readOnlyRating,
 }: ItemListProps) {
   const cols = useResponsiveCols();
   const delayedIsLoading = useDelay(isLoading);
@@ -52,7 +52,7 @@ export default function ItemList({
       ) : (
         data.map((item) => (
           <RatableContentItem
-            disableRating={disableRating}
+            readOnlyRating={readOnlyRating}
             key={item.id}
             imageSizes={imageSizes}
             {...item}

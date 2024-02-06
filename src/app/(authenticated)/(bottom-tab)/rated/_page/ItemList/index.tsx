@@ -24,7 +24,7 @@ export default function ItemList() {
           and rate some content!
         </Alert>
       }
-      disableRating={false}
+      readOnlyRating={false}
     />
   );
 }

@@ -11,14 +11,14 @@ interface RatingProps {
   value: number | null | undefined;
   contentId: string;
   size?: "small" | "medium" | "large";
-  disabled?: boolean;
+  readOnly?: boolean;
 }
 
 export default function ContentRating({
   value,
   contentId,
   size,
-  disabled,
+  readOnly,
 }: RatingProps) {
   const { user } = useUser();
 
@@ -31,7 +31,7 @@ export default function ContentRating({
     >
       <MUIRating
         value={value === undefined ? null : value}
-        disabled={disabled}
+        readOnly={readOnly}
         precision={0.5}
         size={size || "medium"}
         onChange={(event, newValue) => {

@@ -4,8 +4,6 @@ import useUserRatedContent from "@/app/(authenticated)/_hooks/useUserRatedConten
 import UserRatingItemList from "@/components/modules/userRating/ItemList";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import MUILink from "@mui/material/Link";
-import Link from "next/link";
 
 export default function ItemList({ uid }: { uid: string }) {
   const [data, isLoading, error] = useUserRatedContent(uid);
@@ -20,7 +18,7 @@ export default function ItemList({ uid }: { uid: string }) {
           User has not rated any content yet.
         </Alert>
       }
-      disableRating
+      readOnlyRating
     />
   );
 }
