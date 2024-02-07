@@ -50,6 +50,8 @@ export default function Page({ searchParams }: PageProps) {
     }
   }
 
+  console.log(searchParams);
+
   return (
     <form onSubmit={onFormSubmission}>
       <Box sx={{ py: 4, px: 2 }}>

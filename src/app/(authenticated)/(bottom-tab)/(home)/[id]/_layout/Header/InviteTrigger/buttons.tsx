@@ -24,8 +24,8 @@ function getUrl({ pin }: { pin: string }) {
 }
 
 function defaultGetMessage({ name, pin }: GetMessageArgs) {
-  return `Join my ${GROUP_TITLE} "${name}" on ${APP_NAME}! The
-  URL is ${getUrl({ pin })}. The pin is ${pin}.`;
+  const url = getUrl({ pin });
+  return `Join my ${GROUP_TITLE} "${name}" on ${APP_NAME}! The URL is ${url}. The pin is ${pin}.`;
 }
 
 export const INVITE_BUTTONS: InviteButtonItem[] = [
@@ -34,8 +34,8 @@ export const INVITE_BUTTONS: InviteButtonItem[] = [
     button: WhatsappShareButton,
     icon: WhatsappIcon,
     getMessage: ({ name, pin }) => {
-      return `Join my ${GROUP_TITLE} "${name}" on ${APP_NAME}! The
-      URL is ${getUrl({ pin })}. The pin is *${pin}*.`;
+      const url = getUrl({ pin });
+      return `Join my ${GROUP_TITLE} "${name}" on ${APP_NAME}! The URL is ${url}. The pin is *${pin}*.`;
     },
   },
 
