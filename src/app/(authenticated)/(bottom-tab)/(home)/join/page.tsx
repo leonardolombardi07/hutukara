@@ -13,7 +13,13 @@ import useDelay from "@/modules/hooks/useDelay";
 import { GROUP_TITLE } from "@/app/constants";
 import { useSafeGoBack } from "@/modules/navigation";
 
-export default function Page() {
+interface PageProps {
+  searchParams: {
+    pin?: string;
+  };
+}
+
+export default function Page({ searchParams }: PageProps) {
   const router = useRouter();
   const safeGoBack = useSafeGoBack();
 
@@ -48,6 +54,7 @@ export default function Page() {
     <form onSubmit={onFormSubmission}>
       <Box sx={{ py: 4, px: 2 }}>
         <TextField
+          defaultValue={searchParams.pin || ""}
           name="pin"
           autoFocus
           fullWidth

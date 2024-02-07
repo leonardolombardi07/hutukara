@@ -5,7 +5,7 @@ import {
   WhatsappShareButton,
 } from "react-share";
 import { InviteButtonProps } from "./InviteButton";
-import { APP_NAME, GROUP_TITLE } from "@/app/constants";
+import { APP_BASE_URL, APP_NAME, GROUP_TITLE } from "@/app/constants";
 
 interface GetMessageArgs {
   name: string;
@@ -19,8 +19,13 @@ interface InviteButtonItem {
   getMessage: ({ name, pin }: GetMessageArgs) => string;
 }
 
+function getUrl({ pin }: { pin: string }) {
+  return `${APP_BASE_URL}/join?pin=${pin}`;
+}
+
 function defaultGetMessage({ name, pin }: GetMessageArgs) {
-  return `Join my ${GROUP_TITLE} "${name}" on ${APP_NAME}! The pin is ${pin}.`;
+  return `Join my ${GROUP_TITLE} "${name}" on ${APP_NAME}! The
+  URL is ${getUrl({ pin })}. The pin is ${pin}.`;
 }
 
 export const INVITE_BUTTONS: InviteButtonItem[] = [
@@ -28,7 +33,10 @@ export const INVITE_BUTTONS: InviteButtonItem[] = [
     id: "1",
     button: WhatsappShareButton,
     icon: WhatsappIcon,
-    getMessage: defaultGetMessage,
+    getMessage: ({ name, pin }) => {
+      return `Join my ${GROUP_TITLE} "${name}" on ${APP_NAME}! The
+      URL is ${getUrl({ pin })}. The pin is *${pin}*.`;
+    },
   },
 
   {
