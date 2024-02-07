@@ -18,21 +18,9 @@ import GoogleButton from "@/components/elements/GoogleButton";
 import Divider from "@mui/material/Divider";
 import Backdrop from "@mui/material/Backdrop";
 import PasswordTextField from "@/components/inputs/PasswordTextField";
-import { useNavigateWithSearchParams } from "@/modules/navigation";
 import AuthLink from "../_components/AuthLink";
 
 export default function Page() {
-  const navigateWithSearchParams = useNavigateWithSearchParams();
-
-  function createOnLinkClick(href: string) {
-    return function onClick(
-      event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
-    ) {
-      event.preventDefault();
-      navigateWithSearchParams(href);
-    };
-  }
-
   const {
     refs: { nameRef, emailRef, passwordRef },
     isLoading,

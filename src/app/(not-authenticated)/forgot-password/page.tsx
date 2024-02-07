@@ -13,7 +13,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Copyright from "../_components/Copyright";
-import { useNavigateWithSearchParams } from "@/modules/navigation";
 import AuthLink from "../_components/AuthLink";
 
 function useForm() {
@@ -63,17 +62,6 @@ function useForm() {
 const SUBMIT_BUTTON_TEXT = "Send reset email";
 
 export default function Page() {
-  const navigateWithSearchParams = useNavigateWithSearchParams();
-
-  function createOnLinkClick(href: string) {
-    return function onClick(
-      event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
-    ) {
-      event.preventDefault();
-      navigateWithSearchParams(href);
-    };
-  }
-
   const {
     refs: { emailRef },
     isLoading,
