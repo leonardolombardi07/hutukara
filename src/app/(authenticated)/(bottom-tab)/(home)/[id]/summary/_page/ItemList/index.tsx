@@ -43,6 +43,10 @@ export default function ItemList({
     );
   }
 
+  if (isLoading) {
+    return null;
+  }
+
   if (!isLoading && data.length === 0) {
     return emptyComponent;
   }
@@ -59,15 +63,9 @@ export default function ItemList({
         {delayedIsLoading ? (
           <ListOfSkeletonItems numOfItems={5} />
         ) : (
-          <React.Fragment>
-            {data.map((item) => (
-              <MatchContentItem
-                key={item.id}
-                imageSizes={imageSizes}
-                {...item}
-              />
-            ))}
-          </React.Fragment>
+          data.map((item) => (
+            <MatchContentItem key={item.id} imageSizes={imageSizes} {...item} />
+          ))
         )}
       </ImageList>
     </React.Fragment>
