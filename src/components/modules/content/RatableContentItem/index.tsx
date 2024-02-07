@@ -1,7 +1,9 @@
 "use client";
 
 import ImageListItem from "@mui/material/ImageListItem";
-import ImageListItemBar from "@mui/material/ImageListItemBar";
+import ImageListItemBar, {
+  ImageListItemBarProps,
+} from "@mui/material/ImageListItemBar";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import ContentRating from "../ContentRating";
@@ -71,21 +73,18 @@ export default function RatableContentItem({
             contentId={id}
           />
         }
-        position="below"
-        sx={{
-          px: "5px",
-        }}
+        {...SHARED_IMAGE_LIST_BAR_PROPS}
       />
     </ImageListItem>
   );
 }
 
-const IMAGE_LIST_BAR_PROPS = {
+const SHARED_IMAGE_LIST_BAR_PROPS: ImageListItemBarProps = {
   position: "below",
   sx: {
     px: "5px",
   },
-} as const;
+};
 
 export function RatableContentItemSkeleton() {
   return (
@@ -95,7 +94,7 @@ export function RatableContentItemSkeleton() {
       <ImageListItemBar
         title={<Skeleton width="80%" sx={{ my: "-2px", mx: "5px" }} />}
         subtitle={<RatingSkeleton />}
-        {...IMAGE_LIST_BAR_PROPS}
+        {...SHARED_IMAGE_LIST_BAR_PROPS}
       />
     </ImageListItem>
   );

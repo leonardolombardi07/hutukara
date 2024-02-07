@@ -5,6 +5,7 @@ import Link from "next/link";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import GroupsIcon from "@mui/icons-material/Groups";
+import Skeleton from "@mui/material/Skeleton";
 
 interface ItemCardProps {
   id: string;
@@ -17,7 +18,7 @@ export default function ItemCard(props: ItemCardProps) {
   const { id, name } = props;
   return (
     <Card variant="outlined">
-      <CardActionArea LinkComponent={Link} href={`/${id}`}>
+      <CardActionArea LinkComponent={Link} href={`/${id}/summary`}>
         <CardHeader title={name} subheader={<CardSubheader {...props} />} />
       </CardActionArea>
     </Card>
@@ -53,6 +54,17 @@ function Dot() {
     <Box component="span" sx={{ display: "inline-block", mx: 1 }}>
       •
     </Box>
+  );
+}
+
+export function LoadingItemCard() {
+  return (
+    <Card variant="outlined">
+      <CardHeader
+        title={<Skeleton variant="text" width="80%" />}
+        subheader={<Skeleton variant="text" width="40%" />}
+      />
+    </Card>
   );
 }
 

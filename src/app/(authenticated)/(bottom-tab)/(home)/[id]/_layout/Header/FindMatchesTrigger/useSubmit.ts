@@ -6,33 +6,27 @@ import {
   getMatchOutput,
   createMatch,
 } from "@/modules/api/client";
-import { useParams } from "next/navigation";
+import { useLayoutContext } from "../../LayoutProvider";
 
 export default function useSubmit() {
   const [error, setError] = React.useState<Error | null | undefined>();
   const [status, setStatus] = React.useState<
     "idle" | "loadingInput" | "loadingOutput"
   >("idle");
-  const params = useParams();
+  const [group] = useLayoutContext();
 
   const isLoading = status !== "idle";
 
   async function submit() {
     if (isLoading) return { success: undefined };
 
-    if (!params.id || typeof params.id !== "string") {
-      // TODO: This should impossible. But we should get a type safe
-      // way to get the id.
-      throw new Error("ID not found");
-    }
-
     setStatus("loadingInput");
     setError(null);
 
     try {
-      const input = await getMatchInput(params.id);
+      const input = await getMatchInput(group.id);
       const output = await fakeGetMatchOutput(input);
-      createMatch(params.id, {
+      createMatch(group.id, {
         input,
         output,
       });

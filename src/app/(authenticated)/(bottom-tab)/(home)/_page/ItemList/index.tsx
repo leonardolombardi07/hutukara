@@ -2,7 +2,7 @@
 
 import React from "react";
 import Grid from "@mui/material/Grid";
-import ItemCard from "./ItemCard";
+import ItemCard, { LoadingItemCard } from "./ItemCard";
 import { useQueryState } from "nuqs";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
@@ -11,9 +11,11 @@ import AlertTitle from "@mui/material/AlertTitle";
 import MUILink from "@mui/material/Link";
 import { useLayoutContext } from "../../_layout/LayoutProvider";
 import { GROUP_TITLE } from "@/app/constants";
+import useDelay from "@/modules/hooks/useDelay";
 
 export default function ItemList() {
   const [data, isLoading, error] = useLayoutContext();
+  const delayedIsLoading = useDelay(isLoading);
 
   const [filter] = useQueryState("filter", {
     history: "push",
@@ -28,8 +30,11 @@ export default function ItemList() {
     );
   }
 
+  if (delayedIsLoading) {
+    return <ListOfSkeletonItems numOfItems={3} />;
+  }
+
   if (isLoading) {
-    // TODO: add skeleton loader
     return null;
   }
 
@@ -92,6 +97,18 @@ export default function ItemList() {
           </Grid>
         );
       })}
+    </Grid>
+  );
+}
+
+function ListOfSkeletonItems({ numOfItems }: { numOfItems: number }) {
+  return (
+    <Grid container spacing={2}>
+      {Array.from({ length: numOfItems }).map((_, index) => (
+        <Grid item key={index} xs={12} md={6} xl={4}>
+          <LoadingItemCard />
+        </Grid>
+      ))}
     </Grid>
   );
 }

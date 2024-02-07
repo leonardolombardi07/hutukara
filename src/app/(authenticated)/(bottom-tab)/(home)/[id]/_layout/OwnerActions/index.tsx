@@ -13,27 +13,14 @@ import ConfirmDialog from "@/components/feedback/ConfirmDialog";
 import { useParams, useRouter } from "next/navigation";
 import { deleteGroup, useGroup } from "@/modules/api/client";
 import { useUser } from "@/app/_layout/UserProvider";
+import { useLayoutContext } from "../LayoutProvider";
 
 export default function OwnerActions() {
-  const params = useParams();
-  if (typeof params.id !== "string") {
-    // This should never happen
-    throw new Error(`Invalid group ID: ${params.id}`);
-  }
-
   const { user } = useUser();
-  const [group, isLoading, error] = useGroup(params.id);
+  const [group] = useLayoutContext();
   const router = useRouter();
   const { anchorEl, openMenu, closeMenu } = useMenu();
   const { isOpen, openModal, closeModal } = useModal();
-
-  if (isLoading || error) {
-    return null;
-  }
-
-  if (!group) {
-    return null;
-  }
 
   const userRole =
     group.ownerId === user.uid
@@ -47,17 +34,12 @@ export default function OwnerActions() {
   }
 
   async function onDelete() {
-    if (typeof params.id !== "string") {
-      // This should never happen
-      return alert(`Invalid group ID: ${params.id}`);
-    }
-
     try {
       closeModal();
       router.replace("/");
 
       // We are assuming that the delete works
-      deleteGroup(params.id);
+      deleteGroup(group.id);
     } catch (error: any) {
       alert(error.message);
     }
@@ -99,7 +81,7 @@ export default function OwnerActions() {
 
       <ConfirmDialog
         title={`Delete ${GROUP_TITLE}`}
-        description="Are you sure you want to delete this?"
+        description={`Are you sure you want to delete this ${GROUP_TITLE}?`}
         open={isOpen}
         onConfirm={onDelete}
         onClose={closeModal}

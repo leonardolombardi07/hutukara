@@ -15,8 +15,9 @@ export async function getMatchInput(
   const allMembersIds = [group.ownerId, ...group.hostIds, ...group.memberIds];
 
   if (process.env.NODE_ENV === "production" && allMembersIds.length < 2) {
+    const pluralized = allMembersIds.length === 1 ? "member" : "members";
     throw new Error(
-      `Only ${allMembersIds.length} members in the group. Need at least 2 members to create a match.`
+      `Only ${allMembersIds.length} ${pluralized} in the group. Need at least 2 members to create a match.`
     );
   }
 

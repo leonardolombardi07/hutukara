@@ -1,9 +1,12 @@
 import * as React from "react";
 import ImageListItem from "@mui/material/ImageListItem";
-import ImageListItemBar from "@mui/material/ImageListItemBar";
+import ImageListItemBar, {
+  ImageListItemBarProps,
+} from "@mui/material/ImageListItemBar";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import Image from "next/image";
+import Skeleton from "@mui/material/Skeleton";
 
 export interface MatchContentItemProps {
   id?: string;
@@ -12,6 +15,8 @@ export interface MatchContentItemProps {
   score: number;
   imageSizes: string;
 }
+
+const IMAGE_HEIGHT = 300;
 
 export default function MatchContentItem({
   id,
@@ -27,7 +32,7 @@ export default function MatchContentItem({
           href={`/content/${id}`}
           style={{
             display: "block",
-            height: 300,
+            height: IMAGE_HEIGHT,
             position: "relative",
           }}
         >
@@ -60,10 +65,36 @@ export default function MatchContentItem({
             {score * 100}% Match
           </Typography>
         }
-        position="below"
-        sx={{
-          px: "5px",
-        }}
+        {...SHARED_IMAGE_LIST_BAR_PROPS}
+      />
+    </ImageListItem>
+  );
+}
+
+const SHARED_IMAGE_LIST_BAR_PROPS: ImageListItemBarProps = {
+  position: "below",
+  sx: {
+    px: "5px",
+  },
+};
+
+export function MatchContentItemSkeleton() {
+  return (
+    <ImageListItem>
+      <Skeleton variant="rectangular" height={IMAGE_HEIGHT} />
+
+      <ImageListItemBar
+        title={<Skeleton width="80%" />}
+        subtitle={
+          <Skeleton
+            width="40%"
+            sx={{
+              my: "-2px",
+              mx: "5px",
+            }}
+          />
+        }
+        {...SHARED_IMAGE_LIST_BAR_PROPS}
       />
     </ImageListItem>
   );

@@ -6,33 +6,13 @@ import React from "react";
 import InviteTrigger from "./InviteTrigger";
 import CopyAlert from "./CopyAlert";
 import FindMatchesTrigger from "./FindMatchesTrigger";
-import { useGroup } from "@/modules/api/client";
-import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
 import { useUser } from "@/app/_layout/UserProvider";
 import { GROUP_TITLE } from "@/app/constants";
+import { useLayoutContext } from "../LayoutProvider";
 
-interface HeaderProps {
-  id: string;
-}
-
-export default function Header({ id }: HeaderProps) {
+export default function Header() {
   const { user } = useUser();
-  const [item, isLoading, error] = useGroup(id);
-
-  if (isLoading) {
-    // TODO: add skeleton loader
-    return null;
-  }
-
-  if (error || !item) {
-    return (
-      <Alert severity="error">
-        <AlertTitle>Error</AlertTitle>
-        {error ? error.message : "No data found"}
-      </Alert>
-    );
-  }
+  const [item] = useLayoutContext();
 
   // TODO: find out why the `useGroup` hook returns a partial group object when the group was recently created
   const isValidItem = item?.matchIds?.length !== undefined;

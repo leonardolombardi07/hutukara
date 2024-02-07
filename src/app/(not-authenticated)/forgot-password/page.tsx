@@ -4,17 +4,17 @@ import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import MUILink from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import UserOutlinedIcon from "@mui/icons-material/VerifiedUserOutlined";
 import Typography from "@mui/material/Typography";
-import Link from "next/link";
 import { sendPasswordResetEmail } from "@/modules/api/client";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Copyright from "../_components/Copyright";
+import { useNavigateWithSearchParams } from "@/modules/navigation";
+import AuthLink from "../_components/AuthLink";
 
 function useForm() {
   const emailRef = React.useRef<HTMLInputElement>(null);
@@ -63,6 +63,17 @@ function useForm() {
 const SUBMIT_BUTTON_TEXT = "Send reset email";
 
 export default function Page() {
+  const navigateWithSearchParams = useNavigateWithSearchParams();
+
+  function createOnLinkClick(href: string) {
+    return function onClick(
+      event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+    ) {
+      event.preventDefault();
+      navigateWithSearchParams(href);
+    };
+  }
+
   const {
     refs: { emailRef },
     isLoading,
@@ -138,9 +149,7 @@ export default function Page() {
           }}
         >
           <Grid item>
-            <MUILink component={Link} href="/signin" variant="body2">
-              {"Go back to sign in"}
-            </MUILink>
+            <AuthLink href="/sign-in">Go back to sign in</AuthLink>
           </Grid>
 
           {showSuccessMessage && (

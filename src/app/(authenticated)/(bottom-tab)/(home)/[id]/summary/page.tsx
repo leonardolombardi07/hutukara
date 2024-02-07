@@ -1,57 +1,32 @@
+"use client";
+
 import React from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import ItemList from "./ItemList";
+import ItemList from "./_page/ItemList";
 import { useGroupMostRecentMatch } from "@/modules/api/client/";
-import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
 import { MatchContentItemProps } from "@/components/modules/content/MatchContentItem";
 import { GroupsCol } from "@/modules/api/types";
 import { GROUP_TITLE } from "@/app/constants";
+import { useLayoutContext } from "../_layout/LayoutProvider";
 
-export default function Summary({ id }: { id: string }) {
-  const [item, isLoading, error] = useGroupMostRecentMatch(id);
-
-  if (isLoading) {
-    // TODO: add skeleton loader
-    return null;
-  }
-
-  if (error) {
-    return (
-      <Alert severity="error">
-        <AlertTitle>Error</AlertTitle>
-        {error ? error.message : "No match found"}
-      </Alert>
-    );
-  }
-
-  if (!item) {
-    return <NoResults />;
-  }
-
-  const data = getData(item);
-
-  if (data.length === 0) {
-    return <NoResults />;
-  }
-
-  const sorted = data.sort((a, b) => {
-    return b.score - a.score;
-  });
-
+export default function Page() {
+  const [group] = useLayoutContext();
+  const [item, isLoading, error] = useGroupMostRecentMatch(group.id);
+  const data = getSortedData(item);
   return (
     <Box sx={{ p: 2 }}>
-      <Typography variant="h4" sx={{ fontWeight: "bold", m: 2 }}>
-        Your Matches
-      </Typography>
-
-      <ItemList data={sorted} />
+      <ItemList
+        emptyComponent={<Empty />}
+        isLoading={isLoading}
+        error={error}
+        data={data}
+      />
     </Box>
   );
 }
 
-function NoResults() {
+function Empty() {
   return (
     <Box
       sx={{
@@ -71,9 +46,13 @@ function NoResults() {
 
 type PartialMatchContentProps = Omit<MatchContentItemProps, "imageSizes">;
 
-function getData(
-  match: GroupsCol.MatchesSubCol.Doc
+function getSortedData(
+  match: GroupsCol.MatchesSubCol.Doc | null
 ): PartialMatchContentProps[] {
+  if (!match) {
+    return [];
+  }
+
   const {
     output: { recommendations, content },
   } = match;
@@ -96,5 +75,9 @@ function getData(
     }
   }
 
-  return data;
+  const sorted = data.sort((a, b) => {
+    return b.score - a.score;
+  });
+
+  return sorted;
 }

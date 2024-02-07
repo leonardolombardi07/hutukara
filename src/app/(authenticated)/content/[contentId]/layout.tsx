@@ -45,7 +45,7 @@ export default function Layout({ children }: Props) {
             <CloseButtonBehindImage />
           ) : (
             <IconButton edge="start" color="inherit" onClick={safeGoBack}>
-              <GoBackIcon />
+              <CloseIcon />
             </IconButton>
           )}
         </Toolbar>

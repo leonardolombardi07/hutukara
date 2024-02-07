@@ -4,12 +4,10 @@ import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import MUILink from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import UserOutlinedIcon from "@mui/icons-material/VerifiedUserOutlined";
 import Typography from "@mui/material/Typography";
-import Link from "next/link";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
@@ -20,8 +18,21 @@ import GoogleButton from "@/components/elements/GoogleButton";
 import Divider from "@mui/material/Divider";
 import Backdrop from "@mui/material/Backdrop";
 import PasswordTextField from "@/components/inputs/PasswordTextField";
+import { useNavigateWithSearchParams } from "@/modules/navigation";
+import AuthLink from "../_components/AuthLink";
 
 export default function Page() {
+  const navigateWithSearchParams = useNavigateWithSearchParams();
+
+  function createOnLinkClick(href: string) {
+    return function onClick(
+      event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+    ) {
+      event.preventDefault();
+      navigateWithSearchParams(href);
+    };
+  }
+
   const {
     refs: { nameRef, emailRef, passwordRef },
     isLoading,
@@ -131,9 +142,7 @@ export default function Page() {
           }}
         >
           <Grid item>
-            <MUILink component={Link} href="/signin" variant="body2">
-              Already have an account? Sign in
-            </MUILink>
+            <AuthLink href="/signin">Already have an account? Sign in</AuthLink>
           </Grid>
 
           {error && (
