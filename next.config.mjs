@@ -8,6 +8,20 @@ const nextConfig = {
         port: "",
         pathname: "/images/**",
       },
+
+      {
+        protocol: "http",
+        hostname: "127.0.0.1",
+        port: "9199",
+        pathname: "/v0/b/matcher-da279.appspot.com/**",
+      },
+
+      {
+        protocol: "https",
+        hostname: "firebasestorage.googleapis.com",
+        port: "",
+        pathname: "/v0/b/matcher-da279.appspot.com/**",
+      },
     ],
   },
 };

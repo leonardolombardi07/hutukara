@@ -19,6 +19,7 @@ import Skeleton from "@mui/material/Skeleton";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import useDelay from "@/modules/hooks/useDelay";
+import Image from "next/image";
 
 export default function Page() {
   const { user } = useUser();
@@ -127,7 +128,23 @@ function MemberListItem(props: {
           }}
         >
           <ListItemAvatar>
-            <Avatar alt={`Avatar of ${name}`} src={photoURL} />
+            <Avatar
+              sx={{
+                position: "relative",
+              }}
+              alt={`Avatar of ${name}`}
+            >
+              {photoURL ? (
+                <Image
+                  src={photoURL}
+                  alt={`Avatar of ${name}`}
+                  fill
+                  sizes="65px"
+                />
+              ) : (
+                name[0] || ""
+              )}
+            </Avatar>
           </ListItemAvatar>
           <ListItemText primary={name} />
         </ListItemButton>

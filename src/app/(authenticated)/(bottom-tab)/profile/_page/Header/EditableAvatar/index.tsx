@@ -16,6 +16,7 @@ import {
 } from "@/modules/api/client";
 import useDelay from "@/modules/hooks/useDelay";
 import Skeleton from "@mui/material/Skeleton";
+import Image from "next/image";
 
 export default function EditableAvatar() {
   const { user } = useUser();
@@ -83,6 +84,26 @@ export default function EditableAvatar() {
             position: "relative",
           }}
         >
+          <Avatar
+            sx={{
+              position: "relative",
+            }}
+            alt={`Avatar of ${name}`}
+          >
+            {firestoreUser?.photoURL ? (
+              <Image
+                src={firestoreUser?.photoURL}
+                alt={`Avatar of ${name}`}
+                fill
+                sizes="65px"
+              />
+            ) : name ? (
+              name[0]
+            ) : (
+              ""
+            )}
+          </Avatar>
+
           <Avatar
             variant="rounded"
             src={firestoreUser?.photoURL || ""}
