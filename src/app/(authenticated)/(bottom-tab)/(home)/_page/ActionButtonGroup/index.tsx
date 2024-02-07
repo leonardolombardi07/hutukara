@@ -18,9 +18,9 @@ export default function ActionButtonGroup() {
       />
 
       <ImageButton
-        title={`Host a ${GROUP_TITLE}`}
+        title={`Create a ${GROUP_TITLE}`}
         width="50%"
-        onClick={() => router.push("/host")}
+        onClick={() => router.push("/create")}
         src="/images/CarolWithDrums/CarolWithDrums.jpeg"
       />
     </React.Fragment>

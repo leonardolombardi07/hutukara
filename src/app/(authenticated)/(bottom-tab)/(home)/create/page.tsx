@@ -30,7 +30,7 @@ export default function Page() {
       const formData = new FormData(event.currentTarget);
       const name = String(formData.get("name"));
       const { id } = await createGroup({ ownerId: user.uid, name });
-      router.replace(`/${id}`);
+      router.replace(`/${id}/summary`);
     } catch (error: any) {
       setError(error.message);
     } finally {
@@ -67,7 +67,7 @@ export default function Page() {
           color="primary"
           disabled={isLoading}
         >
-          {isLoading ? "Loading..." : "Host"}
+          {isLoading ? "Loading..." : "Create"}
         </Button>
 
         <Button onClick={safeGoBack} size="large" variant="outlined" fullWidth>

@@ -32,7 +32,7 @@ export default function Layout({ children }: PageProps) {
           </IconButton>
 
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-            Host a {GROUP_TITLE}
+            Create a {GROUP_TITLE}
           </Typography>
         </Toolbar>
       </AppBar>

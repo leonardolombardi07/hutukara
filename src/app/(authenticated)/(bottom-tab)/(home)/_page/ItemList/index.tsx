@@ -10,7 +10,7 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import MUILink from "@mui/material/Link";
 import { useLayoutContext } from "../../_layout/LayoutProvider";
-import { GROUP_TITLE } from "@/app/constants";
+import { GROUP_TITLE, PLURALIZED_GROUP_TITLE } from "@/app/constants";
 import useDelay from "@/modules/hooks/useDelay";
 
 export default function ItemList() {
@@ -41,15 +41,15 @@ export default function ItemList() {
   if (data.length === 0) {
     return (
       <Typography variant="body1" color="textSecondary">
-        You don&apos;t have any items yet.{" "}
-        <MUILink component={Link} href="/host">
-          Host
+        You don&apos;t have any {PLURALIZED_GROUP_TITLE.toLowerCase()} yet.{" "}
+        <MUILink component={Link} href="/create">
+          Create
         </MUILink>{" "}
         or{" "}
         <MUILink component={Link} href="/join">
-          join
+          Join
         </MUILink>{" "}
-        a {GROUP_TITLE}!
+        a {GROUP_TITLE.toLowerCase()}!
       </Typography>
     );
   }
