@@ -4,7 +4,7 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { joinGroup } from "@/modules/api/client";
 import { useUser } from "@/app/_layout/UserProvider";
 import Alert from "@mui/material/Alert";
@@ -19,7 +19,10 @@ interface PageProps {
   };
 }
 
-export default function Page({ searchParams }: PageProps) {
+export default function Page(props: PageProps) {
+  // See: https://github.com/vercel/next.js/issues/43077#issuecomment-1339112048
+  // On why we are using search params from `useSearchParams` instead of props
+  const searchParams = useSearchParams();
   const router = useRouter();
   const safeGoBack = useSafeGoBack();
 
@@ -50,13 +53,11 @@ export default function Page({ searchParams }: PageProps) {
     }
   }
 
-  console.log(searchParams);
-
   return (
     <form onSubmit={onFormSubmission}>
       <Box sx={{ py: 4, px: 2 }}>
         <TextField
-          defaultValue={searchParams.pin || ""}
+          defaultValue={searchParams.get("pin") || ""}
           name="pin"
           autoFocus
           fullWidth
