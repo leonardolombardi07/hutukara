@@ -6,11 +6,9 @@ import ImageListItemBar, {
 } from "@mui/material/ImageListItemBar";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
-import ContentRating from "../ContentRating";
+import ContentRating, { ContentRatingSkeleton } from "../ContentRating";
 import Image from "next/image";
-import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
-import Avatar from "@mui/material/Avatar";
 
 export interface RatableContentItemProps {
   id: string;
@@ -93,36 +91,15 @@ export function RatableContentItemSkeleton() {
 
       <ImageListItemBar
         title={<Skeleton width="80%" sx={{ my: "-2px", mx: "5px" }} />}
-        subtitle={<RatingSkeleton />}
+        subtitle={
+          <ContentRatingSkeleton
+            sx={{
+              my: "1px",
+            }}
+          />
+        }
         {...SHARED_IMAGE_LIST_BAR_PROPS}
       />
     </ImageListItem>
-  );
-}
-
-function StarSkeleton() {
-  return (
-    <Skeleton variant="circular" width={23} height={23}>
-      <Avatar />
-    </Skeleton>
-  );
-}
-
-function RatingSkeleton() {
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        gap: 1,
-        my: "1px",
-      }}
-    >
-      <StarSkeleton />
-      <StarSkeleton />
-      <StarSkeleton />
-      <StarSkeleton />
-      <StarSkeleton />
-    </Box>
   );
 }
