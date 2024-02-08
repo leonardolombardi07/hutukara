@@ -29,9 +29,6 @@ function useContinueWithProvider() {
 
       navigateWithPossibleRedirect();
     } catch (error: any) {
-      console.log(error);
-      console.log(error?.message);
-      console.log(error?.code);
       if (error.code === "auth/popup-closed-by-user") return;
       setError(getHumanReadableErrorMessage(error));
     } finally {
