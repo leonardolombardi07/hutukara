@@ -97,35 +97,33 @@ export default function Page({ params }: PageProps) {
           <Typography variant="h4">{item?.Title}</Typography>
         </WithDelayedLoading>
 
-        <Box sx={{ display: "flex", gap: 1 }}>
-          <WithDelayedLoading
-            isLoading={isLoading}
-            delayedIsLoading={delayedIsLoading}
-            loadingComponent={
-              <Skeleton variant="text" width="20%" height={20} />
-            }
-          >
-            <Typography variant="subtitle1">{item?.Year}</Typography>
-          </WithDelayedLoading>
-        </Box>
-      </Box>
-
-      <Paper
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          p: 3,
-          mt: 3,
-          mb: 4,
-        }}
-        elevation={3}
-      >
         <WithDelayedLoading
           isLoading={isLoading}
           delayedIsLoading={delayedIsLoading}
-          loadingComponent={<ContentRatingSkeleton size="large" />}
+          loadingComponent={<Skeleton variant="text" width="20%" height={20} />}
+        >
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <Typography variant="subtitle1">{item?.Year}</Typography>
+          </Box>
+        </WithDelayedLoading>
+      </Box>
+
+      <WithDelayedLoading
+        isLoading={isLoading}
+        delayedIsLoading={delayedIsLoading}
+        loadingComponent={<ContentRatingSkeleton size="large" />}
+      >
+        <Paper
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            p: 3,
+            mt: 3,
+            mb: 4,
+          }}
+          elevation={3}
         >
           <Typography variant="h5">Your Rating</Typography>
           <ContentRating
@@ -133,8 +131,8 @@ export default function Page({ params }: PageProps) {
             size="large"
             contentId={params.contentId}
           />
-        </WithDelayedLoading>
-      </Paper>
+        </Paper>
+      </WithDelayedLoading>
 
       <WithDelayedLoading
         isLoading={isLoading}
