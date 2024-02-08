@@ -4,7 +4,11 @@ import * as React from "react";
 import MUIRating from "@mui/material/Rating";
 import Box from "@mui/material/Box";
 import StarIcon from "@mui/icons-material/Star";
-import { deleteContentRating, rateContent } from "@/modules/api/client";
+import {
+  deleteContentRating,
+  rateContent,
+  saveContentById,
+} from "@/modules/api/client";
 import { useUser } from "@/app/_layout/UserProvider";
 
 interface RatingProps {
@@ -39,6 +43,7 @@ export default function ContentRating({
             return deleteContentRating({ userId: user.uid, contentId });
           }
 
+          saveContentById(contentId);
           rateContent({
             userId: user.uid,
             contentId,

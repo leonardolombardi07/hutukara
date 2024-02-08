@@ -3,10 +3,14 @@
 import * as React from "react";
 import { useQueryState } from "nuqs";
 import { useDebounce } from "@uidotdev/usehooks";
-import { OMBDBResponse } from "@/modules/OMDBApi";
-import { ContentCol } from "@/modules/api/types";
+import OMBDBApi from "@/modules/OMDBApi";
+import { saveSearchContent } from "@/modules/api/client";
 
-interface ContentWithUserRating extends ContentCol.Doc {
+type PartialContent = Awaited<
+  ReturnType<typeof OMBDBApi.search>
+>["data"][number];
+
+interface ContentWithUserRating extends PartialContent {
   id: string;
   userRatingValue: number | undefined;
 }
@@ -59,6 +63,8 @@ export default function useSearch({ data }: { data: ContentWithUserRating[] }) {
     }
 
     search_();
+    // data would cause an infinite loop rerender
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedQuery]);
 
   return {
@@ -81,12 +87,23 @@ function searchOnAvaliableData<T extends { Title: string }>({
   );
 }
 
-async function searchOnAPI(q: string): Promise<OMBDBResponse[]> {
-  await new Promise((resolve) =>
-    setTimeout(resolve, randomMSBetween(4000, 6000))
-  );
-  return [];
-  // return OMBDBApi.search(q);
+async function searchOnAPI(q: string) {
+  if (process.env.NODE_ENV === "development") {
+    await new Promise((resolve) =>
+      setTimeout(resolve, randomMSBetween(4000, 6000))
+    );
+    return [];
+  }
+
+  const { data: searchResults } = await OMBDBApi.search(q);
+  saveOnDatabaseWithoutBlockingTheUI(searchResults);
+  return searchResults;
+}
+
+async function saveOnDatabaseWithoutBlockingTheUI(
+  searchResults: Awaited<ReturnType<typeof OMBDBApi.search>>["data"]
+) {
+  saveSearchContent(searchResults);
 }
 
 function randomMSBetween(min: number, max: number) {

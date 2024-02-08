@@ -8,7 +8,6 @@ import {
 } from "firebase/firestore";
 import { useCollectionDataWithIds } from "../utils/hooks";
 import { getCollections } from "../utils";
-import { ContentCol } from "../../types";
 import { CONTENT_SAMPLE } from "./data";
 import OMBDBApi, { OMBDBResponse } from "@/modules/OMDBApi";
 import { getServices } from "../services";
@@ -36,7 +35,7 @@ const upsertSampleOnce = (function () {
 
     // process.env.NODE_ENV === "development" &&
     // alert("Running upsertSampleOnce...");
-    await upsertOnFirestore(CONTENT_SAMPLE);
+    await upsertContent(CONTENT_SAMPLE);
     hasRun = true;
   };
 })();
@@ -49,22 +48,11 @@ function useContent(id: string) {
   return [data?.[0], ...rest] as const;
 }
 
-async function searchContent(searchQuery: string): Promise<ContentCol.Doc[]> {
-  const ombdResponse = await OMBDBApi.search(searchQuery);
-
-  try {
-    upsertOnFirestore(ombdResponse);
-  } catch (error) {
-    // TODO: log error or something like that, but don't throw
-  }
-  return ombdResponse;
-}
-
-function upsertOnFirestore(items: OMBDBResponse[]) {
+function upsertContent(items: OMBDBResponse[]) {
   const batch = writeBatch(firestore);
 
   for (const item of items) {
-    batch.set(doc(contentCol, item.imdbID), item);
+    batch.set(doc(contentCol, item.imdbID), item, { merge: true });
   }
 
   return batch.commit();
@@ -80,9 +68,10 @@ async function getContentByIds(ids: string[]) {
 }
 
 export {
-  searchContent,
   useContent,
   useContentToBrowse,
   useContentData,
   getContentByIds,
+  upsertContent,
 };
+export * from "./saving";

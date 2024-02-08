@@ -10,7 +10,6 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import GoBackIcon from "@mui/icons-material/ArrowBackIosNew";
 import { useSafeGoBack } from "@/modules/navigation";
 
 interface Props {

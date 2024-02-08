@@ -1,10 +1,10 @@
 import axios from "axios";
 import { OMBDBResponse, Plot, Type, Year } from "./types";
 
-const OMBD_API_TOKEN = "ASSAAS";
+const OMBD_API_TOKEN = "5d2d6ee9";
 
 const ApiInstance = axios.create({
-  baseURL: `http://www.omdbapi.com/?apikey=${OMBD_API_TOKEN}`,
+  baseURL: `https://www.omdbapi.com/?apikey=${OMBD_API_TOKEN}`,
   headers: {
     "content-type": "application/json",
   },
@@ -24,7 +24,7 @@ async function getByTitle(
 ): Promise<OMBDBResponse> {
   const { type, year, plot } = params || {};
 
-  const { data } = await ApiInstance.get(`/`, {
+  const { data } = await ApiInstance.get(``, {
     params: {
       t: title,
       r: "json",
@@ -39,10 +39,13 @@ async function getByTitle(
 
 export interface GetByIdParams extends SharedParams {}
 
-async function getById(id: string, params?: SharedParams) {
+async function getById(
+  id: string,
+  params?: SharedParams
+): Promise<OMBDBResponse> {
   const { type, year, plot } = params || {};
 
-  const { data } = await ApiInstance.get(`/`, {
+  const { data } = await ApiInstance.get(``, {
     params: {
       i: id,
       r: "json",
@@ -59,10 +62,16 @@ export interface SearchParams extends SharedParams {
   page?: number;
 }
 
-async function search(query: string, params?: SearchParams) {
+async function search(
+  query: string,
+  params?: SearchParams
+): Promise<{
+  data: Pick<OMBDBResponse, "Title" | "Poster" | "Year" | "imdbID" | "Type">[];
+  totalResults: number;
+}> {
   const { type, year, plot, page } = params || {};
 
-  const { data } = await ApiInstance.get(`/`, {
+  const { data } = await ApiInstance.get(``, {
     params: {
       s: query,
       r: "json",
@@ -73,7 +82,10 @@ async function search(query: string, params?: SearchParams) {
     },
   });
 
-  return data as OMBDBResponse[];
+  return {
+    data: data.Search,
+    totalResults: data.totalResults,
+  };
 }
 
 const functions = {
