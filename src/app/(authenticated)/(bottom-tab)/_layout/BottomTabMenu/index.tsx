@@ -32,10 +32,13 @@ export default function BottomTabMenu({
     ? PATHNAME.PROFILE
     : pathname.includes(PATHNAME.SEARCH)
     ? PATHNAME.SEARCH
-    : PATHNAME.HOME;
+    : pathname === "/"
+    ? PATHNAME.HOME
+    : null;
 
   return (
     <Paper sx={sx}>
+      <h1>{pathname}</h1>
       <Divider />
       <BottomNavigation showLabels value={value}>
         <BottomNavigationAction
