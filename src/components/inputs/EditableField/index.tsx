@@ -38,6 +38,7 @@ export default function EditableField({
         </Typography>
       ) : (
         <TextField
+          defaultValue={value}
           variant={textFieldProps?.variant || "outlined"}
           autoFocus
           onBlur={(event) => {
