@@ -19,16 +19,19 @@ function useContinueWithProvider() {
     setIsLoading(true);
     setError(null);
     try {
-      if (pathname === "/signin") {
+      if (pathname.includes("/signin")) {
         await signIn(provider);
-      }
-
-      if (pathname === "/signup") {
+      } else if (pathname.includes("/signup")) {
         await signUp(provider);
+      } else {
+        throw new Error("This was not supposed to happen. So sorry.");
       }
 
       navigateWithPossibleRedirect();
     } catch (error: any) {
+      console.log(error);
+      console.log(error?.message);
+      console.log(error?.code);
       if (error.code === "auth/popup-closed-by-user") return;
       setError(getHumanReadableErrorMessage(error));
     } finally {
