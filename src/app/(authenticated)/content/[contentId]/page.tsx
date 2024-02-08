@@ -70,7 +70,7 @@ export default function Page({ params }: PageProps) {
       maxWidth="xs"
     >
       <WithDelayedLoading
-        isLoading={isLoadingContent}
+        isLoading={isLoading}
         delayedIsLoading={delayedIsLoading}
         loadingComponent={
           <Skeleton
@@ -88,7 +88,7 @@ export default function Page({ params }: PageProps) {
 
       <Box sx={{ px: 2 }}>
         <WithDelayedLoading
-          isLoading={isLoadingContent}
+          isLoading={isLoading}
           delayedIsLoading={delayedIsLoading}
           loadingComponent={
             <Skeleton variant="text" width="100%" height={50} />
@@ -99,7 +99,7 @@ export default function Page({ params }: PageProps) {
 
         <Box sx={{ display: "flex", gap: 1 }}>
           <WithDelayedLoading
-            isLoading={isLoadingContent}
+            isLoading={isLoading}
             delayedIsLoading={delayedIsLoading}
             loadingComponent={
               <Skeleton variant="text" width="20%" height={20} />
@@ -125,7 +125,7 @@ export default function Page({ params }: PageProps) {
         <Typography variant="h5">Your Rating</Typography>
 
         <WithDelayedLoading
-          isLoading={isLoadingRatings}
+          isLoading={isLoading}
           delayedIsLoading={delayedIsLoading}
           loadingComponent={<ContentRatingSkeleton size="large" />}
         >
@@ -138,7 +138,7 @@ export default function Page({ params }: PageProps) {
       </Paper>
 
       <WithDelayedLoading
-        isLoading={isLoadingContent}
+        isLoading={isLoading}
         delayedIsLoading={delayedIsLoading}
         loadingComponent={<Skeleton variant="text" width="100%" height={100} />}
       >
