@@ -35,8 +35,8 @@ export default function Page({ params }: PageProps) {
   );
   const [ratings, isLoadingRatings, ratingsError] = useUserRatings(user.uid);
 
-  const delayedIsLoadingContent = useDelay(isLoadingContent);
-  const delayedIsLoadingRatings = useDelay(isLoadingRatings);
+  const isLoading = isLoadingContent || isLoadingRatings;
+  const delayedIsLoading = useDelay(isLoading);
 
   const error = contentError || ratingsError;
   if (error) {
@@ -48,7 +48,6 @@ export default function Page({ params }: PageProps) {
     );
   }
 
-  const isLoading = isLoadingContent || isLoadingRatings;
   if (!isLoading && !item) {
     return (
       <Alert severity="warning">
@@ -72,7 +71,7 @@ export default function Page({ params }: PageProps) {
     >
       <WithDelayedLoading
         isLoading={isLoadingContent}
-        delayedIsLoading={delayedIsLoadingContent}
+        delayedIsLoading={delayedIsLoading}
         loadingComponent={
           <Skeleton
             variant="rectangular"
@@ -90,7 +89,7 @@ export default function Page({ params }: PageProps) {
       <Box sx={{ px: 2 }}>
         <WithDelayedLoading
           isLoading={isLoadingContent}
-          delayedIsLoading={delayedIsLoadingContent}
+          delayedIsLoading={delayedIsLoading}
           loadingComponent={
             <Skeleton variant="text" width="100%" height={50} />
           }
@@ -101,7 +100,7 @@ export default function Page({ params }: PageProps) {
         <Box sx={{ display: "flex", gap: 1 }}>
           <WithDelayedLoading
             isLoading={isLoadingContent}
-            delayedIsLoading={delayedIsLoadingContent}
+            delayedIsLoading={delayedIsLoading}
             loadingComponent={
               <Skeleton variant="text" width="20%" height={20} />
             }
@@ -127,7 +126,7 @@ export default function Page({ params }: PageProps) {
 
         <WithDelayedLoading
           isLoading={isLoadingRatings}
-          delayedIsLoading={delayedIsLoadingRatings}
+          delayedIsLoading={delayedIsLoading}
           loadingComponent={<ContentRatingSkeleton size="large" />}
         >
           <ContentRating
@@ -140,7 +139,7 @@ export default function Page({ params }: PageProps) {
 
       <WithDelayedLoading
         isLoading={isLoadingContent}
-        delayedIsLoading={delayedIsLoadingContent}
+        delayedIsLoading={delayedIsLoading}
         loadingComponent={<Skeleton variant="text" width="100%" height={100} />}
       >
         <Typography variant="body1" sx={{ mx: 1.5 }}>
