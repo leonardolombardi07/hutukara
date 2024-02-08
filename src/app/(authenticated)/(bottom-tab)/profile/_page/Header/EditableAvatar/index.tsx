@@ -87,6 +87,8 @@ export default function EditableAvatar() {
           <Avatar
             sx={{
               position: "relative",
+              width: 65,
+              height: 65,
             }}
             alt={`Avatar of ${name}`}
           >
@@ -102,18 +104,6 @@ export default function EditableAvatar() {
             ) : (
               ""
             )}
-          </Avatar>
-
-          <Avatar
-            variant="rounded"
-            src={firestoreUser?.photoURL || ""}
-            alt={`Avatar of ${name}`}
-            sx={{
-              width: 65,
-              height: 65,
-            }}
-          >
-            {name ? name[0] : "A"}
           </Avatar>
 
           {firestoreUser?.photoURL && (
