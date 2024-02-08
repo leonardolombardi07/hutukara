@@ -12,9 +12,11 @@ import MUILink from "@mui/material/Link";
 import { useLayoutContext } from "../../_layout/LayoutProvider";
 import { GROUP_TITLE, PLURALIZED_GROUP_TITLE } from "@/app/constants";
 import useDelay from "@/modules/hooks/useDelay";
+import { useNavigateOnlyIfContentRated } from "../../_layout/GoRateContentProvider";
 
 export default function ItemList() {
   const [data, isLoading, error] = useLayoutContext();
+  const navigateIfContentRated = useNavigateOnlyIfContentRated();
   const delayedIsLoading = useDelay(isLoading);
 
   const [filter] = useQueryState("filter", {
@@ -42,11 +44,27 @@ export default function ItemList() {
     return (
       <Typography variant="body1" color="textSecondary">
         You don&apos;t have any {PLURALIZED_GROUP_TITLE.toLowerCase()} yet.{" "}
-        <MUILink component={Link} href="/create">
+        <MUILink
+          onClick={(event) => {
+            event.preventDefault();
+            navigateIfContentRated("/create");
+          }}
+          sx={{
+            cursor: "pointer",
+          }}
+        >
           Create
         </MUILink>{" "}
         or{" "}
-        <MUILink component={Link} href="/join">
+        <MUILink
+          onClick={(event) => {
+            event.preventDefault();
+            navigateIfContentRated("/join");
+          }}
+          sx={{
+            cursor: "pointer",
+          }}
+        >
           Join
         </MUILink>{" "}
         a {GROUP_TITLE.toLowerCase()}!

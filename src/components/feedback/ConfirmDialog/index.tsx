@@ -10,7 +10,7 @@ import AlertTitle from "@mui/material/AlertTitle";
 interface ConfirmDialogProps {
   open: boolean;
   title?: string;
-  description: string;
+  description: React.ReactNode;
   onConfirm: () => void;
   onClose: () => void;
   confirmText?: string;
@@ -34,7 +34,13 @@ export default function ConfirmDialog({
         {title && <DialogTitle>{title}</DialogTitle>}
 
         <DialogContent>
-          {description && <DialogContentText>{description}</DialogContentText>}
+          {description ? (
+            typeof description === "string" ? (
+              <DialogContentText>{description}</DialogContentText>
+            ) : (
+              description
+            )
+          ) : null}
         </DialogContent>
 
         <DialogActions>
