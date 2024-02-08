@@ -38,7 +38,6 @@ export default function BottomTabMenu({
 
   return (
     <Paper sx={sx}>
-      <h1>{pathname}</h1>
       <Divider />
       <BottomNavigation showLabels value={value}>
         <BottomNavigationAction
