@@ -24,11 +24,12 @@ export default function ItemList() {
   } = useSearch({ data });
 
   if (error || searchError) {
-    const message = error?.message || searchError?.message;
     return (
       <Alert severity="error">
         <AlertTitle>Error</AlertTitle>
-        {message}
+        {error
+          ? "Oops! Something went wrong"
+          : "This is OMDb API error! Complain to them!"}
       </Alert>
     );
   }
