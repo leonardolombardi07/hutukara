@@ -122,13 +122,12 @@ export default function Page({ params }: PageProps) {
         }}
         elevation={3}
       >
-        <Typography variant="h5">Your Rating</Typography>
-
         <WithDelayedLoading
           isLoading={isLoading}
           delayedIsLoading={delayedIsLoading}
           loadingComponent={<ContentRatingSkeleton size="large" />}
         >
+          <Typography variant="h5">Your Rating</Typography>
           <ContentRating
             value={userRating ? userRating.value : null}
             size="large"
