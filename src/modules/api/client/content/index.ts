@@ -25,10 +25,9 @@ function useContentToBrowse() {
 const upsertSampleOnce = (function () {
   let hasRun = false;
   return async function () {
+    if (process.env.NODE_ENV === "production") return;
     if (hasRun) return;
 
-    // process.env.NODE_ENV === "development" &&
-    // alert("Running upsertSampleOnce...");
     await upsertContent(CONTENT_SAMPLE);
     hasRun = true;
   };
