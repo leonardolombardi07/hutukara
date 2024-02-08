@@ -41,8 +41,18 @@ export default function ItemList() {
     );
   }
 
-  const imageSizes = calculateSizesFromColumns(cols.perBreakpoint);
-  const toRender = query ? searchResults : data;
+  const searchResultsWithUserRating = searchResults.map((result) => {
+    const userRatingValue = data.find(
+      (d) => d.id === result.imdbID
+    )?.userRatingValue;
+    return {
+      ...result,
+      userRatingValue,
+      id: result.imdbID,
+    };
+  });
+
+  const toRender = query ? searchResultsWithUserRating : data;
 
   return (
     <ImageList variant="masonry" cols={cols.value} gap={8}>
@@ -53,7 +63,7 @@ export default function ItemList() {
           <RatableContentItem
             readOnlyRating={false}
             key={item.id}
-            imageSizes={imageSizes}
+            imageSizes={calculateSizesFromColumns(cols.perBreakpoint)}
             {...item}
           />
         ))

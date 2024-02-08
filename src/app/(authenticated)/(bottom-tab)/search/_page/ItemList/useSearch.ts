@@ -5,12 +5,13 @@ import { useQueryState } from "nuqs";
 import { useDebounce } from "@uidotdev/usehooks";
 import OMBDBApi from "@/modules/OMDBApi";
 import { saveSearchContent } from "@/modules/api/client";
+import { ContentCol } from "@/modules/api/types";
 
-type PartialContent = Awaited<
+type SearchedContent = Awaited<
   ReturnType<typeof OMBDBApi.search>
 >["data"][number];
 
-interface ContentWithUserRating extends PartialContent {
+interface ContentWithUserRating extends ContentCol.Doc {
   id: string;
   userRatingValue: number | undefined;
 }
@@ -19,7 +20,7 @@ export default function useSearch({ data }: { data: ContentWithUserRating[] }) {
   const [query] = useQueryState("query");
   const debouncedQuery = useDebounce(query, 500);
 
-  const [results, setResults] = React.useState<ContentWithUserRating[]>([]);
+  const [results, setResults] = React.useState<SearchedContent[]>([]);
   const [isSearching, setIsSearching] = React.useState(false);
   const [error, setError] = React.useState<Error | null>(null);
 
@@ -47,12 +48,11 @@ export default function useSearch({ data }: { data: ContentWithUserRating[] }) {
 
         setIsSearching(true);
         const resultsFromApiSearch = await searchOnAPI(debouncedQuery);
+
         setResults(
           resultsFromApiSearch.map((r) => ({
             ...r,
             id: r.imdbID,
-            userRatingValue: data.find((d) => d.id === r.imdbID)
-              ?.userRatingValue,
           }))
         );
       } catch (error: any) {
