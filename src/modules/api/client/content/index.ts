@@ -6,21 +6,15 @@ import {
   writeBatch,
   getDocs,
 } from "firebase/firestore";
-import { useCollectionDataWithIds } from "../utils/hooks";
 import { getCollections } from "../utils";
 import { CONTENT_SAMPLE } from "./data";
-import OMBDBApi, { OMBDBResponse } from "@/modules/OMDBApi";
+import { OMBDBResponse } from "@/modules/OMDBApi";
 import { getServices } from "../services";
+import { getContentOfIdsThatAreNotInTheDatabase } from "./internal";
+import { saveContentById } from "./saving";
 
 const { firestore } = getServices();
 const { contentCol } = getCollections();
-
-function useContentData(ids: string[]) {
-  // TODO: rename this to "useContent"
-  const q =
-    ids.length === 0 ? null : query(contentCol, where(documentId(), "in", ids));
-  return useCollectionDataWithIds(q);
-}
 
 function useContentToBrowse() {
   upsertSampleOnce();
@@ -40,14 +34,6 @@ const upsertSampleOnce = (function () {
   };
 })();
 
-function useContent(id: string) {
-  // TODO: rename this to "useContentById"
-  const [data, ...rest] = useCollectionDataWithIds(
-    query(contentCol, where(documentId(), "==", id))
-  );
-  return [data?.[0], ...rest] as const;
-}
-
 function upsertContent(items: OMBDBResponse[]) {
   const batch = writeBatch(firestore);
 
@@ -59,19 +45,26 @@ function upsertContent(items: OMBDBResponse[]) {
 }
 
 async function getContentByIds(ids: string[]) {
-  const q = query(contentCol, where(documentId(), "in", ids));
-  const snap = await getDocs(q);
-  return snap.docs.map((d) => ({
+  const idsNotInDb = await getContentOfIdsThatAreNotInTheDatabase(ids);
+  const idsInDb = ids.filter((id) => idsNotInDb.includes(id) === false);
+
+  const [fetchedSnap, savedData] = await Promise.all([
+    getDocs(query(contentCol, where(documentId(), "in", idsInDb))),
+    Promise.all(idsNotInDb.map((id) => saveContentById(id))),
+  ]);
+
+  const fetchedData = fetchedSnap.docs.map((d) => ({
     id: d.id,
     ...d.data(),
   }));
+
+  return [...fetchedData, ...savedData];
 }
 
-export {
-  useContent,
-  useContentToBrowse,
-  useContentData,
-  getContentByIds,
-  upsertContent,
-};
+async function getContentById(id: string) {
+  const [data] = await getContentByIds([id]);
+  return data;
+}
+
+export { useContentToBrowse, getContentByIds, upsertContent, getContentById };
 export * from "./saving";

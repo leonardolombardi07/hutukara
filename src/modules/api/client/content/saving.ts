@@ -1,14 +1,8 @@
 import OMBDBApi from "@/modules/OMDBApi";
 import { upsertContent } from "@/modules/api/client";
 import { getCollections } from "../utils";
-import {
-  documentId,
-  query,
-  where,
-  getDocs,
-  getDoc,
-  doc,
-} from "firebase/firestore";
+import { getDoc, doc } from "firebase/firestore";
+import { getContentOfIdsThatAreNotInTheDatabase } from "./internal";
 
 const { contentCol } = getCollections();
 
@@ -21,25 +15,21 @@ async function saveSearchContent(
 
   const data = await Promise.all(notInDbIds.map((id) => OMBDBApi.getById(id)));
   upsertContent(data);
-
-  async function getContentOfIdsThatAreNotInTheDatabase(ids: string[]) {
-    // To spare OMDB requests, we check if the content already exists in the database
-    const q = query(contentCol, where(documentId(), "in", ids));
-    const snap = await getDocs(q);
-    const idsInDb = snap.docs.filter((d) => d.exists()).map((d) => d.id);
-    const idsNotInDb = ids.filter((id) => idsInDb.includes(id) === false);
-    return idsNotInDb;
-  }
 }
 
-async function saveContentById(id: string) {
+async function saveContentIfNotInDb(id: string) {
   const dbDoc = await getDoc(doc(contentCol, id));
   if (dbDoc.exists()) {
     return;
   }
 
-  const item = await OMBDBApi.getById(id);
-  upsertContent([item]);
+  return saveContentById(id);
 }
 
-export { saveSearchContent, saveContentById };
+async function saveContentById(id: string) {
+  const item = await OMBDBApi.getById(id);
+  upsertContent([item]);
+  return { id, ...item };
+}
+
+export { saveSearchContent, saveContentById, saveContentIfNotInDb };

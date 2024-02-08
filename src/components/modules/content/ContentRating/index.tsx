@@ -7,7 +7,7 @@ import StarIcon from "@mui/icons-material/Star";
 import {
   deleteContentRating,
   rateContent,
-  saveContentById,
+  saveContentIfNotInDb,
 } from "@/modules/api/client";
 import { useUser } from "@/app/_layout/UserProvider";
 
@@ -43,7 +43,7 @@ export default function ContentRating({
             return deleteContentRating({ userId: user.uid, contentId });
           }
 
-          saveContentById(contentId);
+          saveContentIfNotInDb(contentId);
           rateContent({
             userId: user.uid,
             contentId,

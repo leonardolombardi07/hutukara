@@ -6,11 +6,12 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import ContentRating from "@/components/modules/content/ContentRating";
 import Paper from "@mui/material/Paper";
-import { useContent, useUserRatings } from "@/modules/api/client";
+import { useUserRatings } from "@/modules/api/client";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { useUser } from "@/app/_layout/UserProvider";
 import Image from "next/image";
+import { useContentById } from "./_page/useContentById";
 
 export interface PageProps {
   params: {
@@ -25,18 +26,22 @@ export default function Page({ params }: PageProps) {
 
   const { user } = useUser();
 
-  const [item, isLoading, error] = useContent(params.contentId);
+  const [item, isLoadingContent, contentError] = useContentById(
+    params.contentId
+  );
   const [ratings, isLoadingRatings, ratingsError] = useUserRatings(user.uid);
 
   const userRating = ratings?.find(
     (rating) => rating.contentId === params.contentId
   );
 
-  if (isLoading || isLoadingRatings) {
+  const isLoading = isLoadingContent || isLoadingRatings;
+  if (isLoading || !item) {
     return null;
   }
 
-  if (error || !item || ratingsError || !ratings) {
+  const error = contentError || ratingsError;
+  if (error) {
     return (
       <Alert severity="error">
         <AlertTitle>Error</AlertTitle>
