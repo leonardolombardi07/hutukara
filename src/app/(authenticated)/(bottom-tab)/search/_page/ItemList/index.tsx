@@ -15,7 +15,7 @@ import { calculateSizesFromColumns } from "@/modules/image";
 
 export default function ItemList() {
   const cols = useResponsiveCols();
-  const [data, isLoading, error] = useLayoutContext();
+  const [{ data, ratings }, isLoading, error] = useLayoutContext();
   const {
     results: searchResults,
     isSearching,
@@ -24,10 +24,11 @@ export default function ItemList() {
   } = useSearch({ data });
 
   if (error || searchError) {
+    const message = error?.message || searchError?.message;
     return (
       <Alert severity="error">
         <AlertTitle>Error</AlertTitle>
-        {error?.message}
+        {message}
       </Alert>
     );
   }
@@ -42,9 +43,9 @@ export default function ItemList() {
   }
 
   const searchResultsWithUserRating = searchResults.map((result) => {
-    const userRatingValue = data.find(
-      (d) => d.id === result.imdbID
-    )?.userRatingValue;
+    const userRatingValue = ratings.find(
+      (item) => item.id === result.imdbID
+    )?.value;
     return {
       ...result,
       userRatingValue,

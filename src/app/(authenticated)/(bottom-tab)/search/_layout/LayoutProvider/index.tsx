@@ -3,16 +3,18 @@
 import * as React from "react";
 import { useContentToBrowse, useUserRatings } from "@/modules/api/client";
 import { useUser } from "@/app/_layout/UserProvider";
-import { ContentCol } from "@/modules/api/types";
+import { ContentCol, UsersCol } from "@/modules/api/types";
+import { WithId } from "@/modules/tsUtils";
 
-type LayoutContext = [
-  (ContentCol.Doc & {
+type Data = {
+  data: (ContentCol.Doc & {
     id: string;
     userRatingValue: number | undefined;
-  })[],
-  boolean,
-  Error | null | undefined
-];
+  })[];
+  ratings: WithId<UsersCol.RatingsSubCol.Doc>[];
+};
+
+type LayoutContext = [Data, boolean, Error | null | undefined];
 
 const LayoutContext = React.createContext<LayoutContext | null>(null);
 
@@ -20,7 +22,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { user } = useUser();
 
   const [content, isLoadingContent, contentError] = useContentToBrowse();
-  const [ratings, isLoadingRatings, ratingError] = useUserRatings(user.uid);
+  const [ratings = [], isLoadingRatings, ratingError] = useUserRatings(
+    user.uid
+  );
 
   const data = content.map((item) => {
     return {
@@ -34,7 +38,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const error = contentError || ratingError;
 
   return (
-    <LayoutContext.Provider value={[data, isLoading, error]}>
+    <LayoutContext.Provider
+      value={[
+        {
+          data,
+          ratings,
+        },
+        isLoading,
+        error,
+      ]}
+    >
       {children}
     </LayoutContext.Provider>
   );
