@@ -15,6 +15,7 @@ import { useUser } from "@/app/_layout/UserProvider";
 import Image from "next/image";
 import { useContentById } from "./_page/useContentById";
 import Skeleton from "@mui/material/Skeleton";
+import useDelay from "@/modules/hooks/useDelay";
 
 export interface PageProps {
   params: {
@@ -34,9 +35,8 @@ export default function Page({ params }: PageProps) {
   );
   const [ratings, isLoadingRatings, ratingsError] = useUserRatings(user.uid);
 
-  const userRating = ratings?.find(
-    (rating) => rating.contentId === params.contentId
-  );
+  const delayedIsLoadingContent = useDelay(isLoadingContent);
+  const delayedIsLoadingRatings = useDelay(isLoadingRatings);
 
   const error = contentError || ratingsError;
   if (error) {
@@ -58,6 +58,10 @@ export default function Page({ params }: PageProps) {
     );
   }
 
+  const userRating = ratings?.find(
+    (rating) => rating.contentId === params.contentId
+  );
+
   return (
     <Container
       sx={{
@@ -66,20 +70,44 @@ export default function Page({ params }: PageProps) {
       disableGutters
       maxWidth="xs"
     >
-      <CoverImage isLoading={isLoadingContent} src={item?.Poster} />
+      <WithDelayedLoading
+        isLoading={isLoadingContent}
+        delayedIsLoading={delayedIsLoadingContent}
+        loadingComponent={
+          <Skeleton
+            variant="rectangular"
+            width={"100%"}
+            height={COVER_IMAGE_HEIGHT}
+            sx={{
+              mb: 3,
+            }}
+          />
+        }
+      >
+        <CoverImage src={item?.Poster} />
+      </WithDelayedLoading>
 
       <Box sx={{ px: 2 }}>
-        {item?.Title ? (
-          <Typography variant="h4">{item.Title}</Typography>
-        ) : (
-          <Skeleton variant="text" width="80%" height={50} />
-        )}
+        <WithDelayedLoading
+          isLoading={isLoadingContent}
+          delayedIsLoading={delayedIsLoadingContent}
+          loadingComponent={
+            <Skeleton variant="text" width="100%" height={50} />
+          }
+        >
+          <Typography variant="h4">{item?.Title}</Typography>
+        </WithDelayedLoading>
+
         <Box sx={{ display: "flex", gap: 1 }}>
-          {item?.Year ? (
-            <Typography variant="subtitle1">{item.Year}</Typography>
-          ) : (
-            <Skeleton variant="text" width="20%" height={20} />
-          )}
+          <WithDelayedLoading
+            isLoading={isLoadingContent}
+            delayedIsLoading={delayedIsLoadingContent}
+            loadingComponent={
+              <Skeleton variant="text" width="20%" height={20} />
+            }
+          >
+            <Typography variant="subtitle1">{item?.Year}</Typography>
+          </WithDelayedLoading>
         </Box>
       </Box>
 
@@ -96,50 +124,58 @@ export default function Page({ params }: PageProps) {
         elevation={3}
       >
         <Typography variant="h5">Your Rating</Typography>
-        {isLoadingRatings ? (
-          <ContentRatingSkeleton size="large" />
-        ) : (
+
+        <WithDelayedLoading
+          isLoading={isLoadingRatings}
+          delayedIsLoading={delayedIsLoadingRatings}
+          loadingComponent={<ContentRatingSkeleton size="large" />}
+        >
           <ContentRating
             value={userRating ? userRating.value : null}
             size="large"
             contentId={params.contentId}
           />
-        )}
+        </WithDelayedLoading>
       </Paper>
 
-      {item?.Plot ? (
+      <WithDelayedLoading
+        isLoading={isLoadingContent}
+        delayedIsLoading={delayedIsLoadingContent}
+        loadingComponent={<Skeleton variant="text" width="100%" height={100} />}
+      >
         <Typography variant="body1" sx={{ mx: 1.5 }}>
-          {item.Plot}
+          {item?.Plot}
         </Typography>
-      ) : (
-        <Skeleton variant="text" width="100%" height={100} />
-      )}
+      </WithDelayedLoading>
     </Container>
   );
 }
 
-const COVER_IMAGE_HEIGHT = 250;
-
-function CoverImage({
-  src,
+function WithDelayedLoading({
   isLoading,
+  delayedIsLoading,
+  loadingComponent,
+  children,
 }: {
-  src: string | null | undefined;
   isLoading: boolean;
+  delayedIsLoading: boolean;
+  loadingComponent: React.ReactNode;
+  children: React.ReactNode;
 }) {
-  if (isLoading) {
-    return (
-      <Skeleton
-        variant="rectangular"
-        width={"100%"}
-        height={COVER_IMAGE_HEIGHT}
-        sx={{
-          mb: 3,
-        }}
-      />
-    );
+  if (delayedIsLoading) {
+    return loadingComponent;
   }
 
+  if (isLoading) {
+    return null;
+  }
+
+  return children;
+}
+
+const COVER_IMAGE_HEIGHT = 250;
+
+function CoverImage({ src }: { src: string | null | undefined }) {
   if (!src)
     return (
       <Box
