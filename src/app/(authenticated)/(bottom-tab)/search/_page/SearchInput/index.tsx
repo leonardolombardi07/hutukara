@@ -16,15 +16,9 @@ export default function SearchInput() {
 
   return (
     <TextField
-      // See: https://stackoverflow.com/questions/74187884/textfield-mui-component-autofocus-end-of-text
+      // See: https://stackoverflow.com/questions/40132775/autofocus-textfield-using-react-material-ui
       // On why we use inputRef instead of autoFocus
-      inputRef={(input) => input && input?.focus()}
-      onFocus={(e) =>
-        e.currentTarget.setSelectionRange(
-          e.currentTarget.value.length,
-          e.currentTarget.value.length
-        )
-      }
+      inputRef={(input) => input && setTimeout(input?.focus(), 100)}
       value={query}
       onChange={(e) => setQuery(e.target.value)}
       label="Search for movies, shows, and more..."
