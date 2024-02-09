@@ -6,7 +6,6 @@ import Popover from "@mui/material/Popover";
 import useSteps from "./steps";
 import { useUser } from "@/app/_layout/UserProvider";
 import { User } from "firebase/auth";
-import { useIsFirstRender } from "@uidotdev/usehooks";
 
 interface OnboardingContext {
   isOnboarding: boolean;
@@ -57,7 +56,7 @@ export default function OnboardingProvider({
       if (
         // To make sure we only try to onboard the user once
         !HAS_TRIED_TO_ONBOARD_USER &&
-        // We need to checkt he initialStep anchorElRef. Because the OnboardingProvider wraps the bottom-tab layout, which wraps multiple routes, we may try to start onboarding in a route that doesn't have the initialStep anchorElRef set.
+        // We need to checkt the initialStep anchorElRef. Because the OnboardingProvider wraps the bottom-tab layout, which wraps multiple routes, we may try to start onboarding in a route that doesn't have the initialStep anchorElRef set and that would throw an error.
         initialStep.anchorElRef?.current &&
         shouldOnboardUser(user)
       ) {
@@ -142,9 +141,9 @@ export function useOnboardingContext() {
 }
 
 function shouldOnboardUser(user: User) {
-  if (process.env.NODE_ENV === "development") {
-    return true;
-  }
+  // if (process.env.NODE_ENV === "development") {
+  //   return true;
+  // }
 
   const { creationTime } = user.metadata;
   if (!creationTime) {
@@ -155,10 +154,10 @@ function shouldOnboardUser(user: User) {
   const creationDate = new Date(creationTime);
   const now = new Date();
 
-  const createdLessThan1MinuteAgo =
-    now.getTime() - creationDate.getTime() < 60000;
+  const createdLessThan10SecondsAgo =
+    now.getTime() - creationDate.getTime() < 10 * 1000;
 
-  if (createdLessThan1MinuteAgo) {
+  if (createdLessThan10SecondsAgo) {
     return true;
   }
 

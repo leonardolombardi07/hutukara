@@ -34,7 +34,6 @@ export default function FindMatchesTrigger({
   const fullScreen = useFullScreen();
   const { isOpen, openModal, closeModal } = useModal();
   const router = useRouter();
-  const params = useParams();
 
   const { submit, isLoading, status, error } = useSubmit();
 
