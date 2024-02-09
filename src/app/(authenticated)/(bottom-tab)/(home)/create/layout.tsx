@@ -24,7 +24,6 @@ export default function Layout({ children }: PageProps) {
       open
       TransitionComponent={Transition}
       onClose={safeGoBack}
-      disableRestoreFocus
     >
       <AppBar sx={{ position: "relative" }}>
         <Toolbar>
