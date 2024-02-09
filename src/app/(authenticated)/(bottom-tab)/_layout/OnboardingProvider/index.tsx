@@ -6,6 +6,7 @@ import Popover from "@mui/material/Popover";
 import useSteps from "./steps";
 import { useUser } from "@/app/_layout/UserProvider";
 import { User } from "firebase/auth";
+import { Timestamp } from "firebase/firestore";
 
 interface OnboardingContext {
   isOnboarding: boolean;
@@ -146,19 +147,18 @@ function shouldOnboardUser(user: User) {
   // }
 
   const { creationTime } = user.metadata;
-  console.log("creationTime", creationTime);
   if (!creationTime) {
     // default to not onboard, otherwise is annoying
     return false;
   }
 
   const creationDate = new Date(creationTime);
-  const now = new Date();
+  const now = Timestamp.now().toDate(); // we need to use the same timezone as the creationDate
+  const createdLessThan10SecondsAgo =
+    now.getTime() - creationDate.getTime() < 10 * 1000;
+
   console.log("creationDate", creationDate);
   console.log("now", now);
-
-  const createdLessThan10SecondsAgo =
-    now.getUTCMilliseconds() - creationDate.getUTCMilliseconds() < 10 * 1000;
 
   if (createdLessThan10SecondsAgo) {
     return true;
