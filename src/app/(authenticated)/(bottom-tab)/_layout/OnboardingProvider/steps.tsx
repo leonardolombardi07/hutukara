@@ -22,7 +22,7 @@ export default function useSteps() {
           {PLURALIZED_GROUP_TITLE} are for people who are tired of getting
           together with friends and having to fight over what to watch - or even
           worse, having to watch something they don&apos;t like (Love at First
-          Sight, I&apos;m looking at you! 😒) . A {GROUP_TITLE} is a place where
+          Sight, I&apos;m looking at you! 😒). A {GROUP_TITLE} is a place where
           you and your friends can share your favorite movies and series, and
           then get nice <b>recommendations</b> based on your tastes.
         </OnboardingPopoverContent>
@@ -35,8 +35,7 @@ export default function useSteps() {
       popoverContent: (
         <OnboardingPopoverContent>
           To join a {GROUP_TITLE} created by a friend, you need to click in the{" "}
-          <b>Join</b> button above and fill an unique PIN given by a friend.
-          🔓🐱‍👤
+          <b>Join</b> button above and fill an unique PIN. 🔓🐱‍👤
         </OnboardingPopoverContent>
       ),
       anchorElRef: onboardingRef1,
@@ -62,8 +61,8 @@ export default function useSteps() {
           <MUILink component={Link} href="/search">
             search
           </MUILink>{" "}
-          and rate movies and series you like - or dislike. (So sorry, we
-          won&apos;t let you rate Love at First Sight 😅)
+          and rate movies and series you like - or dislike (so sorry, we may not
+          let you rate Love at First Sight 😅)
         </OnboardingPopoverContent>
       ),
       anchorElRef: onboardingRef3,

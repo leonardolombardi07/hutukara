@@ -7,6 +7,7 @@ import { SxProps } from "@mui/material";
 import { Theme } from "@mui/system";
 import Paper from "@mui/material/Paper";
 import Divider from "@mui/material/Divider";
+import { useRouter } from "next/router";
 
 export default function OnboardingPopoverContent({
   children,
@@ -57,6 +58,7 @@ function FixedCloseIconButton() {
 }
 
 function StickyButtonsFooter() {
+  const router = useRouter();
   const {
     goToNextStep,
     goToPreviousStep,
@@ -90,13 +92,20 @@ function StickyButtonsFooter() {
         </Button>
 
         <Button
-          onClick={isLastStep ? stopOnboarding : goToNextStep}
+          onClick={
+            isLastStep
+              ? function () {
+                  stopOnboarding();
+                  router.push("/search");
+                }
+              : goToNextStep
+          }
           sx={{ flex: 1 }}
           variant="contained"
           color="primary"
           size="small"
         >
-          {isLastStep ? "Finish" : "Next"}
+          {isLastStep ? "Let's rate content!" : "Next"}
         </Button>
       </Box>
     </Box>
