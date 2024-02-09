@@ -18,6 +18,7 @@ import ConfirmDialog from "@/components/feedback/ConfirmDialog";
 import useSubmit from "./useSubmit";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
+import { useParams, useRouter } from "next/navigation";
 
 const TRIGGER_BUTTON_TEXT = "Find Matches";
 
@@ -32,6 +33,8 @@ export default function FindMatchesTrigger({
 }: FindMatchesTriggerProps) {
   const fullScreen = useFullScreen();
   const { isOpen, openModal, closeModal } = useModal();
+  const router = useRouter();
+  const params = useParams();
 
   const { submit, isLoading, status, error } = useSubmit();
 
@@ -39,6 +42,7 @@ export default function FindMatchesTrigger({
     const { success } = await submit();
     if (success) {
       closeModal();
+      router.replace(`summary`);
     }
   }
 
