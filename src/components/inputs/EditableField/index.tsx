@@ -5,6 +5,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import CheckIcon from "@mui/icons-material/Check";
 import Box from "@mui/material/Box";
+import EditIcon from "@mui/icons-material/Edit";
 
 interface EditableFieldProps {
   value: string;
@@ -24,18 +25,34 @@ export default function EditableField({
   return (
     <Box>
       {!isEditing ? (
-        <Typography
-          onClick={() => {
-            setIsEditing(true);
-          }}
-          sx={{
-            cursor: "pointer",
-            ...typographyProps?.sx,
-          }}
-          {...typographyProps}
-        >
-          {value}
-        </Typography>
+        <Box>
+          <Typography
+            onClick={() => {
+              setIsEditing(true);
+            }}
+            sx={{
+              cursor: "pointer",
+              ...typographyProps?.sx,
+              position: "relative",
+            }}
+            {...typographyProps}
+          >
+            {value}
+
+            <IconButton
+              onClick={() => {
+                setIsEditing(true);
+              }}
+              sx={{
+                right: 5,
+                top: -15,
+                opacity: 0.9,
+              }}
+            >
+              <EditIcon fontSize="small" />
+            </IconButton>
+          </Typography>
+        </Box>
       ) : (
         <TextField
           defaultValue={value}
