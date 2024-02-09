@@ -4,9 +4,6 @@ import * as React from "react";
 import { OnboardingStep } from "./types";
 import Popover from "@mui/material/Popover";
 import useSteps from "./steps";
-import { useUser } from "@/app/_layout/UserProvider";
-import { User } from "firebase/auth";
-import { Timestamp } from "firebase/firestore";
 
 interface OnboardingContext {
   isOnboarding: boolean;
@@ -23,15 +20,11 @@ type MaybeStep = OnboardingStep | null | undefined;
 
 const OnboardingContext = React.createContext<OnboardingContext | null>(null);
 
-let HAS_TRIED_TO_ONBOARD_USER = false;
-
 export default function OnboardingProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { user } = useUser();
-
   const steps = useSteps();
   const [currentStepIndex, setCurrentStepIndex] = React.useState(0);
 
@@ -56,16 +49,15 @@ export default function OnboardingProvider({
     function automaticallyOnboardUser() {
       if (
         // To make sure we only try to onboard the user once
-        !HAS_TRIED_TO_ONBOARD_USER &&
+        !HasOnboardedCache.get() &&
         // We need to checkt the initialStep anchorElRef. Because the OnboardingProvider wraps the bottom-tab layout, which wraps multiple routes, we may try to start onboarding in a route that doesn't have the initialStep anchorElRef set and that would throw an error.
-        initialStep.anchorElRef?.current &&
-        shouldOnboardUser(user)
+        initialStep.anchorElRef?.current
       ) {
-        HAS_TRIED_TO_ONBOARD_USER = true;
+        HasOnboardedCache.set();
         startOnboarding();
       }
     },
-    [startOnboarding, user, initialStep.anchorElRef]
+    [startOnboarding, initialStep.anchorElRef]
   );
 
   function setAnchorElIfNotNull(
@@ -141,28 +133,14 @@ export function useOnboardingContext() {
   return context;
 }
 
-function shouldOnboardUser(user: User) {
-  // if (process.env.NODE_ENV === "development") {
-  //   return true;
-  // }
+class HasOnboardedCache {
+  private static key: string = "HAS_ONBOARDED_CACHE_KEY";
 
-  const { creationTime } = user.metadata;
-  if (!creationTime) {
-    // default to not onboard, otherwise is annoying
-    return false;
+  static get() {
+    return localStorage.getItem(HasOnboardedCache.key) === "true";
   }
 
-  const creationDate = new Date(creationTime);
-  const now = Timestamp.now().toDate(); // we need to use the same timezone as the creationDate
-  const createdLessThan10SecondsAgo =
-    now.getTime() - creationDate.getTime() < 10 * 1000;
-
-  console.log("creationDate", creationDate);
-  console.log("now", now);
-
-  if (createdLessThan10SecondsAgo) {
-    return true;
+  static set() {
+    localStorage.setItem(HasOnboardedCache.key, "true");
   }
-
-  return false;
 }
