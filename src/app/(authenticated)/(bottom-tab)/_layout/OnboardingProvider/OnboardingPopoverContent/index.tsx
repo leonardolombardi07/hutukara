@@ -7,7 +7,7 @@ import { SxProps } from "@mui/material";
 import { Theme } from "@mui/system";
 import Paper from "@mui/material/Paper";
 import Divider from "@mui/material/Divider";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function OnboardingPopoverContent({
   children,
