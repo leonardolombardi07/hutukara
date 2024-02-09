@@ -6,6 +6,7 @@ import Popover from "@mui/material/Popover";
 import useSteps from "./steps";
 import { useUser } from "@/app/_layout/UserProvider";
 import { User } from "firebase/auth";
+import { useIsFirstRender } from "@uidotdev/usehooks";
 
 interface OnboardingContext {
   isOnboarding: boolean;
@@ -22,6 +23,8 @@ type MaybeStep = OnboardingStep | null | undefined;
 
 const OnboardingContext = React.createContext<OnboardingContext | null>(null);
 
+let HAS_TRIED_TO_ONBOARD_USER = false;
+
 export default function OnboardingProvider({
   children,
 }: {
@@ -29,11 +32,7 @@ export default function OnboardingProvider({
 }) {
   const { user } = useUser();
 
-  const [isOnboarding, setIsOnboarding] = React.useState(() =>
-    shouldInitiallyOnboardUser(user)
-  );
   const steps = useSteps();
-  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
   const [currentStepIndex, setCurrentStepIndex] = React.useState(0);
 
   const initialStep: MaybeStep = steps[0];
@@ -41,8 +40,33 @@ export default function OnboardingProvider({
   const currentStep: MaybeStep = steps[currentStepIndex];
   const nextStep: MaybeStep = steps[currentStepIndex + 1];
 
+  const [isOnboarding, setIsOnboarding] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+
   const isInitialStep = currentStepIndex === 0;
   const isLastStep = currentStepIndex === steps.length - 1;
+
+  const startOnboarding = React.useCallback(() => {
+    setAnchorElIfNotNull(initialStep?.anchorElRef);
+    setIsOnboarding(true);
+    setCurrentStepIndex(0);
+  }, [initialStep]);
+
+  React.useEffect(
+    function automaticallyOnboardUser() {
+      if (
+        // To make sure we only try to onboard the user once
+        !HAS_TRIED_TO_ONBOARD_USER &&
+        // We need to checkt he initialStep anchorElRef. Because the OnboardingProvider wraps the bottom-tab layout, which wraps multiple routes, we may try to start onboarding in a route that doesn't have the initialStep anchorElRef set.
+        initialStep.anchorElRef?.current &&
+        shouldOnboardUser(user)
+      ) {
+        HAS_TRIED_TO_ONBOARD_USER = true;
+        startOnboarding();
+      }
+    },
+    [startOnboarding, user, initialStep.anchorElRef]
+  );
 
   function setAnchorElIfNotNull(
     ref: React.RefObject<HTMLElement> | null | undefined
@@ -56,12 +80,6 @@ export default function OnboardingProvider({
         );
       }
     }
-  }
-
-  function startOnboarding() {
-    setAnchorElIfNotNull(initialStep?.anchorElRef);
-    setIsOnboarding(true);
-    setCurrentStepIndex(0);
   }
 
   function stopOnboarding() {
@@ -123,7 +141,11 @@ export function useOnboardingContext() {
   return context;
 }
 
-function shouldInitiallyOnboardUser(user: User) {
+function shouldOnboardUser(user: User) {
+  if (process.env.NODE_ENV === "development") {
+    return true;
+  }
+
   const { creationTime } = user.metadata;
   if (!creationTime) {
     // default to not onboard, otherwise is annoying
