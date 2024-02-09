@@ -146,6 +146,7 @@ function shouldOnboardUser(user: User) {
   // }
 
   const { creationTime } = user.metadata;
+  console.log("creationTime", creationTime);
   if (!creationTime) {
     // default to not onboard, otherwise is annoying
     return false;
@@ -153,6 +154,8 @@ function shouldOnboardUser(user: User) {
 
   const creationDate = new Date(creationTime);
   const now = new Date();
+  console.log("creationDate", creationDate);
+  console.log("now", now);
 
   const createdLessThan10SecondsAgo =
     now.getUTCMilliseconds() - creationDate.getUTCMilliseconds() < 10 * 1000;
