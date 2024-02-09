@@ -155,7 +155,7 @@ function shouldOnboardUser(user: User) {
   const now = new Date();
 
   const createdLessThan10SecondsAgo =
-    now.getTime() - creationDate.getTime() < 10 * 1000;
+    now.getUTCMilliseconds() - creationDate.getUTCMilliseconds() < 10 * 1000;
 
   if (createdLessThan10SecondsAgo) {
     return true;
