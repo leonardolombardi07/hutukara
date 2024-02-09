@@ -82,6 +82,13 @@ async function search(
     },
   });
 
+  if (data.Response === "False") {
+    return {
+      data: [],
+      totalResults: 0,
+    };
+  }
+
   return {
     data: data.Search,
     totalResults: data.totalResults,
