@@ -11,6 +11,7 @@ import ProfileIcon from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
 import Paper from "@mui/material/Paper";
 import HomeIcon from "@mui/icons-material/Home";
+import { useOnboardingContext } from "../OnboardingProvider";
 
 const PATHNAME = {
   HOME: "",
@@ -24,6 +25,7 @@ export default function BottomTabMenu({
 }: {
   sx?: React.ComponentProps<typeof Paper>["sx"];
 }) {
+  const { onboardingRefs } = useOnboardingContext();
   const pathname = usePathname();
 
   const value = pathname.includes(PATHNAME.RATED)
@@ -49,6 +51,7 @@ export default function BottomTabMenu({
         />
 
         <BottomNavigationAction
+          ref={onboardingRefs[3]}
           label="Search"
           icon={<SearchIcon />}
           LinkComponent={Link}
@@ -57,6 +60,7 @@ export default function BottomTabMenu({
         />
 
         <BottomNavigationAction
+          ref={onboardingRefs[4]}
           label="Rated"
           icon={<StarRateIcon />}
           LinkComponent={Link}
@@ -65,6 +69,7 @@ export default function BottomTabMenu({
         />
 
         <BottomNavigationAction
+          ref={onboardingRefs[5]}
           label="Profile"
           icon={<ProfileIcon />}
           LinkComponent={Link}

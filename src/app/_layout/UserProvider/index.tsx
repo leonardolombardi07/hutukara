@@ -1,18 +1,18 @@
 "use client";
 
 import { onAuthStateChanged } from "@/modules/api/client";
-import { UserInfo } from "firebase/auth";
+import { User } from "firebase/auth";
 import React from "react";
 
 interface UserContext {
-  user: UserInfo | null;
+  user: User | null;
   isLoading: boolean;
 }
 
 const UserContext = React.createContext<UserContext | null>(null);
 
 function UserProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = React.useState<UserInfo | null>(null);
+  const [user, setUser] = React.useState<User | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {

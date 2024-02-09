@@ -8,6 +8,7 @@ import { Metadata } from "next";
 import FilterChip from "./_page/FilterChip";
 import ItemList from "./_page/ItemList";
 import Paper from "@mui/material/Paper";
+import ItemListTitle from "./_page/ItemListTitle";
 
 export const metadata: Metadata = {
   title: `${APP_NAME} | Your ${PLURALIZED_GROUP_TITLE}`,
@@ -58,8 +59,7 @@ export default function Page({ searchParams }: PageProps) {
           }}
         >
           <Box sx={{ mb: 3 }}>
-            <Typography variant="h3">Your {PLURALIZED_GROUP_TITLE}</Typography>
-
+            <ItemListTitle />
             <Box
               sx={{
                 display: "flex",

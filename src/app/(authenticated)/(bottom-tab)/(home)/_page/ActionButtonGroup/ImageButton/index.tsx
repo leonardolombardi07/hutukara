@@ -11,14 +11,13 @@ interface ImageButtonProps {
   onClick: () => void;
 }
 
-export default function ImageButton({
-  src,
-  title,
-  width,
-  onClick,
-}: ImageButtonProps) {
+const ImageButton = React.forwardRef(function ImageButtonWithRef(
+  { src, title, width, onClick }: ImageButtonProps,
+  ref: React.ComponentProps<typeof ButtonBase>["ref"]
+) {
   return (
     <ButtonBase
+      ref={ref}
       focusRipple
       sx={{
         width: {
@@ -72,7 +71,9 @@ export default function ImageButton({
       </ImageContainer>
     </ButtonBase>
   );
-}
+});
+
+export default ImageButton;
 
 const ImageSrc = styled(Image)(({ theme }) => ({
   position: "absolute",
