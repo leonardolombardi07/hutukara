@@ -15,7 +15,7 @@ export default function useFocusableInput(shouldFocus: boolean = true) {
     if (shouldFocus) {
       timeout = setTimeout(() => {
         inputRef.current?.focus();
-      }, 200);
+      });
     }
 
     return () => {
