@@ -5,14 +5,10 @@ import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useQueryState } from "nuqs";
-import useFocusableInput from "@/modules/hooks/useFocusableInput";
 
 export default function SearchInput() {
   const [showClear, setShowClear] = React.useState(false);
   const [query, setQuery] = useQueryState("query");
-  const { setInputRef } = useFocusableInput({
-    delay: 300,
-  });
 
   React.useEffect(() => {
     setShowClear(Boolean(query));
@@ -20,7 +16,7 @@ export default function SearchInput() {
 
   return (
     <TextField
-      inputRef={setInputRef}
+      autoFocus
       value={query}
       onChange={(e) => setQuery(e.target.value)}
       label="Search for movies, shows, and more..."
