@@ -2,18 +2,18 @@ import OMBDBApi from "@/modules/OMDBApi";
 import { upsertContent } from "@/modules/api/client";
 import { getCollections } from "../utils";
 import { getDoc, doc } from "firebase/firestore";
-import { getContentOfIdsThatAreNotInTheDatabase } from "./internal";
+import { findContentInDb } from "./internal";
 
 const { contentCol } = getCollections();
 
 async function saveSearchContent(
   searchResults: Awaited<ReturnType<typeof OMBDBApi.search>>["data"]
 ) {
-  const notInDbIds = await getContentOfIdsThatAreNotInTheDatabase(
+  const { idsNotInDb } = await findContentInDb(
     searchResults.map((item) => item.imdbID)
   );
 
-  const data = await Promise.all(notInDbIds.map((id) => OMBDBApi.getById(id)));
+  const data = await Promise.all(idsNotInDb.map((id) => OMBDBApi.getById(id)));
   upsertContent(data);
 }
 

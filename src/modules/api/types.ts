@@ -49,7 +49,7 @@ export namespace GroupsCol {
       export interface Doc {
         group: GroupsCol.Doc;
         allMembers: Omit<WithId<UsersCol.Doc>, "groupIds">[];
-        content: WithId<ContentCol.Doc>[];
+        content: (WithId<ContentCol.Doc> & { score: number })[];
         ratings: UsersCol.RatingsSubCol.Doc[];
       }
     }

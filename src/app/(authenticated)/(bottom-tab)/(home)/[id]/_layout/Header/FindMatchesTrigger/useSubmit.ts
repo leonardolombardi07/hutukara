@@ -25,7 +25,7 @@ export default function useSubmit() {
 
     try {
       const input = await getMatchInput(group.id);
-      const output = await fakeGetMatchOutput(input);
+      const output = await getMatchOutput(input);
       createMatch(group.id, {
         input,
         output,

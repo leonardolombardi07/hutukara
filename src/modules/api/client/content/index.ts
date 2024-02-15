@@ -1,16 +1,9 @@
-import {
-  query,
-  where,
-  documentId,
-  doc,
-  writeBatch,
-  getDocs,
-} from "firebase/firestore";
+import { doc, writeBatch } from "firebase/firestore";
 import { getCollections } from "../utils";
 import { CONTENT_SAMPLE } from "./data";
 import { OMBDBResponse } from "@/modules/OMDBApi";
 import { getServices } from "../services";
-import { getContentOfIdsThatAreNotInTheDatabase } from "./internal";
+import { findContentInDb } from "./internal";
 import { saveContentById } from "./saving";
 
 const { firestore } = getServices();
@@ -44,20 +37,13 @@ function upsertContent(items: OMBDBResponse[]) {
 }
 
 async function getContentByIds(ids: string[]) {
-  const idsNotInDb = await getContentOfIdsThatAreNotInTheDatabase(ids);
-  const idsInDb = ids.filter((id) => idsNotInDb.includes(id) === false);
+  const { contentInDb, idsNotInDb } = await findContentInDb(ids);
 
-  const [fetchedSnap, savedData] = await Promise.all([
-    getDocs(query(contentCol, where(documentId(), "in", idsInDb))),
-    Promise.all(idsNotInDb.map((id) => saveContentById(id))),
-  ]);
+  const savedContent = await Promise.all(
+    idsNotInDb.map((id) => saveContentById(id))
+  );
 
-  const fetchedData = fetchedSnap.docs.map((d) => ({
-    id: d.id,
-    ...d.data(),
-  }));
-
-  return [...fetchedData, ...savedData];
+  return [...contentInDb, ...savedContent];
 }
 
 async function getContentById(id: string) {

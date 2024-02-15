@@ -1,7 +1,9 @@
-import { getContentByIds, getUsers } from "../../../index";
+import { saveContentById } from "../../../index";
 import OpenAIApi from "@/modules/OpenAIApi";
 import { GroupsCol } from "@/modules/api/types";
 import { z } from "zod";
+import { findContentInDb } from "../../../content/internal";
+import { unwrapPromiseSettled } from "@/modules/asyncUtils";
 
 export async function getMatchOutput(
   input: GroupsCol.MatchesSubCol.InputSubCol.Doc
@@ -64,7 +66,7 @@ async function requestRecommendationsToOpenAI(
     messages: [{ role: "system", content: prompt }],
   });
 
-  const maybeJSONAsString = completion.choices[0].message.content;
+  const maybeJSONAsString = completion?.choices[0]?.message?.content;
   if (!maybeJSONAsString) {
     throw new Error("AI did not return a JSON");
   }
@@ -95,17 +97,30 @@ function parseToJson(jsonAsString: string) {
 async function getContentFromRecommendations(
   recommendations: Recommendation[]
 ) {
-  const contentIds = recommendations.map((r) => r.possibleIMDBId);
+  const candidateContentIds = recommendations.map((r) => r.possibleIMDBId);
 
-  // TODO: We should use something lime Promise.allSettled here,
-  // and handle the errors in a way that makes sense for the user
-  const content = await getContentByIds(contentIds);
+  const { contentInDb, idsNotInDb } = await findContentInDb(
+    candidateContentIds
+  );
+
+  // The content ids may not event exist, so we don't want to throw an error here. Let's just get and save the content we can
+  const responses = await Promise.allSettled(
+    idsNotInDb.map((id) => saveContentById(id))
+  );
+  const [savedContent, errors] = unwrapPromiseSettled(responses);
+
+  if (errors.length > 0) {
+    console.error("Errors saving content: ", errors);
+  }
+
+  const content = [...contentInDb, ...savedContent];
 
   const contentWithScores = content.map((c) => {
     const recommendation = recommendations.find(
       (r) => r.possibleIMDBId === c.imdbID
     );
     if (!recommendation) {
+      // Not sure if we should throw an error here... this probably won't happen but...
       throw new Error("Recommendation not found");
     }
 
