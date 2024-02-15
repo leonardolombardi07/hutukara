@@ -19,6 +19,7 @@ import useSubmit from "./useSubmit";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { useParams, useRouter } from "next/navigation";
+import { GROUP_TITLE } from "@/app/constants";
 
 const TRIGGER_BUTTON_TEXT = "Find Matches";
 
@@ -164,7 +165,7 @@ function DialogContentFromStatus({
   return (
     <DialogContentText>
       We will find the best matches for you based on the combined ratings of the
-      members in the group.
+      members in the {GROUP_TITLE}.
     </DialogContentText>
   );
 }
