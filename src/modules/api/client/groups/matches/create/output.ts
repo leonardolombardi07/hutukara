@@ -1,5 +1,5 @@
 import { saveContentById } from "../../../index";
-import OpenAIApi from "@/modules/OpenAIApi";
+import GoogleGenAI from "@/modules/google-generative-ai";
 import { GroupsCol } from "@/modules/api/types";
 import { z } from "zod";
 import { findContentInDb } from "../../../content/internal";
@@ -8,7 +8,7 @@ import { unwrapPromiseSettled } from "@/modules/asyncUtils";
 export async function getMatchOutput(
   input: GroupsCol.MatchesSubCol.InputSubCol.Doc
 ) {
-  const { recommendations } = await requestRecommendationsToOpenAI(input);
+  const { recommendations } = await requestRecommendationsToAI(input);
 
   const content = await getContentFromRecommendations(recommendations);
 
@@ -34,7 +34,7 @@ interface Recommendation {
   possiblePoster: string;
 }
 
-async function requestRecommendationsToOpenAI(
+async function requestRecommendationsToAI(
   input: GroupsCol.MatchesSubCol.InputSubCol.Doc
 ) {
   const promptInitialMessage = `You are a movie and series recomender. Below, you'll find a text with a list of titles and the scores (from 0 to 5) given by users, in the CSV format of "Title,Person 1,Person 2,...":`;
@@ -55,18 +55,18 @@ async function requestRecommendationsToOpenAI(
     possiblePoster: string;
   }
   
-  Answer with a JSON - and only a JSON.`;
+  Answer with a raw JSON - and only a JSON (not markdown).`;
 
   const dataAsCSV = getDataAsCSV(input);
 
   const prompt = `${promptInitialMessage}\n${dataAsCSV}\n${promptFinalMessage}`;
 
-  const completion = await OpenAIApi.chat.completions.create({
-    model: "gpt-3.5-turbo",
-    messages: [{ role: "system", content: prompt }],
+  const model = GoogleGenAI.getGenerativeModel({
+    model: "gemini-1.5-flash",
   });
+  const { response } = await model.generateContent(prompt);
 
-  const maybeJSONAsString = completion?.choices[0]?.message?.content;
+  const maybeJSONAsString = getAsRawJSONStr(response.text());
   if (!maybeJSONAsString) {
     throw new Error("AI did not return a JSON");
   }
@@ -87,6 +87,16 @@ function validateJSON(json: any) {
   });
   const array = z.array(Recommendation);
   return array.parse(json);
+}
+
+function getAsRawJSONStr(maybeMarkdown: string) {
+  const jsonMatch = maybeMarkdown.match(/```json\n([\s\S]*?)\n```/);
+  if (!jsonMatch) {
+    return maybeMarkdown;
+  }
+
+  const jsonString = jsonMatch[1];
+  return jsonString;
 }
 
 function parseToJson(jsonAsString: string) {
